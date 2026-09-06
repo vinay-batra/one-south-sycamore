@@ -1,26 +1,58 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+  V Flowers design language: warm white paper, deep green ink, pale sage
+  fields, one blush pastel accent. Modern and quiet — the photographs are
+  meant to carry the color, not the interface.
+*/
+@theme {
+  --color-paper: #fcfbf9;
+  --color-paper-warm: #f6f4ef;
+  --color-ink: #1b211c;
+  --color-ink-soft: #4b5449;
+  --color-muted: #7c8479;
+  --color-line: #e3e1d9;
+  --color-forest: #2e4636;
+  --color-moss: #5c7a63;
+  --color-sage: #e8ede6;
+  --color-blush: #f2e3dc;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-instrument), ui-serif, Georgia, serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Small caps label used above section headings throughout the site. */
+.eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+/* Rules sit at 60% opacity so they read as paper creases, not borders. */
+.hairline {
+  border-color: color-mix(in srgb, var(--color-line) 60%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
