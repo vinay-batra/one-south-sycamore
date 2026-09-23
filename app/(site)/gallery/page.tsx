@@ -27,9 +27,9 @@ const PLATES = [
   { slug: "succulent-patio", category: "Succulents" },
   { slug: "roses-hellebore", category: "Arrangements" },
   { slug: "storefront-front", category: "The Shop" },
-  { slug: "studio-interior", category: "The Shop" },
-  { slug: "art-panels", category: "The Shop" },
-  { slug: "art-canvases", category: "The Shop" },
+  { slug: "studio-interior", category: "Art" },
+  { slug: "art-panels", category: "Art" },
+  { slug: "art-canvases", category: "Art" },
   { slug: "cooler-wide", category: "The Cooler" },
 ] as const;
 

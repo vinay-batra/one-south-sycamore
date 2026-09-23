@@ -101,6 +101,20 @@ export const STORY_PARAGRAPHS = [
   "These days the shop is on the corner of Washington and Sycamore in Newtown, and the job hasn't really changed. The flowers come in, and Vince figures out what to do with them.",
 ];
 
+/**
+ * The art.
+ *
+ * Written only from what the photographs actually show: painted canvases
+ * and tall panels through the shop, a rack of spray cans behind the
+ * counter, and an ART sign standing out front. It deliberately does not
+ * say who painted them or that they are for sale, because nobody has told
+ * us either of those things yet. Sharpen this once Vince answers.
+ */
+export const ART_PARAGRAPHS = [
+  "There is more than flowers in the building. Canvases lean along the walls and hang from the rafters, spray-painted in heavy reds and pinks, figures and blooms worked over wood and board.",
+  "It is not a separate business with its own door. The work sits in among the buckets and the cooler, which is the whole character of the place: a corner shop that fills up with whatever Vince has going on.",
+];
+
 /** Where the flowers actually come from, the part most shops don't tell you. */
 export const SOURCING_PARAGRAPHS = [
   "The flowers in the cooler have been on a longer trip than most people expect. New Zealand. Japan. South America. Kenya.",
@@ -160,6 +174,7 @@ export const GALLERY_CATEGORIES = [
   "Plants",
   "Succulents",
   "Gift Baskets",
+  "Art",
   "The Shop",
 ] as const;
 

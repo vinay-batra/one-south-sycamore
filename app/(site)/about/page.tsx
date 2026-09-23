@@ -47,18 +47,20 @@ export default function AboutPage() {
       </section>
 
       <div className="mx-auto grid max-w-[1180px] grid-cols-2 gap-3 px-6 sm:gap-4 lg:grid-cols-3">
+        {/* Held for a portrait of Vince at the bench. Until that photograph
+            exists this draws the labelled placeholder, so the layout is
+            already the right shape when it arrives. */}
+        <PhotoSlot
+          label="Vince at the bench"
+          className="aspect-[3/4] w-full"
+          sizes="(min-width: 1024px) 33vw, 50vw"
+        />
         <PhotoSlot
           slug="storefront-front"
           label="The front of the shop"
           className="aspect-[3/4] w-full"
           sizes="(min-width: 1024px) 33vw, 50vw"
           priority
-        />
-        <PhotoSlot
-          slug="studio-interior"
-          label="Inside the shop"
-          className="aspect-[3/4] w-full"
-          sizes="(min-width: 1024px) 33vw, 50vw"
         />
         <PhotoSlot
           slug="cooler-wide"

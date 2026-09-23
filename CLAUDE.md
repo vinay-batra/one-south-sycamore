@@ -126,8 +126,9 @@ so plainly rather than pretending to save.
    returns 503 and tells people to call**, by design — a real customer must never be silently dropped).
 2. **Wire the admin writes** — board CRUD and photo upload. This is the feature Vince actually
    asked for; the site is not done without it.
-3. ~~Real photos~~ — **done.** Ten photographs are in. More would help: there is still no
-   photo of Vince himself, and nothing of wedding, sympathy or gift-basket work.
+3. ~~Real photos~~ **Ten are in.** A portrait slot for Vince at the bench is held open at
+   the top of /about and renders the placeholder until the photograph exists. Still
+   nothing of wedding, sympathy or gift-basket work.
 4. **Buy vjsflowers.com** and deploy.
 5. **Draft review with Vince, in person** — he explicitly asked for this before launch. Confirm
    the slogan ("No set menu. Just what's beautiful today." is invented, not his), the logo, the

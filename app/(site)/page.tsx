@@ -2,7 +2,7 @@ import Link from "next/link";
 import { JourneySection } from "@/components/journey-section";
 import { Reveal } from "@/components/reveal";
 import { PhotoSlot } from "@/components/photo-slot";
-import { DEFAULT_BOARD, SERVICES } from "@/lib/content";
+import { ART_PARAGRAPHS, DEFAULT_BOARD, SERVICES } from "@/lib/content";
 import {
   ADDRESS_CITY,
   ADDRESS_STREET,
@@ -216,6 +216,69 @@ export default function HomePage() {
             </li>
           ))}
         </ul>
+      </section>
+
+      {/* ── The art ──────────────────────────────────────────── */}
+      <section className="border-t hairline bg-paper-warm">
+        <div className="mx-auto max-w-[1180px] px-6 py-20 sm:py-24">
+          <div className="grid gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-5">
+              <p className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
+                Also in the shop
+              </p>
+              <h2 className="mt-5 font-display text-[2.5rem] leading-[1.0] tracking-[-0.02em] sm:text-[3.25rem]">
+                There is paint on
+                <br />
+                the walls too.
+              </h2>
+            </div>
+            <div className="lg:col-span-6 lg:col-start-7 lg:pt-4">
+              {ART_PARAGRAPHS.map((para) => (
+                <p
+                  key={para}
+                  className="mt-5 max-w-xl text-[1.0625rem] leading-relaxed text-ink-soft first:mt-0"
+                >
+                  {para}
+                </p>
+              ))}
+              <p className="mt-6 text-[0.9rem] leading-relaxed text-muted">
+                Ask about a piece while you are in.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-14 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+            <Reveal motion="scale" delay={0} duration={1000}>
+              <PhotoSlot
+                slug="art-panels"
+                label="Painted panels hanging in the shop"
+                className="aspect-[3/4] w-full"
+                sizes="(min-width: 1024px) 33vw, 50vw"
+              />
+            </Reveal>
+            <Reveal motion="scale" delay={120} duration={1000}>
+              <PhotoSlot
+                slug="art-canvases"
+                label="Canvases along the wood wall"
+                className="aspect-[3/4] w-full"
+                sizes="(min-width: 1024px) 33vw, 50vw"
+              />
+            </Reveal>
+            <Reveal
+              motion="scale"
+              delay={240}
+              duration={1000}
+              className="col-span-2 lg:col-span-1"
+            >
+              <PhotoSlot
+                slug="studio-interior"
+                label="Inside the shop, canvases along the counter"
+                className="aspect-[3/4] w-full"
+                sizes="(min-width: 1024px) 33vw, 100vw"
+              />
+            </Reveal>
+          </div>
+        </div>
       </section>
 
       {/* ── Recent work ──────────────────────────────────────── */}
