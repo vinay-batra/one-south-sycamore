@@ -6,6 +6,10 @@ import { supabaseConfigured } from "@/lib/supabase";
  * Vince's flow is "take a photo, pick a section, done": no cropping, no
  * file management, no naming.
  */
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Photos" };
+
 export default function AdminPhotosPage() {
   return (
     <>
@@ -15,7 +19,7 @@ export default function AdminPhotosPage() {
       </p>
 
       {!supabaseConfigured && (
-        <div className="mt-8 border border-blush bg-blush/40 p-5 text-sm leading-relaxed text-ink-soft">
+        <div id="photos-locked" className="mt-8 border border-blush bg-blush/40 p-5 text-sm leading-relaxed text-ink-soft">
           Uploading turns on once the photo storage is connected.
         </div>
       )}
@@ -33,7 +37,8 @@ export default function AdminPhotosPage() {
           </label>
           <select
             id="category"
-            disabled
+            aria-disabled="true"
+            aria-describedby="photos-locked"
             defaultValue={GALLERY_CATEGORIES[0]}
             className="border border-ink/15 bg-paper-warm px-4 py-3 text-sm text-muted"
           >
@@ -44,7 +49,8 @@ export default function AdminPhotosPage() {
 
           <button
             type="button"
-            disabled
+            aria-disabled="true"
+            aria-describedby="photos-locked"
             className="mt-2 bg-forest px-7 py-3.5 text-[0.7rem] uppercase tracking-[0.16em] text-paper opacity-50"
           >
             Choose photos

@@ -14,14 +14,14 @@ export type Photo = {
 export const PHOTOS = [
   {
     "slug": "storefront-wide",
-    "alt": "The shop from across Sycamore Street, under a blue sky",
+    "alt": "One South Sycamore seen from across the street, the shop front under a blue sky in Newtown, Pennsylvania",
     "width": 1800,
     "height": 2400,
     "blurDataURL": "data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAACQAwCdASoQABUAPu1iqU2ppaOiMAgBMB2JaAC7ACFJ4ZbkzwOwAP39HiHzARnjsSJHVwTPQbOooNOvJ16u9/VYxz3u7eSZkns+j2qdXTM7bhNkblxYKTR/Nu1/jCME+3287m2UMbSmNTum+Q0uBHfnwAA="
   },
   {
     "slug": "storefront-front",
-    "alt": "The front of the shop, burlap shade over tables of plants",
+    "alt": "The front of One South Sycamore on Sycamore Street in Newtown, burlap shade over tables of plants",
     "width": 1800,
     "height": 2400,
     "blurDataURL": "data:image/webp;base64,UklGRqoAAABXRUJQVlA4IJ4AAAAQBACdASoQABUAPu1iqU2ppaOiMAgBMB2JbACw7YwIuek82LUsuV33wADL9ml54CTkPyZqr+jtqB1v39vTreXitArOhZIycaa2HlwqDHGaUoVWg8tX9ybbdmEs6QRSkGhgFSgXFQUeQS5hwi5AJsd9WQcRtAmg8/ITlMfCUqTF2BJ1i1JlbRz/vSxQ//h7VtaRcv5cQlkpcw5ZLjtkAA=="

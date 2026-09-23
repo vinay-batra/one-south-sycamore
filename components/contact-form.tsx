@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type State = "idle" | "sending" | "sent" | "error";
 
@@ -12,9 +12,17 @@ type State = "idle" | "sending" | "sent" | "error";
 export function ContactForm() {
   const [state, setState] = useState<State>("idle");
   const [error, setError] = useState<string | null>(null);
+  const confirmation = useRef<HTMLDivElement>(null);
+
+  // The form is replaced wholesale on success, which otherwise drops focus
+  // to the top of the document and tells a screen reader nothing.
+  useEffect(() => {
+    if (state === "sent") confirmation.current?.focus();
+  }, [state]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (state === "sending") return;
     setState("sending");
     setError(null);
 
@@ -41,7 +49,12 @@ export function ContactForm() {
 
   if (state === "sent") {
     return (
-      <div className="border-t-[3px] border-forest bg-paper p-8">
+      <div
+        ref={confirmation}
+        role="status"
+        tabIndex={-1}
+        className="border-t-[3px] border-forest bg-paper p-8 focus:outline-none"
+      >
         <h3 className="font-display text-[2rem] leading-tight">Got it.</h3>
         <p className="mt-3 leading-relaxed text-ink-soft">
           Vince will get back to you. If it&rsquo;s time-sensitive, a funeral or a
@@ -58,6 +71,10 @@ export function ContactForm() {
         <label htmlFor="company">Company</label>
         <input id="company" name="company" tabIndex={-1} autoComplete="off" />
       </div>
+
+      <p className="text-xs text-muted">
+        Everything except the occasion is needed so Vince can call you back.
+      </p>
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Your name" name="name" required autoComplete="name" />
@@ -117,8 +134,8 @@ export function ContactForm() {
       <div className="flex flex-wrap items-center gap-4">
         <button
           type="submit"
-          disabled={state === "sending"}
-          className="bg-forest px-7 py-3.5 text-[0.7rem] uppercase tracking-[0.16em] text-paper transition-opacity hover:opacity-90 disabled:opacity-50"
+          aria-disabled={state === "sending"}
+          className="bg-forest px-7 py-3.5 text-[0.7rem] uppercase tracking-[0.16em] text-paper transition-opacity hover:opacity-90 aria-disabled:opacity-50"
         >
           {state === "sending" ? "Sending…" : "Send to the shop"}
         </button>

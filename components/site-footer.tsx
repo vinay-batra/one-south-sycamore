@@ -104,7 +104,7 @@ export function SiteFooter() {
             <p className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
               Pages
             </p>
-            <nav className="mt-4 flex flex-col gap-2">
+            <nav aria-label="Footer" className="mt-4 flex flex-col gap-2">
               {COLUMNS.map((column) => (
                 <Link
                   key={column.href}
@@ -140,7 +140,7 @@ export function SiteFooter() {
             <Link href="/privacy" className="transition-colors hover:text-ink-soft">
               Privacy
             </Link>
-            <Link href="/admin" className="transition-colors hover:text-ink-soft">
+            <Link href="/admin" rel="nofollow" className="transition-colors hover:text-ink-soft">
               Shop login
             </Link>
           </div>

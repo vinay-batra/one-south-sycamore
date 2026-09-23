@@ -5,6 +5,7 @@ import { INSTAGRAM_HANDLE, INSTAGRAM_URL, PHONE_DISPLAY, PHONE_TEL, SITE_NAME } 
 export const metadata: Metadata = {
   title: "Privacy",
   alternates: { canonical: "/privacy" },
+  openGraph: { url: "/privacy" },
   description: `What ${SITE_NAME} does with the details you send through this website. Short version: nothing beyond getting back to you.`,
 };
 

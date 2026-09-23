@@ -7,6 +7,7 @@ import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/site";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/board" },
+  openGraph: { url: "/board" },
   title: "The Board",
   description:
     "The numbered board at One South Sycamore in Newtown, PA. Order by number or just describe the person. Prices depend on the day.",

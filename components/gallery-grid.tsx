@@ -40,10 +40,18 @@ export function GalleryGrid({ plates }: { plates: readonly Plate[] }) {
     [plates.length],
   );
 
+  const isOpen = openIndex !== null;
+
+  // Move focus in when the overlay opens, and only then. Keying this on
+  // openIndex re-ran it on every step and yanked focus back to Close, which
+  // made the Next and Previous buttons unusable from the keyboard.
+  useEffect(() => {
+    if (!isOpen) return;
+    closeButton.current?.focus();
+  }, [isOpen]);
+
   useEffect(() => {
     if (openIndex === null) return;
-
-    closeButton.current?.focus();
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -107,6 +115,7 @@ export function GalleryGrid({ plates }: { plates: readonly Plate[] }) {
                 <PhotoSlot
                   slug={plate.slug}
                   label={plate.category}
+                  alt=""
                   className="aspect-[3/4] w-full"
                   sizes="(min-width: 1024px) 33vw, 50vw"
                   priority={index < 2}
@@ -153,10 +162,14 @@ export function GalleryGrid({ plates }: { plates: readonly Plate[] }) {
             </button>
           </div>
 
+          <p aria-live="polite" className="sr-only">
+            {open.category}, {openIndex! + 1} of {plates.length}. {photo.alt}
+          </p>
+
           <button
             type="button"
             onClick={close}
-            aria-label="Close"
+            aria-label={`Close, showing ${photo.alt}`}
             className="relative my-4 min-h-0 flex-1 cursor-zoom-out"
           >
             <Image

@@ -79,8 +79,9 @@ export function Masthead() {
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
+            aria-controls="masthead-menu"
             aria-label="Toggle menu"
-            className="-mr-1 shrink-0 self-center p-1 sm:hidden"
+            className="-mr-1 shrink-0 self-center p-2 sm:hidden"
           >
             <span className="relative block h-3.5 w-6">
               <span
@@ -103,7 +104,7 @@ export function Masthead() {
       <div className="rule-in border-t border-ink/25" />
       <div className="rule-in border-t border-ink/25 pt-[3px]">
         <div className="mx-auto max-w-[1180px] px-6">
-          <nav className="hidden items-center justify-between py-2.5 sm:flex">
+          <nav aria-label="Main" className="hidden items-center justify-between py-2.5 sm:flex">
             <ul className="flex items-center gap-9">
               {LINKS.map((link) => {
                 const active = pathname === link.href;
@@ -111,6 +112,7 @@ export function Masthead() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
+                      aria-current={active ? "page" : undefined}
                       className={`group/nav block text-[0.7rem] uppercase tracking-[0.16em] transition-colors hover:text-ink ${
                         active ? "text-ink" : "text-ink-soft"
                       }`}
@@ -134,7 +136,7 @@ export function Masthead() {
       </div>
 
       {open && (
-        <nav className="border-t border-ink/15 bg-paper-warm sm:hidden">
+        <nav id="masthead-menu" aria-label="Main" className="border-t border-ink/15 bg-paper-warm sm:hidden">
           <ul className="mx-auto max-w-[1180px] divide-y divide-ink/10 px-6">
             {LINKS.map((link) => (
               <li key={link.href}>
@@ -164,7 +166,10 @@ export function Masthead() {
  */
 export function CallStrip() {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 grid grid-cols-2 border-t border-ink/15 bg-paper/95 backdrop-blur-sm sm:hidden">
+    <nav
+      aria-label="Contact the shop"
+      className="fixed inset-x-0 bottom-0 z-50 grid grid-cols-2 border-t border-ink/15 bg-paper/95 backdrop-blur-sm sm:hidden"
+    >
       <a
         href={`tel:${PHONE_TEL}`}
         className="border-r border-ink/10 py-3.5 text-center text-[0.7rem] uppercase tracking-[0.16em] text-ink"
@@ -177,6 +182,6 @@ export function CallStrip() {
       >
         Text
       </a>
-    </div>
+    </nav>
   );
 }

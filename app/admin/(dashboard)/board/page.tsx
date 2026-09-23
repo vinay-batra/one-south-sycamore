@@ -6,6 +6,10 @@ import { supabaseConfigured } from "@/lib/supabase";
  * are laid out here so the shape is settled; they get wired to
  * `board_items` once the Supabase project exists.
  */
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "The Board" };
+
 export default function AdminBoardPage() {
   return (
     <>
@@ -16,7 +20,7 @@ export default function AdminBoardPage() {
       </p>
 
       {!supabaseConfigured && (
-        <div className="mt-8 border border-blush bg-blush/40 p-5 text-sm leading-relaxed text-ink-soft">
+        <div id="board-locked" className="mt-8 border border-blush bg-blush/40 p-5 text-sm leading-relaxed text-ink-soft">
           Editing turns on once the database is connected. Everything below is
           the current live board.
         </div>
@@ -40,15 +44,17 @@ export default function AdminBoardPage() {
             <div className="flex gap-2">
               <button
                 type="button"
-                disabled
-                className="border border-ink/15 px-4 py-2 text-xs text-muted disabled:cursor-not-allowed"
+                aria-disabled="true"
+                aria-describedby="board-locked"
+                className="border border-ink/15 px-4 py-2 text-xs text-muted aria-disabled:cursor-not-allowed"
               >
                 Edit
               </button>
               <button
                 type="button"
-                disabled
-                className="border border-ink/15 px-4 py-2 text-xs text-muted disabled:cursor-not-allowed"
+                aria-disabled="true"
+                aria-describedby="board-locked"
+                className="border border-ink/15 px-4 py-2 text-xs text-muted aria-disabled:cursor-not-allowed"
               >
                 Hide
               </button>
@@ -59,7 +65,8 @@ export default function AdminBoardPage() {
 
       <button
         type="button"
-        disabled
+        aria-disabled="true"
+        aria-describedby="board-locked"
         className="mt-8 bg-forest px-7 py-3.5 text-[0.7rem] uppercase tracking-[0.16em] text-paper opacity-50"
       >
         Add an option

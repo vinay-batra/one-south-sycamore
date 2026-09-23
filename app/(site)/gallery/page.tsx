@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { GalleryGrid, type Plate } from "@/components/gallery-grid";
 import {
   INSTAGRAM_HANDLE,
@@ -9,9 +10,10 @@ import {
 
 export const metadata: Metadata = {
   alternates: { canonical: "/gallery" },
+  openGraph: { url: "/gallery" },
   title: "Gallery",
   description:
-    "Arrangements, wedding work, sympathy pieces, plants, succulents and art from One South Sycamore in Newtown, PA.",
+    "Arrangements, wedding work, sympathy pieces, plants, succulents and painted canvases from the florist at One South Sycamore in Newtown, PA.",
 };
 
 /**
@@ -94,10 +96,25 @@ export default function GalleryPage() {
               </a>
               <a
                 href={`tel:${PHONE_TEL}`}
+                aria-label={`Call the shop, ${PHONE_DISPLAY}`}
                 className="font-display text-[1.6rem] leading-none tracking-tight hover:text-forest"
               >
                 {PHONE_DISPLAY}
               </a>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-x-8 gap-y-3">
+              <Link
+                href="/board"
+                className="border-b border-forest/40 pb-0.5 text-[0.7rem] uppercase tracking-[0.16em] text-forest transition-colors hover:border-forest"
+              >
+                Order by number
+              </Link>
+              <Link
+                href="/visit"
+                className="border-b border-forest/40 pb-0.5 text-[0.7rem] uppercase tracking-[0.16em] text-forest transition-colors hover:border-forest"
+              >
+                Hours and directions
+              </Link>
             </div>
           </div>
         </div>

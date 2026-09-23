@@ -33,6 +33,7 @@ const HOW_IT_GOES = [
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
+  openGraph: { url: "/" },
 };
 
 export default function HomePage() {
@@ -205,6 +206,11 @@ export default function HomePage() {
         <p className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
           What he does
         </p>
+        {/* A real heading: without it the eight service h3s below filed
+            themselves under the previous section's h2. */}
+        <h2 className="mt-4 max-w-3xl font-display text-[2.25rem] leading-[1.05] tracking-tight sm:text-[2.75rem]">
+          Weddings, sympathy work and everyday flowers in Newtown.
+        </h2>
         <ul className="mt-10">
           {SERVICES.map((service, index) => (
             <li key={service.slug}>
@@ -249,6 +255,12 @@ export default function HomePage() {
               <p className="mt-6 text-[0.9rem] leading-relaxed text-muted">
                 Ask about a piece while you are in.
               </p>
+              <Link
+                href="/about"
+                className="mt-6 inline-block border-b border-forest/40 pb-0.5 text-[0.7rem] uppercase tracking-[0.16em] text-forest transition-colors hover:border-forest"
+              >
+                The whole story
+              </Link>
             </div>
           </div>
 
@@ -324,8 +336,8 @@ export default function HomePage() {
               sizes="(min-width: 640px) 25vw, 50vw"
             />
             <PhotoSlot
-              slug="studio-interior"
-              label="Inside the shop"
+              slug="cooler-wide"
+              label="The cooler, roses and banksia on the shelves"
               className="mt-8 aspect-[3/4] w-full"
               sizes="(min-width: 640px) 25vw, 50vw"
             />

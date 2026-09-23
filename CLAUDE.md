@@ -1,6 +1,6 @@
-# V Flowers — project notes
+# One South Sycamore: project notes
 
-Marketing site for **V Flowers**, a one-man flower shop in Newtown, PA.
+Marketing site for **One South Sycamore**, a one-man flower shop in Newtown, PA.
 Client is **Vince** (sole owner, sole point of contact). Built free; changes are free.
 Vinay owns and manages the domain and does all deploys.
 
@@ -18,7 +18,7 @@ Everything below came from Vince directly. Don't invent shop details — ask.
 
 | | |
 |---|---|
-| Business name | **V Flowers** (domain is vjsflowers.com — the name and the domain differ on purpose) |
+| Business name | **One South Sycamore**, the name on the street blade over the door and the Instagram handle. The domain is vjsflowers.com and deliberately differs: people search for flowers, not an address. An early draft called it "V Flowers", which appeared nowhere a customer could see. |
 | Address | 1 South Sycamore Street, Newtown, **PA** 18940 |
 | Landmark | Across from the Lukoil, corner of Washington & Sycamore, center of town |
 | Phone | (609) 649-1992 — call **and** text |
@@ -149,9 +149,42 @@ Both of these came out of his own photographs, not the intake — ask before act
    own section — right now those photos sit in the gallery under "The Shop", which states
    nothing untrue but undersells what is clearly a real part of the business.
 
+## SEO, and the traps in it
+
+- **`NEXT_PUBLIC_SITE_URL` decides every canonical, og:url, sitemap entry and
+  JSON-LD url.** A local production build once baked `http://localhost:3000` into
+  all of them. `lib/site.ts` now throws on a production build with a non-https
+  origin, and the variable is deliberately absent from `.env.local` so local
+  builds fall back to the real domain.
+- Every page declares its own `alternates.canonical` **and** `openGraph.url`. The
+  root layout must not set either, or all six pages claim to be the home page.
+- JSON-LD omits `openingHours` (placeholders) and `geo` (the only coordinates in
+  the repo were authored to place a dot on the globe and are the town centroid,
+  not a surveyed pin). Add either only once someone has confirmed the real value.
+- The single biggest local-search win is not in this repo: **claim the Google
+  Business Profile.** The map pack sits above every organic result.
+
+## Accessibility
+
+Contrast is measured, not eyeballed (see Design above). Beyond that:
+
+- The globe is decorative and `aria-hidden`; the four regions, their distances
+  and the destination all exist as real buttons and text beside it.
+- Animated figures (`CountUp`) are hidden from assistive technology and the
+  final number is carried in the button's `aria-label`, so a control's name
+  does not mutate every frame.
+- Reveals start at `opacity: 0` and are shown by script, so `.no-js` forces them
+  visible and reduced-motion skips the observer entirely.
+- Disabled-looking admin controls use `aria-disabled`, not `disabled`, so they
+  stay in the tab order and can point at the banner explaining why.
+
 ## Rules
 
 - No prices, ever. No email address, ever. No online checkout.
+- No em dashes anywhere: copy, comments, commits. Rewrite the sentence instead.
+- The /privacy page claims there is no analytics, no tracking pixel and no
+  cookie banner. That is currently true. If anything is ever added, that page
+  has to change in the same commit.
 - The site sells the *conversation with Vince*, not a product list.
 - `lib/site.ts` is the only place shop facts belong.
 - Placeholder copy that Vince hasn't approved (slogan, board descriptions, hours) is marked

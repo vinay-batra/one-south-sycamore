@@ -36,7 +36,10 @@ export function FlowerGlobe() {
     <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-6">
       <div className="lg:col-span-7">
         <div className="relative mx-auto aspect-square w-full max-w-[34rem] lg:max-w-none">
+          {/* The list beside this is the text equivalent, so the canvas
+              itself has nothing to offer assistive technology. */}
           <Canvas
+            aria-hidden="true"
             camera={{ position: [0, 0, 2.75], fov: 45 }}
             dpr={[1, 2]}
             gl={{ antialias: true, alpha: true }}
@@ -53,7 +56,7 @@ export function FlowerGlobe() {
 
         {/* Outside the square, so it clears the globe rather than sitting on it. */}
         <p className="mt-6 text-center text-[0.65rem] uppercase tracking-[0.18em] text-chalk/60">
-          Drag to turn · Tap an origin
+          Drag to turn, or choose a region below
         </p>
       </div>
 
@@ -68,6 +71,10 @@ export function FlowerGlobe() {
                   type="button"
                   onClick={() => setActiveId(isActive ? null : origin.id)}
                   aria-pressed={isActive}
+                  aria-label={`${origin.name}, ${milesFrom(
+                    origin.lat,
+                    origin.lng,
+                  ).toLocaleString()} miles away`}
                   className="flex w-full items-baseline justify-between gap-4 py-4 text-left transition-colors hover:text-chalk"
                 >
                   <span
@@ -77,7 +84,13 @@ export function FlowerGlobe() {
                   >
                     {origin.name}
                   </span>
-                  <span className="shrink-0 font-sans text-[0.7rem] uppercase tracking-[0.14em] text-chalk/60">
+                  {/* Hidden from AT: the figure animates, which would
+                      rewrite the button's name on every frame. The label
+                      above carries the final number. */}
+                  <span
+                    aria-hidden="true"
+                    className="shrink-0 font-sans text-[0.7rem] uppercase tracking-[0.14em] text-chalk/60"
+                  >
                     <CountUp to={milesFrom(origin.lat, origin.lng)} /> mi
                   </span>
                 </button>
@@ -87,7 +100,10 @@ export function FlowerGlobe() {
           })}
         </ul>
 
-        <div className="mt-6 min-h-[5.5rem]">
+        {/* Live on the stable wrapper, not the paragraph: the paragraph is
+            keyed and replaced, and a live region inserted along with its
+            own content is usually not announced. */}
+        <div aria-live="polite" className="mt-6 min-h-[5.5rem]">
           <p
             key={active?.id ?? "idle"}
             className={`animate-[fade-up_500ms_cubic-bezier(0.16,1,0.3,1)_both] text-[0.95rem] leading-relaxed motion-reduce:animate-none ${

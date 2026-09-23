@@ -13,6 +13,7 @@ import {
 
 export const metadata: Metadata = {
   alternates: { canonical: "/about" },
+  openGraph: { url: "/about" },
   title: "About",
   description:
     "Twenty-five years in flowers, from Brooklyn street stands to a corner shop in Newtown, PA. The story behind One South Sycamore.",

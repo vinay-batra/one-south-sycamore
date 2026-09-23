@@ -13,6 +13,10 @@ type Message = {
 
 export const dynamic = "force-dynamic";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Messages" };
+
 export default async function AdminMessagesPage() {
   let messages: Message[] = [];
   let loadError: string | null = null;

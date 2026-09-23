@@ -28,8 +28,10 @@
 
 html {
   scroll-behavior: smooth;
-  /* Anchor targets clear the masthead when it is still on screen. */
+  /* Anchor targets clear the masthead when it is still on screen, and the
+     fixed call strip at the bottom of small screens. */
   scroll-padding-top: 6rem;
+  scroll-padding-bottom: 5rem;
 }
 
 body {
@@ -63,6 +65,13 @@ p {
 }
 
 /* Visible only to assistive technology. */
+/* Reveals start hidden and are shown by script. Without JS they would
+   never appear, so the no-script case forces them visible. */
+.no-js [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -147,6 +156,47 @@ p {
   border-color: color-mix(in srgb, var(--color-line) 60%, transparent);
 }
 
+/**
+ * Print: someone printing this is almost certainly taking the address and
+ * the hours with them, so strip the furniture, drop the dark fields to
+ * paper, and spell out where links actually go.
+ */
+@media print {
+  .skip-link,
+  nav,
+  canvas,
+  [role="dialog"] {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .bg-board,
+  [class*="bg-board"] {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    word-break: break-all;
+  }
+
+  a[href^="tel:"]::after {
+    content: "";
+  }
+
+  img,
+  figure,
+  section {
+    break-inside: avoid;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -159,6 +209,11 @@ p {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    /* Without this, an infinite animation like Tailwind's animate-pulse
+       becomes a 0.01ms loop sampled at a random point every frame, which
+       flickers at exactly the people who asked for less motion. */
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0.01ms !important;
   }
 }

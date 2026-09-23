@@ -18,8 +18,9 @@ import {
 
 export const metadata: Metadata = {
   alternates: { canonical: "/visit" },
-  title: "Visit & Delivery",
-  description: `One South Sycamore is at ${ADDRESS_FULL}. Hours, local delivery, payment, and directions.`,
+  openGraph: { url: "/visit" },
+  title: "Visit & Delivery in Newtown, PA",
+  description: `One South Sycamore is the florist at ${ADDRESS_FULL}. Opening hours, local delivery, payment, and directions to the corner.`,
 };
 
 export default function VisitPage() {
@@ -33,7 +34,7 @@ export default function VisitPage() {
           <h1 className="mt-5 font-display text-[3rem] leading-[0.94] tracking-[-0.03em] sm:text-[4.5rem]">
             Corner of Washington
             <br />
-            and Sycamore.
+            and Sycamore, Newtown.
           </h1>
         </div>
         <p className="text-[1.0625rem] leading-relaxed text-ink-soft lg:col-span-4 lg:col-start-9 lg:pt-4">

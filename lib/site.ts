@@ -9,11 +9,17 @@
  */
 export const SITE_NAME = "One South Sycamore";
 
-/** For places too tight for the full name, like a mobile masthead. */
-export const SITE_NAME_SHORT = "One South Sycamore";
 
 /** Primary slogan. Draft. Confirm with Vince at the in-person review. */
 export const SITE_TAGLINE = "No set menu. Just what's beautiful today.";
+
+/**
+ * Used as the fallback meta description and on every share card. Kept
+ * inside 160 characters so search results do not truncate it, and it leads
+ * with the town because that is what people search for.
+ */
+export const SHARE_DESCRIPTION =
+  "Hand-arranged flowers in Newtown, PA, on the corner of Washington and Sycamore. No set menu: tell Vince the occasion and he builds it in front of you.";
 
 export const PHONE_DISPLAY = "(609) 649-1992";
 export const PHONE_TEL = "+16096491992";
@@ -52,8 +58,21 @@ export const DELIVERY = {
 
 export const PAYMENT_METHODS = ["Cash", "Card", "Apple Pay", "Venmo"];
 
-export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://vjsflowers.com";
+const RAW_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vjsflowers.com";
+
+/**
+ * Every canonical, og:url, sitemap entry and JSON-LD url is built from this.
+ * A production build that picked up a localhost origin would tell search
+ * engines the real address of every page is a host nobody can reach, so it
+ * fails the build instead.
+ */
+if (process.env.NODE_ENV === "production" && !RAW_SITE_URL.startsWith("https://")) {
+  throw new Error(
+    `NEXT_PUBLIC_SITE_URL must be an https origin in production, got "${RAW_SITE_URL}".`,
+  );
+}
+
+export const SITE_URL = RAW_SITE_URL;
 
 /** The one account allowed into /admin. */
 export const OWNER_EMAIL = process.env.OWNER_EMAIL ?? "";

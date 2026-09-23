@@ -45,8 +45,8 @@ export default function AdminLoginPage() {
 
           <button
             type="submit"
-            disabled={pending}
-            className="bg-forest px-7 py-3.5 text-[0.7rem] uppercase tracking-[0.16em] text-paper transition-opacity hover:opacity-90 disabled:opacity-50"
+            aria-disabled={pending}
+            className="bg-forest px-7 py-3.5 text-[0.7rem] uppercase tracking-[0.16em] text-paper transition-opacity hover:opacity-90 aria-disabled:opacity-50"
           >
             {pending ? "Checking…" : "Log in"}
           </button>

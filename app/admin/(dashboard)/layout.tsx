@@ -1,16 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { AdminTabs } from "@/app/admin/(dashboard)/admin-tabs";
 import { logout } from "@/app/admin/actions";
 import { LogoMark } from "@/components/logo";
 import { ADMIN_COOKIE, sessionTokenValid } from "@/lib/admin-auth";
 
-const TABS = [
-  { href: "/admin", label: "Overview" },
-  { href: "/admin/board", label: "The Board" },
-  { href: "/admin/photos", label: "Photos" },
-  { href: "/admin/messages", label: "Messages" },
-];
+/** Keep the shop's back office out of the index. */
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default async function AdminLayout({
   children,
@@ -24,6 +24,9 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-screen bg-paper-warm">
+      <a href="#admin-main" className="skip-link">
+        Skip to content
+      </a>
       <header className="border-t-[3px] border-ink border-b border-ink/15 bg-paper">
         <div className="mx-auto flex max-w-[1000px] flex-wrap items-center justify-between gap-4 px-6 py-4">
           <Link href="/admin" className="inline-flex items-center gap-2">
@@ -41,20 +44,10 @@ export default async function AdminLayout({
             </form>
           </div>
         </div>
-        <nav className="mx-auto flex max-w-[1000px] gap-6 overflow-x-auto px-6">
-          {TABS.map((tab) => (
-            <Link
-              key={tab.href}
-              href={tab.href}
-              className="-mb-px whitespace-nowrap border-b-2 border-transparent py-3 text-sm text-ink-soft hover:border-moss hover:text-ink"
-            >
-              {tab.label}
-            </Link>
-          ))}
-        </nav>
+        <AdminTabs />
       </header>
 
-      <main className="mx-auto max-w-[1000px] px-6 py-10">{children}</main>
+      <main id="admin-main" className="mx-auto max-w-[1000px] px-6 py-10">{children}</main>
     </div>
   );
 }

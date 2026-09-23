@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Instrument_Serif } from "next/font/google";
-import { SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
+import { SHARE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import { StructuredData } from "@/components/structured-data";
 import "./globals.css";
 
@@ -21,12 +21,12 @@ export const metadata: Metadata = {
     default: `${SITE_NAME} · Florist in Newtown, PA`,
     template: `%s · ${SITE_NAME}`,
   },
-  description:
-    "One South Sycamore is a hand-arranged flower shop on the corner of Washington and Sycamore in Newtown, PA. Fresh cut flowers sourced worldwide, custom arrangements, weddings, sympathy work, plants, succulents and gift baskets.",
+  description: SHARE_DESCRIPTION,
   openGraph: {
     title: `${SITE_NAME} · Florist in Newtown, PA`,
-    description: SITE_TAGLINE,
-    url: SITE_URL,
+    // Shared links are how a neighbourhood shop actually spreads, so the
+    // card says where it is and what it does, not just the tagline.
+    description: SHARE_DESCRIPTION,
     siteName: SITE_NAME,
     type: "website",
     locale: "en_US",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: `${SITE_NAME} · Florist in Newtown, PA`,
-    description: SITE_TAGLINE,
+    description: SHARE_DESCRIPTION,
   },
 };
 
@@ -44,7 +44,16 @@ export default function RootLayout({
   return (
     // The font variables go on <html> so the @theme tokens, which resolve
     // against :root, can see them.
-    <html lang="en" className={`${inter.variable} ${display.variable}`}>
+    <html lang="en" className={`no-js ${inter.variable} ${display.variable}`}>
+      <head>
+        {/* Dropped the moment script runs, so reveals only stay hidden for
+            browsers that can actually un-hide them. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.documentElement.classList.remove('no-js')`,
+          }}
+        />
+      </head>
       <body className="font-sans antialiased">
         <StructuredData />
         {children}

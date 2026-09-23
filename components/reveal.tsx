@@ -45,6 +45,13 @@ export function Reveal({
     const node = ref.current;
     if (!node) return;
 
+    // Anyone who asked for less motion gets the content straight away
+    // rather than waiting on a scroll observer.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const frame = requestAnimationFrame(() => setShown(true));
+      return () => cancelAnimationFrame(frame);
+    }
+
     // No observer support: show it rather than stranding the content.
     if (typeof IntersectionObserver === "undefined") {
       const frame = requestAnimationFrame(() => setShown(true));
@@ -68,6 +75,7 @@ export function Reveal({
   return (
     <div
       ref={ref}
+      data-reveal=""
       className={`transition-[opacity,transform] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${
         shown ? SHOWN[motion] : HIDDEN[motion]
       } ${className}`}
