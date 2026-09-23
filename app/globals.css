@@ -65,13 +65,6 @@ p {
 }
 
 /* Visible only to assistive technology. */
-/* Reveals start hidden and are shown by script. Without JS they would
-   never appear, so the no-script case forces them visible. */
-.no-js [data-reveal] {
-  opacity: 1 !important;
-  transform: none !important;
-}
-
 .sr-only {
   position: absolute;
   width: 1px;

@@ -135,11 +135,32 @@ so plainly rather than pretending to save.
    placeholder hours, and the board copy.
 6. Consider: Vercel Hobby forbids commercial use — same question that's open on Moreco.
 
+## Layout decisions worth not undoing
+
+- **No full-bleed dark sections on public pages.** There used to be several, and every
+  one meant two hard colour changes on the way past, however gently they were ramped.
+  The globe is dark enough on its own to anchor the page. The only dark surface left is
+  the gallery lightbox, which is meant to be a different mode.
+- **The globe sits directly under the header** and is the first thing you land on. It is
+  lazy-loaded behind an IntersectionObserver, so it still is not in the first payload.
+- **Selecting a region flies to it and then releases control.** Steering the rotation for
+  as long as a region stayed selected undid every drag on the next frame, which felt
+  like the globe had locked.
+- **Say the "no set menu, hours vary" thing once.** It was on the masthead, in the hero
+  and in the footer at the same time. The footer's hours note carries it now.
+
 ## Open questions for Vince
 
 Both of these came out of his own photographs, not the intake — ask before acting.
 
-1. **The shop's sign says ONE SOUTH SYCAMORE.** It is on the building in the storefront
+1. **The name is settled on the site but not in the world.** The site is now
+   One South Sycamore, matching the blade over the door and the Instagram handle.
+   But his Google listing still reads **"V flowers"**, and Google is what feeds the
+   map pack. Whichever name wins, the listing and the site have to agree, or local
+   search splits between two businesses. Ask him which one he wants and update the
+   Google listing to match.
+
+   Original note: **The shop's sign says ONE SOUTH SYCAMORE.** It is on the building in the storefront
    shots, and it is his Instagram handle (@1southsycamore). The site currently calls the
    business "V Flowers" because that is what Vinay was told. Which name goes on the site?
    The domain (vjsflowers.com) matches neither.
@@ -148,6 +169,17 @@ Both of these came out of his own photographs, not the intake — ask before act
    and the site says nothing about it. Is the art his? Is it for sale? It may deserve its
    own section — right now those photos sit in the gallery under "The Shop", which states
    nothing untrue but undersells what is clearly a real part of the business.
+
+### The contact form, and where it goes
+
+The form lives at `/contact`. Submissions land in `contact_messages` and surface in the
+admin Messages tab.
+
+**That is probably not good enough.** Vince does not use email and does not sit at a
+computer; expecting him to log into an admin panel to find a customer enquiry is
+optimistic. Either wire the form to text him (a Twilio send on successful insert is a
+few lines in `app/api/contact/route.ts`) or reconsider having a form at all. Until one
+of those happens, the page copy deliberately points anyone in a hurry at the phone.
 
 ## SEO, and the traps in it
 

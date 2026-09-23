@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { DEFAULT_BOARD } from "@/lib/content";
 import { supabaseConfigured } from "@/lib/supabase";
 
 import type { Metadata } from "next";
@@ -11,8 +10,8 @@ export default function AdminOverviewPage() {
     <>
       <h1 className="font-display text-3xl leading-tight">Hi Vince.</h1>
       <p className="mt-3 max-w-2xl leading-relaxed text-ink-soft">
-        Two things live here: the board people order from, and the photos on the
-        site. Change either whenever you want. The site updates right away.
+        The photographs on the site live here. Change them whenever you want
+        and the site updates right away.
       </p>
 
       {!supabaseConfigured && (
@@ -26,11 +25,6 @@ export default function AdminOverviewPage() {
       )}
 
       <div className="mt-10 grid gap-4 sm:grid-cols-2">
-        <Card
-          href="/admin/board"
-          title="The Board"
-          body={`${DEFAULT_BOARD.length} numbered options right now. Add, rename, or take one off when the inventory changes.`}
-        />
         <Card
           href="/admin/photos"
           title="Photos"

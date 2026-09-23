@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { Line, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
@@ -9,7 +9,6 @@ import { DESTINATION, ORIGINS, toVector } from "@/lib/globe/origins";
 const CHALK = "#eef1ea";
 const ROUTE = "#cfdcd0";
 const BLUSH = "#f0cfc0";
-const RIM = "#9db9a3";
 
 /**
  * A great-circle arc lifted just off the surface.
@@ -73,36 +72,6 @@ function Earth() {
     <mesh>
       <sphereGeometry args={[1, 128, 128]} />
       <meshBasicMaterial map={texture} />
-    </mesh>
-  );
-}
-
-/** Rim light: a back-faced shell that only shows at the edges. */
-function Atmosphere() {
-  return (
-    <mesh scale={1.04}>
-      <sphereGeometry args={[1, 48, 48]} />
-      <shaderMaterial
-        transparent
-        side={THREE.BackSide}
-        depthWrite={false}
-        uniforms={{ uColor: { value: new THREE.Color(RIM) } }}
-        vertexShader={`
-          varying vec3 vNormal;
-          void main() {
-            vNormal = normalize(normalMatrix * normal);
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          }
-        `}
-        fragmentShader={`
-          uniform vec3 uColor;
-          varying vec3 vNormal;
-          void main() {
-            float rim = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 3.5);
-            gl_FragColor = vec4(uColor, rim * 0.45);
-          }
-        `}
-      />
     </mesh>
   );
 }
@@ -245,6 +214,20 @@ export function GlobeScene({
     [],
   );
 
+  /**
+   * True only while a selection is being flown to.
+   *
+   * Once the region is centred this goes false and the globe is handed back
+   * to the viewer. Driving the rotation for as long as a region stayed
+   * selected meant every drag was immediately undone on the next frame, so
+   * picking a region felt like it locked the globe.
+   */
+  const flying = useRef(false);
+
+  useEffect(() => {
+    flying.current = activeOrigin !== null;
+  }, [activeOrigin]);
+
   useFrame(({ camera }, delta) => {
     const node = group.current;
     if (!node) return;
@@ -256,10 +239,12 @@ export function GlobeScene({
       return;
     }
 
+    // Arrived, or the viewer took over. Either way, stop steering.
+    if (!flying.current) return;
+
     const parent = node.parent;
     if (!parent) return;
 
-    // Where the camera sits, expressed in this group's parent space.
     parent.getWorldQuaternion(scratch.parentQuat);
     scratch.camDir
       .copy(camera.position)
@@ -273,13 +258,9 @@ export function GlobeScene({
 
     /**
      * Yaw the region onto the prime meridian, pitch it to the camera's
-     * latitude, then yaw it out to the camera's longitude.
-     *
-     * The obvious version of this is a single setFromUnitVectors, which
-     * takes the shortest path between the two directions and rolls the
-     * globe on its way there: picking New Zealand swung Antarctica to the
-     * top of the frame. Splitting the turn into yaw, pitch, yaw keeps north
-     * pointing up.
+     * latitude, then yaw it out to the camera's longitude. A single
+     * setFromUnitVectors takes the shortest path and rolls the globe on the
+     * way, which swung Antarctica to the top of the frame.
      */
     scratch.yawIn.setFromAxisAngle(scratch.up, -lng);
     scratch.pitch.setFromAxisAngle(scratch.right, lat - camLat);
@@ -292,9 +273,9 @@ export function GlobeScene({
     const step = reduced ? 1 : 1 - Math.pow(0.0015, delta);
     node.quaternion.slerp(scratch.target, step);
 
-    // Snap the last sliver, so it arrives instead of easing forever.
-    if (node.quaternion.angleTo(scratch.target) < 0.002) {
+    if (node.quaternion.angleTo(scratch.target) < 0.01) {
       node.quaternion.copy(scratch.target);
+      flying.current = false;
     }
   });
 
@@ -308,7 +289,6 @@ export function GlobeScene({
       {/* A shallow tilt: equirectangular textures smear badly at the poles,
           so the less of the Arctic that faces the camera, the better. */}
       <group rotation={[0.16, 0, 0.08]}>
-        <Atmosphere />
         <group ref={group} rotation={[0, -(DESTINATION.lng * Math.PI) / 180, 0]}>
           <Earth />
 
@@ -337,6 +317,10 @@ export function GlobeScene({
       </group>
 
       <OrbitControls
+        onStart={() => {
+          // The viewer is driving now; abandon any fly-to in progress.
+          flying.current = false;
+        }}
         enableZoom={false}
         enablePan={false}
         rotateSpeed={0.4}

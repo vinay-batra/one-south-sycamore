@@ -7,15 +7,16 @@ import { LogoMark } from "@/components/logo";
 import {
   ADDRESS_CITY,
   ADDRESS_STREET,
+  INSTAGRAM_URL,
   PHONE_DISPLAY,
   PHONE_TEL,
 } from "@/lib/site";
 
 const LINKS = [
-  { href: "/board", label: "The Board" },
   { href: "/gallery", label: "Gallery" },
   { href: "/about", label: "About" },
   { href: "/visit", label: "Visit" },
+  { href: "/contact", label: "Contact" },
 ];
 
 /**
@@ -42,8 +43,8 @@ export function Masthead() {
           <Link href="/" aria-label="One South Sycamore, home" className="group block">
             <span className="flex items-center gap-3">
               <LogoMark
-                className={`shrink-0 text-forest transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-rotate-6 ${
-                  isHome ? "h-8 w-8 sm:h-10 sm:w-10" : "h-6 w-6 sm:h-7 sm:w-7"
+                className={`shrink-0 text-forest transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-rotate-3 ${
+                  isHome ? "h-11 w-11 sm:h-14 sm:w-14" : "h-8 w-8 sm:h-10 sm:w-10"
                 }`}
               />
               <span
@@ -128,9 +129,14 @@ export function Masthead() {
                 );
               })}
             </ul>
-            <p className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
-              The inventory changes daily. Call ahead.
-            </p>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="text-[0.7rem] uppercase tracking-[0.16em] text-ink-soft transition-colors hover:text-ink"
+            >
+              Instagram
+            </a>
           </nav>
         </div>
       </div>

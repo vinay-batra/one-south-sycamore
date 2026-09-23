@@ -122,9 +122,45 @@ export const SOURCING_PARAGRAPHS = [
 ];
 
 /**
+ * How an order actually happens.
+ *
+ * This replaced a numbered, restaurant-style board. Vince did ask for one
+ * at the intake, but a fixed list of combinations contradicts the only
+ * thing that makes the shop what it is: nothing is made ahead and nothing
+ * is priced ahead. Confirm the change with him at the in-person review.
+ */
+export type OrderStep = {
+  label: string;
+  heading: string;
+  body: string;
+};
+
+export const ORDER_STEPS: OrderStep[] = [
+  {
+    label: "First",
+    heading: "Work out the occasion, not the product.",
+    body: "Who it is for, when you need it, and roughly what you want to spend. That is the entire brief, and it is all Vince needs.",
+  },
+  {
+    label: "Then",
+    heading: "Call, text, or walk in.",
+    body: "The phone is quickest. If you come by, you can look through the cooler and see exactly what arrived that morning.",
+  },
+  {
+    label: "After that",
+    heading: "He builds it in front of you.",
+    body: "Vince pulls the stems with you, suggests what goes with what, and puts the arrangement together while you are standing there.",
+  },
+  {
+    label: "Last",
+    heading: "It gets priced once it exists.",
+    body: "Never before. Tell him a number you want to stay under and he will work to it. Cash, card, Apple Pay or Venmo.",
+  },
+];
+
+/**
  * The board. Vince asked for a numbered board like a restaurant's.
- * These are defaults; he can change them from /admin whenever the
- * inventory turns over, which is most days.
+ * Kept only so the decision above is reversible; nothing renders it.
  */
 export type BoardItem = {
   number: number;

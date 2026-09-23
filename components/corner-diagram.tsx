@@ -1,14 +1,13 @@
 import { MAP_URL } from "@/lib/site";
 
 /**
- * A sketch of the crossing, not a map.
+ * A sketch of the junction, drawn to the real geography.
  *
- * It draws only what Vince actually told us: the shop stands on the corner
- * of Washington and Sycamore with the Lukoil directly across the street.
- * It deliberately does not claim a compass orientation or which corner of
- * the junction, because nobody has said, and a diagram that looks like a
- * map while being wrong is worse than no diagram. The real map is one tap
- * away underneath.
+ * North is up. Sycamore runs north to south; Washington Avenue crosses it
+ * and continues west as Swamp Road. The shop is on the south east corner
+ * and the Lukoil is directly opposite across Sycamore, which is exactly how
+ * Vince describes it. Still a sketch and still not to scale, with the real
+ * map a tap underneath.
  */
 export function CornerDiagram({ className = "" }: { className?: string }) {
   return (
@@ -18,69 +17,59 @@ export function CornerDiagram({ className = "" }: { className?: string }) {
           viewBox="0 0 400 300"
           className="block w-full"
           role="img"
-          aria-label="Sketch of the junction: the shop sits on the corner of Washington Avenue and Sycamore Street, directly across from the Lukoil station."
+          aria-label="Sketch of the junction, north at the top. Sycamore Street runs north to south and Washington Avenue crosses it, continuing west as Swamp Road. The shop is on the south east corner, with the Lukoil station directly opposite across Sycamore Street."
         >
-          {/* Roadway */}
           <g fill="var(--color-sage)">
-            <rect x="150" y="0" width="86" height="300" />
-            <rect x="0" y="96" width="400" height="74" />
+            <rect x="158" y="0" width="76" height="300" />
+            <rect x="0" y="104" width="400" height="62" />
           </g>
 
-          {/* Centre lines */}
           <g
             stroke="var(--color-paper)"
             strokeWidth="2"
             strokeDasharray="12 10"
             strokeLinecap="round"
           >
-            <path d="M193 0V96" />
-            <path d="M193 170V300" />
-            <path d="M0 133H150" />
-            <path d="M236 133H400" />
+            <path d="M196 0V104" />
+            <path d="M196 166V300" />
+            <path d="M0 135H158" />
+            <path d="M234 135H400" />
           </g>
 
-          {/* Kerb lines */}
-          <g stroke="var(--color-moss)" strokeWidth="1" opacity="0.5">
-            <path d="M150 0V96M150 170V300M236 0V96M236 170V300" />
-            <path d="M0 96H150M236 96H400M0 170H150M236 170H400" />
+          <g stroke="var(--color-moss)" strokeWidth="1" opacity="0.45">
+            <path d="M158 0V104M158 166V300M234 0V104M234 166V300" />
+            <path d="M0 104H158M234 104H400M0 166H158M234 166H400" />
           </g>
 
-          {/* The shop */}
+          {/* The shop: south east corner, east of Sycamore. */}
           <g>
-            <rect
-              x="46"
-              y="186"
-              width="92"
-              height="66"
-              fill="var(--color-forest)"
-              rx="2"
-            />
+            <rect x="248" y="182" width="104" height="62" fill="var(--color-forest)" rx="2" />
             <text
-              x="92"
-              y="214"
+              x="300"
+              y="208"
               textAnchor="middle"
               className="fill-[var(--color-paper)] font-sans"
-              style={{ fontSize: 11, letterSpacing: "0.12em" }}
+              style={{ fontSize: 10.5, letterSpacing: "0.1em" }}
             >
               ONE SOUTH
             </text>
             <text
-              x="92"
-              y="230"
+              x="300"
+              y="224"
               textAnchor="middle"
               className="fill-[var(--color-paper)] font-sans"
-              style={{ fontSize: 11, letterSpacing: "0.12em" }}
+              style={{ fontSize: 10.5, letterSpacing: "0.1em" }}
             >
               SYCAMORE
             </text>
           </g>
 
-          {/* The landmark across the street */}
+          {/* Lukoil: directly opposite, west of Sycamore. */}
           <g>
             <rect
-              x="252"
-              y="192"
-              width="74"
+              x="58"
+              y="186"
+              width="78"
               height="54"
               fill="none"
               stroke="var(--color-moss)"
@@ -89,36 +78,72 @@ export function CornerDiagram({ className = "" }: { className?: string }) {
               rx="2"
             />
             <text
-              x="289"
-              y="224"
+              x="97"
+              y="218"
               textAnchor="middle"
               className="fill-[var(--color-ink-soft)] font-sans"
-              style={{ fontSize: 10, letterSpacing: "0.12em" }}
+              style={{ fontSize: 10, letterSpacing: "0.1em" }}
             >
               LUKOIL
             </text>
           </g>
 
-          {/* Street names, set along their own roads */}
+          {/* Street names */}
           <text
-            x="20"
-            y="127"
+            x="286"
+            y="129"
             className="fill-[var(--color-ink-soft)] font-sans"
-            style={{ fontSize: 10, letterSpacing: "0.18em" }}
+            style={{ fontSize: 9.5, letterSpacing: "0.16em" }}
           >
-            WASHINGTON
+            W WASHINGTON AVE
           </text>
-          {/* Anchored at the start and rotated about its own origin, so the
-              label runs down the road instead of being clipped at the top. */}
           <text
-            x="170"
+            x="16"
+            y="129"
+            className="fill-[var(--color-ink-soft)] font-sans"
+            style={{ fontSize: 9.5, letterSpacing: "0.16em" }}
+          >
+            SWAMP RD
+          </text>
+          <text
+            x="178"
             y="18"
-            transform="rotate(90 170 18)"
+            transform="rotate(90 178 18)"
             className="fill-[var(--color-ink-soft)] font-sans"
-            style={{ fontSize: 10, letterSpacing: "0.18em" }}
+            style={{ fontSize: 9.5, letterSpacing: "0.16em" }}
           >
-            SYCAMORE
+            N SYCAMORE ST
           </text>
+          <text
+            x="178"
+            y="182"
+            transform="rotate(90 178 182)"
+            className="fill-[var(--color-ink-soft)] font-sans"
+            style={{ fontSize: 9.5, letterSpacing: "0.16em" }}
+          >
+            S SYCAMORE ST
+          </text>
+
+          {/* North */}
+          <g transform="translate(366 30)">
+            <path
+              d="M0 14V-6M0 -6l-4.5 5M0 -6l4.5 5"
+              stroke="var(--color-ink-soft)"
+              strokeWidth="1.3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              fill="none"
+            />
+            <text
+              x="0"
+              y="26"
+              textAnchor="middle"
+              className="fill-[var(--color-ink-soft)] font-sans"
+              style={{ fontSize: 9, letterSpacing: "0.12em" }}
+            >
+              N
+            </text>
+          </g>
         </svg>
       </div>
 

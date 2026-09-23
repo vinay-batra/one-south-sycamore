@@ -43,7 +43,8 @@ export const INSTAGRAM_HANDLE = "@1southsycamore";
  * Hours change constantly with the inventory, so the site leads with
  * "call for availability" and treats these as typical, not promised.
  */
-export const HOURS_NOTE = "Hours move with the flowers. Call or text before you come.";
+export const HOURS_NOTE =
+  "Hours vary. Call or text if you are planning to come by, to check availability.";
 export const HOURS: { days: string; time: string }[] = [
   { days: "Monday – Friday", time: "9:00 AM – 6:00 PM" },
   { days: "Saturday", time: "9:00 AM – 5:00 PM" },

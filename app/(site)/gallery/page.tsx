@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { GalleryGrid, type Plate } from "@/components/gallery-grid";
-import {
-  INSTAGRAM_HANDLE,
-  INSTAGRAM_URL,
-  PHONE_DISPLAY,
-  PHONE_TEL,
-} from "@/lib/site";
+import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/gallery" },
@@ -77,45 +71,18 @@ export default function GalleryPage() {
 
       <section className="border-t hairline bg-paper-warm">
         <div className="mx-auto grid max-w-[1180px] gap-8 px-6 py-16 lg:grid-cols-12">
-          <h2 className="font-display text-[2.25rem] leading-[1.05] tracking-tight lg:col-span-6 sm:text-[2.75rem]">
+          <h2 className="font-display text-[2.25rem] leading-[1.05] tracking-tight sm:text-[2.75rem] lg:col-span-6">
             More on Instagram, most days.
           </h2>
-          <div className="lg:col-span-5 lg:col-start-8">
-            <p className="leading-relaxed text-ink-soft">
-              Vince posts what&rsquo;s in as it comes in, the fastest way to see
-              today&rsquo;s cooler without walking through the door.
-            </p>
-            <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3">
-              <a
-                href={INSTAGRAM_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="border-b border-forest/40 pb-0.5 text-[0.7rem] uppercase tracking-[0.16em] text-forest hover:border-forest"
-              >
-                Follow {INSTAGRAM_HANDLE}
-              </a>
-              <a
-                href={`tel:${PHONE_TEL}`}
-                aria-label={`Call the shop, ${PHONE_DISPLAY}`}
-                className="font-display text-[1.6rem] leading-none tracking-tight hover:text-forest"
-              >
-                {PHONE_DISPLAY}
-              </a>
-            </div>
-            <div className="mt-6 flex flex-wrap gap-x-8 gap-y-3">
-              <Link
-                href="/board"
-                className="border-b border-forest/40 pb-0.5 text-[0.7rem] uppercase tracking-[0.16em] text-forest transition-colors hover:border-forest"
-              >
-                Order by number
-              </Link>
-              <Link
-                href="/visit"
-                className="border-b border-forest/40 pb-0.5 text-[0.7rem] uppercase tracking-[0.16em] text-forest transition-colors hover:border-forest"
-              >
-                Hours and directions
-              </Link>
-            </div>
+          <div className="lg:col-span-5 lg:col-start-8 lg:pt-3">
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="font-display text-[1.6rem] leading-none tracking-tight text-forest underline decoration-forest/30 underline-offset-[6px] transition-colors hover:decoration-forest"
+            >
+              {INSTAGRAM_HANDLE}
+            </a>
           </div>
         </div>
       </section>

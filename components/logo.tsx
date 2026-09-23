@@ -1,57 +1,55 @@
 /**
  * The mark is the street blade over the shop door.
  *
- * An earlier draft drew a V from two cut stems, which stopped meaning
- * anything once the shop took its real name. The green sign reading ONE
- * SOUTH SYCAMORE is the identity Vince already has on the building, so the
- * mark echoes that: a street blade carrying the number, with a stem
- * growing through it. It survives being shrunk to a favicon, where a
- * wordmark would not.
+ * Drawn solid rather than stroked. The first version outlined the blade in
+ * thin strokes, which disappeared at the size it actually gets used, and
+ * put the numeral at 1.7px of stroke where it read as a smudge. A filled
+ * sign with the number knocked out holds up from a favicon to a poster,
+ * which is the same reason real street blades are made that way.
+ *
+ * The knocked-out parts are painted in the paper colour rather than masked,
+ * so there is no SVG id to collide when the mark appears more than once.
  */
 export function LogoMark({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" className={className}>
+    <svg viewBox="0 0 40 40" fill="none" aria-hidden="true" className={className}>
       {/* The blade */}
+      <rect x="1" y="10" width="38" height="20" rx="2.5" fill="currentColor" />
+      {/* Inset keyline, the way a real sign is bordered */}
       <rect
-        x="2.5"
-        y="8.5"
-        width="27"
-        height="15"
-        rx="2.5"
-        stroke="currentColor"
-        strokeWidth="1.6"
-      />
-      {/* Inset rule, the way a real street sign is bordered */}
-      <rect
-        x="5"
-        y="11"
-        width="22"
-        height="10"
-        rx="1.2"
-        stroke="currentColor"
-        strokeWidth="0.9"
-        opacity="0.45"
+        x="3.4"
+        y="12.4"
+        width="33.2"
+        height="15.2"
+        rx="1.4"
+        stroke="var(--color-paper, #fcfbf9)"
+        strokeWidth="1.1"
+        opacity="0.55"
       />
       {/* The number */}
       <path
-        d="M13.4 13.2h2.1v5.6"
-        stroke="currentColor"
-        strokeWidth="1.7"
+        d="M14.6 16.1h2.9v9"
+        stroke="var(--color-paper, #fcfbf9)"
+        strokeWidth="2.4"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path d="M12.6 18.8h4.4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-      {/* A stem growing up through the blade */}
       <path
-        d="M21.6 21.6V12.6"
-        stroke="currentColor"
-        strokeWidth="1.5"
+        d="M13.1 25.1h6.6"
+        stroke="var(--color-paper, #fcfbf9)"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+      />
+      {/* A stem, because it is still a flower shop */}
+      <path
+        d="M26.4 25.4V15.1"
+        stroke="var(--color-paper, #fcfbf9)"
+        strokeWidth="2"
         strokeLinecap="round"
       />
       <path
-        d="M21.6 15.6c2-.1 3.2-1.1 3.4-2.9-2 .1-3.2 1.1-3.4 2.9z"
-        fill="currentColor"
-        opacity="0.9"
+        d="M26.4 19c2.6-.1 4.2-1.5 4.5-4-2.6.1-4.2 1.5-4.5 4z"
+        fill="var(--color-paper, #fcfbf9)"
       />
     </svg>
   );
@@ -59,9 +57,9 @@ export function LogoMark({ className = "" }: { className?: string }) {
 
 export function Wordmark({ className = "" }: { className?: string }) {
   return (
-    <span className={`inline-flex items-baseline gap-2.5 ${className}`}>
-      <LogoMark className="h-5 w-5 shrink-0 translate-y-[3px] text-forest" />
-      <span className="font-display text-[1.3rem] leading-none tracking-tight text-ink">
+    <span className={`inline-flex items-center gap-3 ${className}`}>
+      <LogoMark className="h-7 w-7 shrink-0 text-forest" />
+      <span className="font-display text-[1.35rem] leading-none tracking-tight text-ink">
         One South Sycamore
       </span>
     </span>

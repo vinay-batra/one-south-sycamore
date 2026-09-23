@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FieldFade } from "@/components/field-fade";
 import { PhotoSlot } from "@/components/photo-slot";
 import { Reveal } from "@/components/reveal";
 import { STORY_CHAPTERS } from "@/lib/content";
@@ -32,7 +31,7 @@ export default function AboutPage() {
             <h1 className="mt-5 font-display text-[3rem] leading-[0.94] tracking-[-0.03em] sm:text-[4.75rem]">
               Twenty-five years
               <br />
-              of new mornings.
+              in flowers.
             </h1>
           </div>
 
@@ -106,25 +105,6 @@ export default function AboutPage() {
           </Reveal>
         ))}
       </section>
-
-      {/* ── Pull quote ───────────────────────────────────────── */}
-      <FieldFade to="dark" />
-      <section className="bg-board text-chalk">
-        <div className="mx-auto max-w-[1180px] px-6 py-24 sm:py-32">
-          <Reveal>
-            <figure className="mx-auto max-w-4xl text-center">
-              <blockquote className="font-display text-[2.25rem] leading-[1.08] tracking-[-0.01em] sm:text-[3.5rem]">
-                &ldquo;Every day is a new day,
-                <br className="hidden sm:block" /> and a new inventory.&rdquo;
-              </blockquote>
-              <figcaption className="mt-8 text-[0.7rem] uppercase tracking-[0.2em] text-chalk/60">
-                Vince
-              </figcaption>
-            </figure>
-          </Reveal>
-        </div>
-      </section>
-      <FieldFade to="paper" />
 
       {/* ── How an order goes ────────────────────────────────── */}
       <section className="mx-auto max-w-[1180px] px-6 py-20 sm:py-28">

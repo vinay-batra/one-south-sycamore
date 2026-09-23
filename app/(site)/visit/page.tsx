@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { ContactForm } from "@/components/contact-form";
+import Link from "next/link";
 import { CornerDiagram } from "@/components/corner-diagram";
-import { PhotoSlot } from "@/components/photo-slot";
 import {
   ADDRESS_CITY,
   ADDRESS_FULL,
@@ -17,15 +16,15 @@ import {
 } from "@/lib/site";
 
 export const metadata: Metadata = {
+  title: "Visit & Delivery in Newtown, PA",
   alternates: { canonical: "/visit" },
   openGraph: { url: "/visit" },
-  title: "Visit & Delivery in Newtown, PA",
   description: `One South Sycamore is the florist at ${ADDRESS_FULL}. Opening hours, local delivery, payment, and directions to the corner.`,
 };
 
 export default function VisitPage() {
   return (
-    <div className="mx-auto max-w-[1180px] px-6 pt-14 pb-8 sm:pt-20">
+    <div className="mx-auto max-w-[1180px] px-6 pt-14 pb-20 sm:pt-20">
       <header className="grid gap-8 lg:grid-cols-12">
         <div className="lg:col-span-7">
           <p className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
@@ -37,16 +36,27 @@ export default function VisitPage() {
             and Sycamore, Newtown.
           </h1>
         </div>
-        <p className="text-[1.0625rem] leading-relaxed text-ink-soft lg:col-span-4 lg:col-start-9 lg:pt-4">
-          {DIRECTIONS_NOTE}
-        </p>
+        <div className="lg:col-span-4 lg:col-start-9 lg:pt-4">
+          <p className="text-[1.0625rem] leading-relaxed text-ink-soft">
+            {DIRECTIONS_NOTE}
+          </p>
+          <a
+            href={`tel:${PHONE_TEL}`}
+            aria-label={`Call the shop, ${PHONE_DISPLAY}`}
+            className="mt-5 inline-block font-display text-[1.9rem] leading-none tracking-tight transition-colors hover:text-forest"
+          >
+            {PHONE_DISPLAY}
+          </a>
+        </div>
       </header>
 
-      <div className="mt-16 grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-start">
-        <div>
+      <div className="mt-16 grid gap-12 lg:grid-cols-12 lg:items-start">
+        <div className="lg:col-span-6">
           <dl className="grid gap-8 sm:grid-cols-2">
             <div className="border-t border-ink/15 pt-4">
-              <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">Address</dt>
+              <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
+                Address
+              </dt>
               <dd className="mt-2 text-sm leading-relaxed text-ink-soft">
                 <a href={MAP_URL} target="_blank" rel="noreferrer" className="hover:text-ink">
                   {ADDRESS_STREET}
@@ -57,7 +67,9 @@ export default function VisitPage() {
             </div>
 
             <div className="border-t border-ink/15 pt-4">
-              <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">Phone</dt>
+              <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
+                Phone
+              </dt>
               <dd className="mt-2 text-sm leading-relaxed text-ink-soft">
                 <a href={`tel:${PHONE_TEL}`} className="hover:text-ink">
                   {PHONE_DISPLAY}
@@ -70,7 +82,9 @@ export default function VisitPage() {
             </div>
 
             <div className="border-t border-ink/15 pt-4 sm:col-span-2">
-              <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">Hours</dt>
+              <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
+                Hours
+              </dt>
               <dd className="mt-3">
                 <ul className="grid gap-1.5">
                   {HOURS.map((row) => (
@@ -88,7 +102,9 @@ export default function VisitPage() {
             </div>
 
             <div className="border-t border-ink/15 pt-4">
-              <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">Delivery</dt>
+              <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
+                Delivery
+              </dt>
               <dd className="mt-2 text-sm leading-relaxed text-ink-soft">
                 Local delivery to {DELIVERY.area}.
                 <br />${DELIVERY.orderMinimum} order minimum.
@@ -98,7 +114,9 @@ export default function VisitPage() {
             </div>
 
             <div className="border-t border-ink/15 pt-4">
-              <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">Payment</dt>
+              <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
+                Payment
+              </dt>
               <dd className="mt-2 text-sm leading-relaxed text-ink-soft">
                 {PAYMENT_METHODS.join(", ")}.
                 <br />
@@ -107,24 +125,21 @@ export default function VisitPage() {
             </div>
           </dl>
 
-          <CornerDiagram className="mt-12" />
-
-          <PhotoSlot
-            slug="storefront-wide"
-            label="Storefront, corner of Washington & Sycamore"
-            className="mt-10 aspect-[3/4] w-full"
-            sizes="(min-width: 1024px) 45vw, 100vw"
-          />
+          <div className="mt-10 border-t hairline pt-8">
+            <p className="leading-relaxed text-ink-soft">
+              For a wedding, a corporate account, or anything with a lot of
+              detail, it is easier to write it down.
+            </p>
+            <Link
+              href="/contact"
+              className="mt-4 inline-block border-b border-forest/40 pb-0.5 text-[0.7rem] uppercase tracking-[0.16em] text-forest transition-colors hover:border-forest"
+            >
+              Write to the shop
+            </Link>
+          </div>
         </div>
 
-        <div className="border-t-[3px] border-ink bg-paper-warm p-8 sm:p-10">
-          <h2 className="font-display text-[2.25rem] leading-[1.05] tracking-tight">Send the shop a note</h2>
-          <p className="mt-3 mb-8 leading-relaxed text-ink-soft">
-            For weddings, corporate accounts, or anything you&rsquo;d rather write out
-            than explain on the phone.
-          </p>
-          <ContactForm />
-        </div>
+        <CornerDiagram className="lg:col-span-5 lg:col-start-8" />
       </div>
     </div>
   );

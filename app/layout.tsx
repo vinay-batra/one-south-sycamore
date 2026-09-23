@@ -44,15 +44,14 @@ export default function RootLayout({
   return (
     // The font variables go on <html> so the @theme tokens, which resolve
     // against :root, can see them.
-    <html lang="en" className={`no-js ${inter.variable} ${display.variable}`}>
+    <html lang="en" className={`${inter.variable} ${display.variable}`}>
       <head>
-        {/* Dropped the moment script runs, so reveals only stay hidden for
-            browsers that can actually un-hide them. */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `document.documentElement.classList.remove('no-js')`,
-          }}
-        />
+        {/* Reveals start hidden and are shown by script. This only renders
+            when scripting is off, so the content is never stranded. A class
+            toggled by an inline script would hydrate mismatched. */}
+        <noscript>
+          <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
       </head>
       <body className="font-sans antialiased">
         <StructuredData />

@@ -16,10 +16,10 @@ import {
 } from "@/lib/site";
 
 const COLUMNS = [
-  { href: "/board", label: "The Board" },
   { href: "/gallery", label: "Gallery" },
   { href: "/about", label: "About" },
   { href: "/visit", label: "Visit & Delivery" },
+  { href: "/contact", label: "Write to the shop" },
 ];
 
 export function SiteFooter() {
@@ -64,7 +64,8 @@ export function SiteFooter() {
               rel="noreferrer"
               className="mt-4 inline-block text-sm text-ink-soft transition-colors hover:text-ink"
             >
-              {INSTAGRAM_HANDLE}
+              Instagram
+              <span className="block text-xs text-muted">{INSTAGRAM_HANDLE}</span>
             </a>
           </div>
 
