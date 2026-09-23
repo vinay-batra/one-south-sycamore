@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Instrument_Serif } from "next/font/google";
 import { SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/lib/site";
+import { StructuredData } from "@/components/structured-data";
 import "./globals.css";
 
 const inter = Inter({
@@ -28,7 +29,14 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: SITE_NAME,
     type: "website",
+    locale: "en_US",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} — Florist in Newtown, PA`,
+    description: SITE_TAGLINE,
+  },
+  alternates: { canonical: "/" },
 };
 
 export default function RootLayout({
@@ -38,7 +46,10 @@ export default function RootLayout({
     // The font variables go on <html> so the @theme tokens, which resolve
     // against :root, can see them.
     <html lang="en" className={`${inter.variable} ${display.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+        <StructuredData />
+        {children}
+      </body>
     </html>
   );
 }

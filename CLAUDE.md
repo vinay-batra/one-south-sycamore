@@ -45,11 +45,55 @@ No set options. The site must never contradict this by looking like a catalog wi
 ## Design
 
 Modern, clean, neutral — Vince's brief was "neutrals, white green lights pastel."
-Warm-white paper, deep forest green ink, pale sage fields, one blush accent.
-Instrument Serif for display, Inter for body. Tokens live in `app/globals.css` under `@theme`.
+Warm-white paper, deep forest green ink, pale sage fields, one blush accent, and a
+single near-black green (`--color-board`) used for the dark fields. Instrument Serif
+for display, Inter for body. Tokens live in `app/globals.css` under `@theme`.
+
+**The neutral palette is deliberate**: Vince's photographs are extremely saturated
+(magenta roses, green trick dianthus, spray-paint canvases). The interface stays quiet
+so the photographs carry all the colour. Don't add brand colour to the chrome.
+
+**Not a generic template.** The first pass used the same sticky translucent top bar as
+every other site in this account; it was replaced with a printed **masthead** — shop
+name at size, address set as a dateline, double rule, ruled nav row — that scrolls away
+instead of following. On mobile the phone stays reachable through a fixed bottom call
+strip, not a top bar. Interior pages compress the masthead to a folio. Sections are
+ruled ledgers, not cards.
+
+**Contrast is verified, not eyeballed.** Every text/background pair on every page was
+measured by compositing the real (often `oklab`, alpha-modified) colours on a canvas.
+`--color-muted` is `#5f6a5e` because the original `#7c8479` failed AA at small sizes,
+and text on `--color-board` never goes below `chalk/50` for body or `chalk/40` for
+display numerals. Re-measure if you touch either token.
 
 Logo is a **draft** (`components/logo.tsx`): the V drawn as two cut stems with a leaf.
 Vince asked for a logo to be made; he hasn't seen this one yet.
+
+## The globe
+
+`components/globe/` renders the sourcing story: four growing regions arced to Newtown.
+
+- Land is a **texture**, not points — `public/globe/land.png`, 4096×2048, rasterised
+  from Natural Earth 50m land polygons by `scripts/generate-globe-texture.mjs`. An
+  earlier point-cloud version could not hold recognisable coastlines and read as noise.
+- `SphereGeometry`'s UVs run opposite to a standard equirectangular map, so the texture
+  is mirrored back with `repeat.x = -1; offset.x = 1`. Geo-alignment is verified by
+  sampling the PNG at known coordinates (Newtown, Nairobi, Tokyo, mid-Pacific).
+- Arc lift is `0.025 + angle * 0.055`, peaking at ~1.15× radius. An earlier formula
+  peaked at 1.68× and the routes looked like they were leaving orbit.
+- Distances in the panel are computed great-circle, not estimated.
+- three.js (~900 KB) is **not** in the first load: the section holds it back behind an
+  IntersectionObserver so the phone number paints first on cell data.
+
+## Photographs
+
+Ten of Vince's photos, all 3:4 portrait. Layouts are built around that ratio — don't
+crop them into wide bands, it cuts the sign off the storefront shot.
+
+- Masters: `public/photos/*.webp`, 2400px, ~7.7 MB total (from 37 MB of JPEGs).
+- `lib/photos.ts` is generated: dimensions plus a 16px inline `blurDataURL` per photo.
+- Originals are in `photo-originals/`, gitignored — they are not deployed.
+- Regenerate with `scripts/process-photos.mjs`.
 
 ## Structure
 
@@ -82,13 +126,27 @@ so plainly rather than pretending to save.
    returns 503 and tells people to call**, by design — a real customer must never be silently dropped).
 2. **Wire the admin writes** — board CRUD and photo upload. This is the feature Vince actually
    asked for; the site is not done without it.
-3. **Real photos** — every image is a placeholder. Sources: his Instagram (approved) + in-store
-   shots Vinay takes. He has "tons" of succulent pictures.
+3. ~~Real photos~~ — **done.** Ten photographs are in. More would help: there is still no
+   photo of Vince himself, and nothing of wedding, sympathy or gift-basket work.
 4. **Buy vjsflowers.com** and deploy.
 5. **Draft review with Vince, in person** — he explicitly asked for this before launch. Confirm
    the slogan ("No set menu. Just what's beautiful today." is invented, not his), the logo, the
    placeholder hours, and the board copy.
 6. Consider: Vercel Hobby forbids commercial use — same question that's open on Moreco.
+
+## Open questions for Vince
+
+Both of these came out of his own photographs, not the intake — ask before acting.
+
+1. **The shop's sign says ONE SOUTH SYCAMORE.** It is on the building in the storefront
+   shots, and it is his Instagram handle (@1southsycamore). The site currently calls the
+   business "V Flowers" because that is what Vinay was told. Which name goes on the site?
+   The domain (vjsflowers.com) matches neither.
+2. **He sells art.** Three of the ten photos are spray-paint canvases, there is a hanging
+   rack of spray cans, and an "ART" sign stands out front. The intake never mentioned it
+   and the site says nothing about it. Is the art his? Is it for sale? It may deserve its
+   own section — right now those photos sit in the gallery under "The Shop", which states
+   nothing untrue but undersells what is clearly a real part of the business.
 
 ## Rules
 

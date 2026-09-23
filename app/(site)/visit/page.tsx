@@ -22,22 +22,28 @@ export const metadata: Metadata = {
 
 export default function VisitPage() {
   return (
-    <div className="mx-auto max-w-[1120px] px-6 pt-16 pb-8 sm:pt-24">
-      <header className="max-w-2xl">
-        <p className="eyebrow">Visit</p>
-        <h1 className="mt-5 font-display text-[2.5rem] leading-[1.08] tracking-tight sm:text-5xl">
-          On the corner of Washington and Sycamore.
-        </h1>
-        <p className="mt-6 text-[1.0625rem] leading-relaxed text-ink-soft">
+    <div className="mx-auto max-w-[1180px] px-6 pt-14 pb-8 sm:pt-20">
+      <header className="grid gap-8 lg:grid-cols-12">
+        <div className="lg:col-span-7">
+          <p className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
+            Visit
+          </p>
+          <h1 className="mt-5 font-display text-[3rem] leading-[0.94] tracking-[-0.03em] sm:text-[4.5rem]">
+            Corner of Washington
+            <br />
+            and Sycamore.
+          </h1>
+        </div>
+        <p className="text-[1.0625rem] leading-relaxed text-ink-soft lg:col-span-4 lg:col-start-9 lg:pt-4">
           {DIRECTIONS_NOTE}
         </p>
       </header>
 
-      <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-start">
+      <div className="mt-16 grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-start">
         <div>
           <dl className="grid gap-8 sm:grid-cols-2">
-            <div className="border-t hairline pt-4">
-              <dt className="eyebrow">Address</dt>
+            <div className="border-t border-ink/15 pt-4">
+              <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">Address</dt>
               <dd className="mt-2 text-sm leading-relaxed text-ink-soft">
                 <a href={MAP_URL} target="_blank" rel="noreferrer" className="hover:text-ink">
                   {ADDRESS_STREET}
@@ -47,8 +53,8 @@ export default function VisitPage() {
               </dd>
             </div>
 
-            <div className="border-t hairline pt-4">
-              <dt className="eyebrow">Phone</dt>
+            <div className="border-t border-ink/15 pt-4">
+              <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">Phone</dt>
               <dd className="mt-2 text-sm leading-relaxed text-ink-soft">
                 <a href={`tel:${PHONE_TEL}`} className="hover:text-ink">
                   {PHONE_DISPLAY}
@@ -60,8 +66,8 @@ export default function VisitPage() {
               </dd>
             </div>
 
-            <div className="border-t hairline pt-4 sm:col-span-2">
-              <dt className="eyebrow">Hours</dt>
+            <div className="border-t border-ink/15 pt-4 sm:col-span-2">
+              <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">Hours</dt>
               <dd className="mt-3">
                 <ul className="grid gap-1.5">
                   {HOURS.map((row) => (
@@ -78,8 +84,8 @@ export default function VisitPage() {
               </dd>
             </div>
 
-            <div className="border-t hairline pt-4">
-              <dt className="eyebrow">Delivery</dt>
+            <div className="border-t border-ink/15 pt-4">
+              <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">Delivery</dt>
               <dd className="mt-2 text-sm leading-relaxed text-ink-soft">
                 Local delivery to {DELIVERY.area}.
                 <br />${DELIVERY.orderMinimum} order minimum.
@@ -88,8 +94,8 @@ export default function VisitPage() {
               </dd>
             </div>
 
-            <div className="border-t hairline pt-4">
-              <dt className="eyebrow">Payment</dt>
+            <div className="border-t border-ink/15 pt-4">
+              <dt className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">Payment</dt>
               <dd className="mt-2 text-sm leading-relaxed text-ink-soft">
                 {PAYMENT_METHODS.join(", ")}.
                 <br />
@@ -99,13 +105,15 @@ export default function VisitPage() {
           </dl>
 
           <PhotoSlot
+            slug="storefront-wide"
             label="Storefront — corner of Washington & Sycamore"
-            className="mt-10 aspect-[4/3] w-full rounded-sm"
+            className="mt-12 aspect-[3/4] w-full"
+            sizes="(min-width: 1024px) 45vw, 100vw"
           />
         </div>
 
-        <div className="rounded-sm bg-paper-warm p-8 sm:p-10">
-          <h2 className="font-display text-3xl leading-tight">Send the shop a note</h2>
+        <div className="border-t-[3px] border-ink bg-paper-warm p-8 sm:p-10">
+          <h2 className="font-display text-[2.25rem] leading-[1.05] tracking-tight">Send the shop a note</h2>
           <p className="mt-3 mb-8 leading-relaxed text-ink-soft">
             For weddings, corporate accounts, or anything you&rsquo;d rather write out
             than explain on the phone.

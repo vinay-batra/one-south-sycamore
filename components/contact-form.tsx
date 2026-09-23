@@ -41,8 +41,8 @@ export function ContactForm() {
 
   if (state === "sent") {
     return (
-      <div className="rounded-sm border hairline bg-paper-warm p-8">
-        <h3 className="font-display text-2xl leading-tight">Got it.</h3>
+      <div className="border-t-[3px] border-forest bg-paper p-8">
+        <h3 className="font-display text-[2rem] leading-tight">Got it.</h3>
         <p className="mt-3 leading-relaxed text-ink-soft">
           Vince will get back to you. If it&rsquo;s time-sensitive — a funeral, a
           same-day delivery — please call the shop directly so it doesn&rsquo;t wait.
@@ -71,7 +71,7 @@ export function ContactForm() {
         <select
           id="occasion"
           name="occasion"
-          className="rounded-sm border hairline bg-paper px-4 py-3 text-sm outline-none focus:border-moss"
+          className="border-b border-ink/25 bg-transparent px-0 py-2.5 text-sm outline-none transition-colors focus:border-forest"
           defaultValue=""
         >
           <option value="" disabled>
@@ -104,7 +104,7 @@ export function ContactForm() {
           required
           rows={5}
           placeholder="Who it's for, when you need it, and roughly what you'd like to spend."
-          className="rounded-sm border hairline bg-paper px-4 py-3 text-sm leading-relaxed outline-none placeholder:text-muted focus:border-moss"
+          className="border-b border-ink/25 bg-transparent px-0 py-2.5 text-sm leading-relaxed outline-none transition-colors placeholder:text-muted focus:border-forest"
         />
       </div>
 
@@ -118,7 +118,7 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={state === "sending"}
-          className="rounded-full bg-forest px-6 py-3 text-sm text-paper transition-opacity hover:opacity-90 disabled:opacity-50"
+          className="bg-forest px-7 py-3.5 text-[0.7rem] uppercase tracking-[0.16em] text-paper transition-opacity hover:opacity-90 disabled:opacity-50"
         >
           {state === "sending" ? "Sending…" : "Send to the shop"}
         </button>
@@ -154,7 +154,7 @@ function Field({
         type={type}
         required={required}
         autoComplete={autoComplete}
-        className="rounded-sm border hairline bg-paper px-4 py-3 text-sm outline-none focus:border-moss"
+        className="border-b border-ink/25 bg-transparent px-0 py-2.5 text-sm outline-none transition-colors focus:border-forest"
       />
     </div>
   );

@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { PhotoSlot } from "@/components/photo-slot";
-import { GALLERY_CATEGORIES } from "@/lib/content";
-import { INSTAGRAM_HANDLE, INSTAGRAM_URL, PHONE_DISPLAY, PHONE_TEL } from "@/lib/site";
+import { Reveal } from "@/components/reveal";
+import {
+  INSTAGRAM_HANDLE,
+  INSTAGRAM_URL,
+  PHONE_DISPLAY,
+  PHONE_TEL,
+} from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Gallery",
@@ -10,84 +15,114 @@ export const metadata: Metadata = {
 };
 
 /**
- * Placeholder grid until Vinay uploads Vince's photos. Each slot is a real
- * position in the layout, so swapping in images doesn't move anything.
- * Once /admin/gallery is wired to Supabase this reads from the database.
+ * A contact sheet, not a product grid — plates are numbered and unevenly
+ * sized so it reads as a record of work rather than a catalog. Every
+ * photograph is 3:4, so the columns vary instead of the crops.
  */
-const PLACEHOLDER_SHOTS = [
-  { label: "Wrapped bouquet", category: "Arrangements", tall: true },
-  { label: "Vase arrangement", category: "Arrangements", tall: false },
-  { label: "Bridal bouquet", category: "Weddings", tall: false },
-  { label: "Ceremony piece", category: "Weddings", tall: true },
-  { label: "Standing spray", category: "Sympathy", tall: false },
-  { label: "Blooming plant", category: "Plants", tall: false },
-  { label: "Succulent dish garden", category: "Succulents", tall: true },
-  { label: "Potted succulents", category: "Succulents", tall: false },
-  { label: "Gift basket", category: "Gift Baskets", tall: false },
-  { label: "Storefront on Sycamore", category: "The Shop", tall: true },
-  { label: "Inside the cooler", category: "The Shop", tall: false },
-  { label: "Bench in progress", category: "The Shop", tall: false },
-];
+const PLATES = [
+  { slug: "storefront-wide", category: "The Shop", span: "sm:col-span-5" },
+  { slug: "roses-green-trick", category: "Arrangements", span: "sm:col-span-4" },
+  { slug: "cooler-doors", category: "The Cooler", span: "sm:col-span-3" },
+  { slug: "succulent-patio", category: "Succulents", span: "sm:col-span-4" },
+  { slug: "roses-hellebore", category: "Arrangements", span: "sm:col-span-4" },
+  { slug: "storefront-front", category: "The Shop", span: "sm:col-span-4" },
+  { slug: "studio-interior", category: "The Shop", span: "sm:col-span-5" },
+  { slug: "art-panels", category: "The Shop", span: "sm:col-span-3" },
+  { slug: "art-canvases", category: "The Shop", span: "sm:col-span-4" },
+  { slug: "cooler-wide", category: "The Cooler", span: "sm:col-span-6" },
+] as const;
 
 export default function GalleryPage() {
   return (
-    <div className="mx-auto max-w-[1120px] px-6 pt-16 pb-8 sm:pt-24">
-      <header className="max-w-2xl">
-        <p className="eyebrow">Gallery</p>
-        <h1 className="mt-5 font-display text-[2.5rem] leading-[1.08] tracking-tight sm:text-5xl">
-          What&rsquo;s come out of the shop.
-        </h1>
-        <p className="mt-6 text-[1.0625rem] leading-relaxed text-ink-soft">
-          None of these are catalog items — they&rsquo;re what got built on a given
-          morning, from what was in that day. Use them for ideas, then call and
-          describe what you&rsquo;re after.
-        </p>
-      </header>
+    <>
+      <section className="mx-auto max-w-[1180px] px-6 pt-14 pb-12 sm:pt-20">
+        <div className="grid gap-8 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <p className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
+              Gallery
+            </p>
+            <h1 className="mt-5 font-display text-[3rem] leading-[0.94] tracking-[-0.03em] sm:text-[4.5rem]">
+              What&rsquo;s come out
+              <br />
+              of the shop.
+            </h1>
+          </div>
+          <p className="text-[1.0625rem] leading-relaxed text-ink-soft lg:col-span-4 lg:col-start-9 lg:pt-4">
+            None of these are catalog items. They&rsquo;re what got built on a given
+            morning, from what was in that day. Use them for ideas, then call and
+            describe what you&rsquo;re after.
+          </p>
+        </div>
 
-      <ul className="mt-10 flex flex-wrap gap-2">
-        {GALLERY_CATEGORIES.map((category) => (
-          <li
-            key={category}
-            className="rounded-full border border-forest/15 bg-paper-warm px-3.5 py-1.5 text-xs tracking-wide text-forest"
-          >
-            {category}
-          </li>
-        ))}
-      </ul>
+        {/* Index of what's actually in the sheet below, set like a masthead
+            rule. Derived from the plates so it can never over-promise. */}
+        <ul className="mt-12 flex flex-wrap items-baseline gap-x-6 gap-y-2 border-y hairline py-4">
+          {[...new Set(PLATES.map((plate) => plate.category))].map((category) => (
+            <li
+              key={category}
+              className="text-[0.7rem] uppercase tracking-[0.16em] text-muted"
+            >
+              {category}
+            </li>
+          ))}
+        </ul>
+      </section>
 
-      <div className="mt-10 columns-2 gap-4 lg:columns-3 [&>*]:mb-4">
-        {PLACEHOLDER_SHOTS.map((shot) => (
-          <figure key={shot.label} className="break-inside-avoid">
-            <PhotoSlot
-              label={shot.label}
-              className={`w-full rounded-sm ${shot.tall ? "aspect-[3/4]" : "aspect-square"}`}
-            />
-            <figcaption className="mt-2 text-xs text-muted">{shot.category}</figcaption>
-          </figure>
-        ))}
-      </div>
+      <section className="mx-auto max-w-[1180px] px-6 pb-20">
+        <div className="grid gap-4 sm:grid-cols-12 sm:gap-6">
+          {PLATES.map((plate, index) => (
+            <Reveal key={plate.slug} className={plate.span}>
+              <figure>
+                <PhotoSlot
+                  slug={plate.slug}
+                  label={plate.category}
+                  className="aspect-[3/4] w-full"
+                  sizes="(min-width: 640px) 33vw, 100vw"
+                  priority={index < 2}
+                />
+                <figcaption className="mt-2.5 flex items-baseline justify-between gap-4 border-t hairline pt-2">
+                  <span className="text-[0.7rem] uppercase tracking-[0.16em] text-ink-soft">
+                    {plate.category}
+                  </span>
+                  <span className="numeral text-xs text-muted">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </figcaption>
+              </figure>
+            </Reveal>
+          ))}
+        </div>
+      </section>
 
-      <div className="mt-14 rounded-sm bg-sage p-8 sm:p-10">
-        <h2 className="font-display text-2xl leading-tight">
-          More on Instagram, updated most days.
-        </h2>
-        <p className="mt-3 max-w-2xl leading-relaxed text-ink-soft">
-          Vince posts what&rsquo;s in as it comes in. Follow{" "}
-          <a
-            href={INSTAGRAM_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="text-forest underline underline-offset-2"
-          >
-            {INSTAGRAM_HANDLE}
-          </a>{" "}
-          — or just call{" "}
-          <a href={`tel:${PHONE_TEL}`} className="text-forest underline underline-offset-2">
-            {PHONE_DISPLAY}
-          </a>{" "}
-          and ask what&rsquo;s good today.
-        </p>
-      </div>
-    </div>
+      <section className="border-t hairline bg-paper-warm">
+        <div className="mx-auto grid max-w-[1180px] gap-8 px-6 py-16 lg:grid-cols-12">
+          <h2 className="font-display text-[2.25rem] leading-[1.05] tracking-tight lg:col-span-6 sm:text-[2.75rem]">
+            More on Instagram, most days.
+          </h2>
+          <div className="lg:col-span-5 lg:col-start-8">
+            <p className="leading-relaxed text-ink-soft">
+              Vince posts what&rsquo;s in as it comes in — the fastest way to see
+              today&rsquo;s cooler without walking through the door.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3">
+              <a
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="border-b border-forest/40 pb-0.5 text-[0.7rem] uppercase tracking-[0.16em] text-forest hover:border-forest"
+              >
+                Follow {INSTAGRAM_HANDLE}
+              </a>
+              <a
+                href={`tel:${PHONE_TEL}`}
+                className="font-display text-[1.6rem] leading-none tracking-tight hover:text-forest"
+              >
+                {PHONE_DISPLAY}
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

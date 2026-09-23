@@ -16,7 +16,7 @@ export default function AdminBoardPage() {
       </p>
 
       {!supabaseConfigured && (
-        <div className="mt-8 rounded-sm border border-blush bg-blush/40 p-5 text-sm leading-relaxed text-ink-soft">
+        <div className="mt-8 border border-blush bg-blush/40 p-5 text-sm leading-relaxed text-ink-soft">
           Editing turns on once the database is connected. Everything below is
           the current live board.
         </div>
@@ -26,7 +26,7 @@ export default function AdminBoardPage() {
         {DEFAULT_BOARD.map((item) => (
           <li
             key={item.number}
-            className="flex flex-wrap items-start gap-4 border-b hairline bg-paper px-5 py-5"
+            className="flex flex-wrap items-start gap-4 border-b border-ink/15 bg-paper px-5 py-5"
           >
             <span className="font-display text-2xl leading-none text-moss">
               #{item.number}
@@ -41,14 +41,14 @@ export default function AdminBoardPage() {
               <button
                 type="button"
                 disabled
-                className="rounded-full border hairline px-4 py-2 text-xs text-muted disabled:cursor-not-allowed"
+                className="border border-ink/15 px-4 py-2 text-xs text-muted disabled:cursor-not-allowed"
               >
                 Edit
               </button>
               <button
                 type="button"
                 disabled
-                className="rounded-full border hairline px-4 py-2 text-xs text-muted disabled:cursor-not-allowed"
+                className="border border-ink/15 px-4 py-2 text-xs text-muted disabled:cursor-not-allowed"
               >
                 Hide
               </button>
@@ -60,7 +60,7 @@ export default function AdminBoardPage() {
       <button
         type="button"
         disabled
-        className="mt-8 rounded-full bg-forest px-6 py-3 text-sm text-paper opacity-50"
+        className="mt-8 bg-forest px-7 py-3.5 text-[0.7rem] uppercase tracking-[0.16em] text-paper opacity-50"
       >
         Add an option
       </button>

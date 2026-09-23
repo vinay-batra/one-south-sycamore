@@ -10,12 +10,15 @@
   --color-paper-warm: #f6f4ef;
   --color-ink: #1b211c;
   --color-ink-soft: #4b5449;
-  --color-muted: #7c8479;
+  --color-muted: #5f6a5e;
   --color-line: #e3e1d9;
   --color-forest: #2e4636;
   --color-moss: #5c7a63;
   --color-sage: #e8ede6;
   --color-blush: #f2e3dc;
+  /* The board: a real menu board, the one dark field on the site. */
+  --color-board: #151d17;
+  --color-chalk: #eef1ea;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-instrument), ui-serif, Georgia, serif;
@@ -23,12 +26,57 @@
 
 html {
   scroll-behavior: smooth;
+  /* Anchor targets clear the masthead when it is still on screen. */
+  scroll-padding-top: 6rem;
 }
 
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background-color: var(--color-sage);
+  color: var(--color-forest);
+}
+
+/* Display type is set tight, so let the browser even out the rag. */
+h1,
+h2,
+blockquote {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* One visible focus treatment everywhere, including on the dark board. */
+:focus-visible {
+  outline: 2px solid var(--color-moss);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* Keyboard users land here first. */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  background: var(--color-forest);
+  color: var(--color-paper);
+  padding: 0.65rem 1.1rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: top 160ms ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
 }
 
 /* Small caps label used above section headings throughout the site. */
@@ -38,6 +86,14 @@ body {
   text-transform: uppercase;
   font-weight: 500;
   color: var(--color-muted);
+}
+
+/* Oversized numerals hanging in the margin, like a market board. */
+.numeral {
+  font-family: var(--font-display);
+  font-variant-numeric: lining-nums;
+  letter-spacing: -0.03em;
+  line-height: 0.8;
 }
 
 /* Rules sit at 60% opacity so they read as paper creases, not borders. */

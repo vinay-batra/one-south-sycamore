@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Photo originals — masters live in public/photos as webp
+photo-originals/
+.DS_Store

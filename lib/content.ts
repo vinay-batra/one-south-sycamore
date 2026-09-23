@@ -57,6 +57,43 @@ export const SERVICES: Service[] = [
   },
 ];
 
+/**
+ * The story as chapters. Sequence is Vince's own; no dates are invented —
+ * the only number he gave was twenty-five years.
+ */
+export type Chapter = {
+  label: string;
+  heading: string;
+  body: string[];
+};
+
+export const STORY_CHAPTERS: Chapter[] = [
+  {
+    label: "Out of school",
+    heading: "He knew one thing for certain.",
+    body: [
+      "Vince started right out of school, and the only part of the plan he was sure about was that he didn't want to work for anybody.",
+      "What he didn't plan on was meeting a guy with an unbelievable flower connection. He started picking up flowers from him. He never stopped.",
+    ],
+  },
+  {
+    label: "Brooklyn",
+    heading: "The trade, learned from the pavement up.",
+    body: [
+      "A store in Brooklyn. Stands on the corner. Brooklyn and Manhattan, on the road and on the street, for years — selling flowers to people walking past, which is the fastest way there is to learn what people actually want.",
+      "He loved it. That part comes up more than once when he talks about it.",
+    ],
+  },
+  {
+    label: "Newtown",
+    heading: "Same job, quieter corner.",
+    body: [
+      "These days the shop sits on the corner of Washington and Sycamore, across from the Lukoil, in the center of town.",
+      "The job hasn't really changed. The flowers come in, and Vince figures out what to do with them.",
+    ],
+  },
+];
+
 /** Vince's story, in his voice, from the intake. */
 export const STORY_PARAGRAPHS = [
   "Vince started right out of school. He didn't want to work for anybody — that part he knew. What he didn't know was that he'd meet a guy with an unbelievable flower connection, start picking up flowers from him, and never stop.",

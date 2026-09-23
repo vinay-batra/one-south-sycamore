@@ -24,8 +24,15 @@ export async function POST(request: Request) {
 
   const parsed = Submission.safeParse(body);
   if (!parsed.success) {
+    // Say which way it failed — "fill this in" is wrong and confusing when
+    // someone has written too much, not too little.
+    const tooLong = parsed.error.issues.some((issue) => issue.code === "too_big");
     return NextResponse.json(
-      { error: "Please fill in your name, phone, and what you're looking for." },
+      {
+        error: tooLong
+          ? "That message is a little long — please shorten it, or just call the shop."
+          : "Please fill in your name, phone, and what you're looking for.",
+      },
       { status: 400 },
     );
   }

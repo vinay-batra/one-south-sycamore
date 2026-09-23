@@ -37,11 +37,11 @@ export default async function AdminMessagesPage() {
       </p>
 
       {!supabaseConfigured ? (
-        <div className="mt-8 rounded-sm border border-blush bg-blush/40 p-5 text-sm leading-relaxed text-ink-soft">
+        <div className="mt-8 border border-blush bg-blush/40 p-5 text-sm leading-relaxed text-ink-soft">
           Messages start showing up here once the database is connected.
         </div>
       ) : loadError ? (
-        <div className="mt-8 rounded-sm border border-red-200 bg-red-50 p-5 text-sm text-red-800">
+        <div className="mt-8 border border-red-200 bg-red-50 p-5 text-sm text-red-800">
           Couldn&rsquo;t load messages: {loadError}
         </div>
       ) : messages.length === 0 ? (
@@ -49,7 +49,7 @@ export default async function AdminMessagesPage() {
       ) : (
         <ul className="mt-10 grid gap-4">
           {messages.map((item) => (
-            <li key={item.id} className="rounded-sm border hairline bg-paper p-6">
+            <li key={item.id} className="border border-ink/15 bg-paper p-6">
               <div className="flex flex-wrap items-baseline justify-between gap-3">
                 <p className="font-medium">{item.name}</p>
                 <time className="text-xs text-muted" dateTime={item.created_at}>

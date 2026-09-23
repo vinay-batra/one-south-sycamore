@@ -15,12 +15,12 @@ export default function AdminPhotosPage() {
       </p>
 
       {!supabaseConfigured && (
-        <div className="mt-8 rounded-sm border border-blush bg-blush/40 p-5 text-sm leading-relaxed text-ink-soft">
+        <div className="mt-8 border border-blush bg-blush/40 p-5 text-sm leading-relaxed text-ink-soft">
           Uploading turns on once the photo storage is connected.
         </div>
       )}
 
-      <div className="mt-10 rounded-sm border border-dashed border-moss/40 bg-paper p-10 text-center">
+      <div className="mt-10 border border-dashed border-moss/40 bg-paper p-10 text-center">
         <p className="font-display text-2xl">Add photos</p>
         <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-ink-soft">
           Choose one or more pictures. They&rsquo;ll show up in the gallery in the
@@ -28,14 +28,14 @@ export default function AdminPhotosPage() {
         </p>
 
         <div className="mx-auto mt-6 grid max-w-xs gap-3 text-left">
-          <label htmlFor="category" className="eyebrow">
+          <label htmlFor="category" className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
             Section
           </label>
           <select
             id="category"
             disabled
             defaultValue={GALLERY_CATEGORIES[0]}
-            className="rounded-sm border hairline bg-paper-warm px-4 py-3 text-sm text-muted"
+            className="border border-ink/15 bg-paper-warm px-4 py-3 text-sm text-muted"
           >
             {GALLERY_CATEGORIES.map((category) => (
               <option key={category}>{category}</option>
@@ -45,7 +45,7 @@ export default function AdminPhotosPage() {
           <button
             type="button"
             disabled
-            className="mt-2 rounded-full bg-forest px-6 py-3 text-sm text-paper opacity-50"
+            className="mt-2 bg-forest px-7 py-3.5 text-[0.7rem] uppercase tracking-[0.16em] text-paper opacity-50"
           >
             Choose photos
           </button>

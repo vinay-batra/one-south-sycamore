@@ -23,7 +23,7 @@ export default function AdminLoginPage() {
 
         <form action={formAction} className="mt-8 grid gap-4">
           <div className="grid gap-2">
-            <label htmlFor="password" className="eyebrow">
+            <label htmlFor="password" className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
               Password
             </label>
             <input
@@ -33,7 +33,7 @@ export default function AdminLoginPage() {
               required
               autoFocus
               autoComplete="current-password"
-              className="rounded-sm border hairline bg-paper px-4 py-3 text-sm outline-none focus:border-moss"
+              className="border border-ink/15 bg-paper px-4 py-3 text-sm outline-none focus:border-moss"
             />
           </div>
 
@@ -46,7 +46,7 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={pending}
-            className="rounded-full bg-forest px-6 py-3 text-sm text-paper transition-opacity hover:opacity-90 disabled:opacity-50"
+            className="bg-forest px-7 py-3.5 text-[0.7rem] uppercase tracking-[0.16em] text-paper transition-opacity hover:opacity-90 disabled:opacity-50"
           >
             {pending ? "Checking…" : "Log in"}
           </button>
