@@ -17,7 +17,7 @@ import {
 
 export const metadata: Metadata = {
   title: "Visit & Delivery",
-  description: `V Flowers is at ${ADDRESS_FULL} — hours, local delivery, payment, and directions.`,
+  description: `V Flowers is at ${ADDRESS_FULL}. Hours, local delivery, payment, and directions.`,
 };
 
 export default function VisitPage() {
@@ -99,14 +99,14 @@ export default function VisitPage() {
               <dd className="mt-2 text-sm leading-relaxed text-ink-soft">
                 {PAYMENT_METHODS.join(", ")}.
                 <br />
-                Paid at the shop or on delivery — there&rsquo;s no checkout online.
+                Paid at the shop or on delivery. There&rsquo;s no checkout online.
               </dd>
             </div>
           </dl>
 
           <PhotoSlot
             slug="storefront-wide"
-            label="Storefront — corner of Washington & Sycamore"
+            label="Storefront, corner of Washington & Sycamore"
             className="mt-12 aspect-[3/4] w-full"
             sizes="(min-width: 1024px) 45vw, 100vw"
           />

@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
+import { FieldFade } from "@/components/field-fade";
 import { SOURCING_PARAGRAPHS } from "@/lib/content";
 
 /**
@@ -66,11 +67,13 @@ export function JourneySection() {
   }, []);
 
   return (
-    <section className="bg-board text-chalk">
+    <>
+      <FieldFade to="dark" />
+      <section className="bg-board text-chalk">
       <div className="mx-auto max-w-[1180px] px-6 py-20 sm:py-28">
         <div className="grid gap-8 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <p className="text-[0.7rem] uppercase tracking-[0.2em] text-chalk/50">
+            <p className="text-[0.7rem] uppercase tracking-[0.2em] text-chalk/60">
               Where they come from
             </p>
             <h2 className="mt-5 font-display text-[2.5rem] leading-[1.0] tracking-[-0.02em] sm:text-[3.25rem]">
@@ -97,6 +100,8 @@ export function JourneySection() {
           {near ? <FlowerGlobe /> : <GlobeSkeleton />}
         </div>
       </div>
-    </section>
+      </section>
+      <FieldFade to="paper" />
+    </>
   );
 }

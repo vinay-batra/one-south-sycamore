@@ -5,7 +5,7 @@ import { ADDRESS_STREET, PHONE_DISPLAY, SITE_TAGLINE } from "@/lib/site";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "V Flowers — florist in Newtown, Pennsylvania";
+export const alt = "V Flowers, florist in Newtown, Pennsylvania";
 
 /** Shared-link card: the masthead, essentially, at poster size. */
 export default async function OpengraphImage() {

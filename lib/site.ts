@@ -1,8 +1,8 @@
-/** Site-wide constants — single source of truth for V Flowers' details. */
+/** Site-wide constants: the single source of truth for V Flowers' details. */
 
 export const SITE_NAME = "V Flowers";
 
-/** Primary slogan. Draft — confirm with Vince at the in-person review. */
+/** Primary slogan. Draft. Confirm with Vince at the in-person review. */
 export const SITE_TAGLINE = "No set menu. Just what's beautiful today.";
 
 export const PHONE_DISPLAY = "(609) 649-1992";
@@ -12,7 +12,7 @@ export const ADDRESS_STREET = "1 South Sycamore Street";
 export const ADDRESS_CITY = "Newtown, PA 18940";
 export const ADDRESS_FULL = `${ADDRESS_STREET}, ${ADDRESS_CITY}`;
 
-/** How people actually find him — his own words at the intake. */
+/** How people actually find him, in his own words at the intake. */
 export const DIRECTIONS_NOTE =
   "Directly across from the Lukoil, on the corner of Washington and Sycamore in the center of town.";
 
@@ -27,7 +27,7 @@ export const INSTAGRAM_HANDLE = "@1southsycamore";
  * Hours change constantly with the inventory, so the site leads with
  * "call for availability" and treats these as typical, not promised.
  */
-export const HOURS_NOTE = "Hours move with the flowers — call or text before you come.";
+export const HOURS_NOTE = "Hours move with the flowers. Call or text before you come.";
 export const HOURS: { days: string; time: string }[] = [
   { days: "Monday – Friday", time: "9:00 AM – 6:00 PM" },
   { days: "Saturday", time: "9:00 AM – 5:00 PM" },

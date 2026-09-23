@@ -2,7 +2,7 @@ import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
 
 /**
- * One shop, one owner, one password — full Supabase auth would be more
+ * One shop, one owner, one password. Full Supabase auth would be more
  * account than Vince needs. The cookie holds a signed expiry, never the
  * password, so it can't be replayed after it lapses or forged without the
  * secret.

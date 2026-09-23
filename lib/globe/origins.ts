@@ -36,7 +36,7 @@ export const ORIGINS: Origin[] = [
   {
     id: "new-zealand",
     name: "New Zealand",
-    note: "Opposite season to ours — it's their summer when it's our winter.",
+    note: "Opposite season to ours: their summer is our winter.",
     lat: -41.0,
     lng: 174.0,
   },
@@ -61,13 +61,21 @@ export function milesFrom(lat: number, lng: number) {
   return Math.round(2 * R * Math.asin(Math.sqrt(a)));
 }
 
-/** Lat/lng to a point on the unit sphere, matching the land-point cloud. */
+/**
+ * Lat/lng to a point on the unit sphere.
+ *
+ * The camera sits on +z, so +x is screen right. This mapping puts the prime
+ * meridian at +z and east toward +x, which is how a globe looks from
+ * outside: west on the left, east on the right. Swapping sin and cos here
+ * mirrors the whole world, and because the texture transform is derived
+ * from this function the mirror stays self-consistent and is easy to miss.
+ */
 export function toVector(lat: number, lng: number, radius = 1): [number, number, number] {
   const phi = (lat * Math.PI) / 180;
   const theta = (lng * Math.PI) / 180;
   return [
-    radius * Math.cos(phi) * Math.cos(theta),
-    radius * Math.sin(phi),
     radius * Math.cos(phi) * Math.sin(theta),
+    radius * Math.sin(phi),
+    radius * Math.cos(phi) * Math.cos(theta),
   ];
 }

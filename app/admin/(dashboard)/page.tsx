@@ -8,7 +8,7 @@ export default function AdminOverviewPage() {
       <h1 className="font-display text-3xl leading-tight">Hi Vince.</h1>
       <p className="mt-3 max-w-2xl leading-relaxed text-ink-soft">
         Two things live here: the board people order from, and the photos on the
-        site. Change either whenever you want — the site updates right away.
+        site. Change either whenever you want. The site updates right away.
       </p>
 
       {!supabaseConfigured && (
@@ -16,7 +16,7 @@ export default function AdminOverviewPage() {
           <p className="text-sm font-medium">Not connected yet</p>
           <p className="mt-1 text-sm leading-relaxed text-ink-soft">
             The database isn&rsquo;t hooked up, so edits here won&rsquo;t save. This is the
-            draft version — Vinay finishes this part before launch.
+            draft version. Vinay finishes this part before launch.
           </p>
         </div>
       )}

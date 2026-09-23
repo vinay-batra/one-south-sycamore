@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { FieldFade } from "@/components/field-fade";
 import { PhotoSlot } from "@/components/photo-slot";
 import { Reveal } from "@/components/reveal";
 import { STORY_CHAPTERS } from "@/lib/content";
@@ -13,7 +14,7 @@ import {
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Twenty-five years in flowers — Brooklyn street stands to a corner shop in Newtown, PA. The story behind V Flowers.",
+    "Twenty-five years in flowers, from Brooklyn street stands to a corner shop in Newtown, PA. The story behind V Flowers.",
 };
 
 export default function AboutPage() {
@@ -98,6 +99,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Pull quote ───────────────────────────────────────── */}
+      <FieldFade to="dark" />
       <section className="bg-board text-chalk">
         <div className="mx-auto max-w-[1180px] px-6 py-24 sm:py-32">
           <Reveal>
@@ -106,13 +108,14 @@ export default function AboutPage() {
                 &ldquo;Every day is a new day,
                 <br className="hidden sm:block" /> and a new inventory.&rdquo;
               </blockquote>
-              <figcaption className="mt-8 text-[0.7rem] uppercase tracking-[0.2em] text-chalk/50">
+              <figcaption className="mt-8 text-[0.7rem] uppercase tracking-[0.2em] text-chalk/60">
                 Vince
               </figcaption>
             </figure>
           </Reveal>
         </div>
       </section>
+      <FieldFade to="paper" />
 
       {/* ── How an order goes ────────────────────────────────── */}
       <section className="mx-auto max-w-[1180px] px-6 py-20 sm:py-28">
@@ -144,7 +147,7 @@ export default function AboutPage() {
             <p className="text-[1.0625rem] leading-relaxed text-ink-soft">
               Someone came in and said it was their wife&rsquo;s anniversary. Vince
               took them to the back, showed them what was in the cooler, and
-              started making suggestions — this with that, more of these, skip
+              started making suggestions: this with that, more of these, skip
               those.
             </p>
             <p className="mt-5 text-[1.0625rem] leading-relaxed text-ink-soft">

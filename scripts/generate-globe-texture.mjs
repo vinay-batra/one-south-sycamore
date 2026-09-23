@@ -1,6 +1,6 @@
 /**
  * Rasterises Natural Earth land polygons into an equirectangular texture
- * for the globe. A texture gives true coastlines — a point cloud can only
+ * for the globe. A texture gives true coastlines. A point cloud can only
  * approximate them, and at any readable density it reads as noise.
  *
  *   node scripts/generate-globe-texture.mjs
@@ -8,13 +8,14 @@
 import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import * as topojson from "topojson-client";
+import { geoArea, geoEquirectangular, geoPath } from "d3-geo";
 import sharp from "sharp";
 
 const require = createRequire(import.meta.url);
 
 const W = 4096;
 const H = 2048;
-const OCEAN = "#0d1712";
+const OCEAN = "#15241b";
 const LAND = "#8fae95";
 const COAST = "#c2d4c4";
 
@@ -24,61 +25,65 @@ const topo = JSON.parse(
 );
 const land = topojson.feature(topo, topo.objects.land);
 
-/** Standard equirectangular: lng -180 at x=0, lat +90 at y=0. */
-const px = (lng, lat) => [
-  ((lng + 180) / 360) * W,
-  ((90 - lat) / 180) * H,
-];
-
 /**
- * One <path> per polygon, each carrying its own holes, filled with the
- * nonzero rule.
+ * Drop the specks.
  *
- * Merging every ring into a single evenodd path looks equivalent and is
- * not: Antarctica's outline wraps the full width of the projection and
- * overlaps itself near the pole, so evenodd cancelled the overlap and
- * punched a hole straight through the South Pole. Nonzero respects ring
- * winding — GeoJSON winds holes opposite to their outer ring — so lakes
- * still read as holes and Antarctica stays solid.
+ * The dataset carries 1,419 separate landmasses, and roughly 1,100 of them
+ * are Pacific atolls of a few square kilometres. At the size this globe is
+ * drawn they cannot render as islands, only as scattered dots, which read
+ * as dirt on the lens. Cutting below 1,000 km2 removes them while keeping
+ * 99.8% of the world's land area and every island anyone would look for,
+ * Hawaii's main chain included.
  */
-const polygons = [];
+const MIN_ISLAND_KM2 = 1000;
+const EARTH_R2 = 6371 * 6371;
+
+const keptPolygons = [];
 for (const feature of land.features ?? [land]) {
   const { type, coordinates } = feature.geometry;
   const polys = type === "Polygon" ? [coordinates] : coordinates;
-  polygons.push(...polys);
+  for (const poly of polys) {
+    const km2 = geoArea({ type: "Polygon", coordinates: poly }) * EARTH_R2;
+    if (km2 >= MIN_ISLAND_KM2) keptPolygons.push(poly);
+  }
 }
 
-const ringPath = (ring) => {
-  let d = "";
-  for (let i = 0; i < ring.length; i++) {
-    const [x, y] = px(ring[i][0], ring[i][1]);
-    d += (i === 0 ? "M" : "L") + x.toFixed(1) + " " + y.toFixed(1);
-  }
-  return d + "Z";
-};
-
-const paths = polygons
-  .map(
-    (poly) =>
-      `<path d="${poly.map(ringPath).join("")}" fill="${LAND}" stroke="${COAST}" ` +
-      `stroke-width="1.4" stroke-linejoin="round" fill-rule="nonzero"/>`,
-  )
-  .join("");
+const trimmedLand = { type: "MultiPolygon", coordinates: keptPolygons };
+console.log(
+  `kept ${keptPolygons.length} landmasses of ${
+    (land.features ?? [land]).reduce(
+      (n, f) =>
+        n + (f.geometry.type === "Polygon" ? 1 : f.geometry.coordinates.length),
+      0,
+    )
+  } (>= ${MIN_ISLAND_KM2} km2)`,
+);
 
 /**
- * Antarctica's outline in this dataset runs to the pole and back along the
- * projection's bottom edge, which leaves the innermost cap unfilled however
- * it is wound. Painting the cap solid is simply correct: there is no open
- * ocean anywhere south of -84°, it is continuous ice sheet to the pole.
+ * d3 builds the path, not a hand-rolled projection.
+ *
+ * Projecting lng/lat straight to x/y looks fine until a polygon crosses the
+ * antimeridian: its coordinates jump from +179 to -179 and a naive path
+ * draws a straight line across the entire map. At high latitude that line
+ * wraps into a complete ring around the pole, which is exactly what
+ * Russia's Chukotka coast and Wrangel Island were drawing around the North
+ * Pole. d3 cuts polygons at the antimeridian and walks the polar boundary
+ * properly, so the rings disappear and Antarctica closes over the pole.
  */
-const CAP_LAT = -84;
-const capTop = ((90 - CAP_LAT) / 180) * H;
-const polarCap = `<rect x="0" y="${capTop.toFixed(1)}" width="${W}" height="${(H - capTop).toFixed(1)}" fill="${LAND}"/>`;
+const projection = geoEquirectangular()
+  .scale(W / (2 * Math.PI))
+  .translate([W / 2, H / 2]);
+
+const render = geoPath(projection);
+const landPath = render(trimmedLand);
+
+const paths =
+  `<path d="${landPath}" fill="${LAND}" stroke="${COAST}" stroke-width="1.4" ` +
+  `stroke-linejoin="round" fill-rule="evenodd"/>`;
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
   <rect width="${W}" height="${H}" fill="${OCEAN}"/>
   ${paths}
-  ${polarCap}
 </svg>`;
 
 mkdirSync("public/globe", { recursive: true });
@@ -91,4 +96,4 @@ const { size } = await sharp(out).metadata().then(async (m) => ({
   size: (await import("node:fs")).statSync(out).size,
   m,
 }));
-console.log(`wrote ${out} — ${W}x${H}, ${(size / 1024).toFixed(0)} KB`);
+console.log(`wrote ${out}: ${W}x${H}, ${(size / 1024).toFixed(0)} KB`);

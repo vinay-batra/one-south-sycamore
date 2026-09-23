@@ -15,7 +15,7 @@ export default function NotFound() {
         in the cooler.
       </h1>
       <p className="mt-6 max-w-md leading-relaxed text-ink-soft">
-        The page you were after doesn&rsquo;t exist. The flowers still do — call the
+        The page you were after doesn&rsquo;t exist. The flowers still do. Call the
         shop, or start again from the front.
       </p>
       <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">

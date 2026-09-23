@@ -3,7 +3,7 @@ import { supabaseConfigured } from "@/lib/supabase";
 
 /**
  * Draft state: the uploader's layout, without the Supabase Storage wiring.
- * Vince's flow is "take a photo, pick a section, done" — no cropping, no
+ * Vince's flow is "take a photo, pick a section, done": no cropping, no
  * file management, no naming.
  */
 export default function AdminPhotosPage() {
@@ -54,7 +54,7 @@ export default function AdminPhotosPage() {
 
       <h2 className="mt-14 font-display text-2xl">On the site now</h2>
       <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-        Nothing uploaded yet — the site is showing placeholders until the first
+        Nothing uploaded yet. The site is showing placeholders until the first
         real photos go up.
       </p>
     </>

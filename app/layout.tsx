@@ -18,13 +18,13 @@ const display = Instrument_Serif({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — Florist in Newtown, PA`,
+    default: `${SITE_NAME} · Florist in Newtown, PA`,
     template: `%s · ${SITE_NAME}`,
   },
   description:
     "V Flowers is a hand-arranged flower shop on South Sycamore Street in Newtown, PA. Fresh cut flowers sourced worldwide, custom arrangements, weddings, sympathy, plants and succulents.",
   openGraph: {
-    title: `${SITE_NAME} — Florist in Newtown, PA`,
+    title: `${SITE_NAME} · Florist in Newtown, PA`,
     description: SITE_TAGLINE,
     url: SITE_URL,
     siteName: SITE_NAME,
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} — Florist in Newtown, PA`,
+    title: `${SITE_NAME} · Florist in Newtown, PA`,
     description: SITE_TAGLINE,
   },
   alternates: { canonical: "/" },

@@ -3,6 +3,7 @@
 import { Suspense, useState, useSyncExternalStore } from "react";
 import { Canvas } from "@react-three/fiber";
 import { GlobeScene } from "@/components/globe/globe-scene";
+import { CountUp, Reveal } from "@/components/reveal";
 import { DESTINATION, ORIGINS, milesFrom } from "@/lib/globe/origins";
 
 const REDUCED_QUERY = "(prefers-reduced-motion: reduce)";
@@ -51,17 +52,18 @@ export function FlowerGlobe() {
         </div>
 
         {/* Outside the square, so it clears the globe rather than sitting on it. */}
-        <p className="mt-6 text-center text-[0.65rem] uppercase tracking-[0.18em] text-chalk/50">
+        <p className="mt-6 text-center text-[0.65rem] uppercase tracking-[0.18em] text-chalk/60">
           Drag to turn · Tap an origin
         </p>
       </div>
 
       <div className="lg:col-span-4 lg:col-start-9">
         <ul className="border-t border-chalk/15">
-          {ORIGINS.map((origin) => {
+          {ORIGINS.map((origin, index) => {
             const isActive = origin.id === activeId;
             return (
               <li key={origin.id} className="border-b border-chalk/15">
+                <Reveal motion="left" delay={index * 90} duration={700}>
                 <button
                   type="button"
                   onClick={() => setActiveId(isActive ? null : origin.id)}
@@ -75,26 +77,27 @@ export function FlowerGlobe() {
                   >
                     {origin.name}
                   </span>
-                  <span className="shrink-0 font-sans text-[0.7rem] uppercase tracking-[0.14em] text-chalk/50">
-                    {milesFrom(origin.lat, origin.lng).toLocaleString()} mi
+                  <span className="shrink-0 font-sans text-[0.7rem] uppercase tracking-[0.14em] text-chalk/60">
+                    <CountUp to={milesFrom(origin.lat, origin.lng)} /> mi
                   </span>
                 </button>
+                </Reveal>
               </li>
             );
           })}
         </ul>
 
         <div className="mt-6 min-h-[5.5rem]">
-          {active ? (
-            <p className="text-[0.95rem] leading-relaxed text-chalk/65">
-              {active.note}
-            </p>
-          ) : (
-            <p className="text-[0.95rem] leading-relaxed text-chalk/50">
-              Four growing regions, one cooler on {DESTINATION.name}. Pick one to
-              see how far it came.
-            </p>
-          )}
+          <p
+            key={active?.id ?? "idle"}
+            className={`animate-[fade-up_500ms_cubic-bezier(0.16,1,0.3,1)_both] text-[0.95rem] leading-relaxed motion-reduce:animate-none ${
+              active ? "text-chalk/65" : "text-chalk/60"
+            }`}
+          >
+            {active
+              ? active.note
+              : `Four growing regions, one cooler on ${DESTINATION.name}. Pick one to see how far it came.`}
+          </p>
         </div>
       </div>
     </div>

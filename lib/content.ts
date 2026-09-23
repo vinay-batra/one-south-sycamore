@@ -58,7 +58,7 @@ export const SERVICES: Service[] = [
 ];
 
 /**
- * The story as chapters. Sequence is Vince's own; no dates are invented —
+ * The story as chapters. Sequence is Vince's own, and no dates are invented:
  * the only number he gave was twenty-five years.
  */
 export type Chapter = {
@@ -80,7 +80,7 @@ export const STORY_CHAPTERS: Chapter[] = [
     label: "Brooklyn",
     heading: "The trade, learned from the pavement up.",
     body: [
-      "A store in Brooklyn. Stands on the corner. Brooklyn and Manhattan, on the road and on the street, for years — selling flowers to people walking past, which is the fastest way there is to learn what people actually want.",
+      "A store in Brooklyn. Stands on the corner. Brooklyn and Manhattan, on the road and on the street, for years, selling flowers to people walking past, which is the fastest way there is to learn what people actually want.",
       "He loved it. That part comes up more than once when he talks about it.",
     ],
   },
@@ -96,19 +96,19 @@ export const STORY_CHAPTERS: Chapter[] = [
 
 /** Vince's story, in his voice, from the intake. */
 export const STORY_PARAGRAPHS = [
-  "Vince started right out of school. He didn't want to work for anybody — that part he knew. What he didn't know was that he'd meet a guy with an unbelievable flower connection, start picking up flowers from him, and never stop.",
-  "That was twenty-five years ago. Since then it's been Brooklyn and Manhattan, on the road and on the street — a store in Brooklyn, stands on the corner, learning the trade from the pavement up. He loved it. Every day was a new day, and a new inventory.",
+  "Vince started right out of school. He didn't want to work for anybody. That part he knew. What he didn't know was that he'd meet a guy with an unbelievable flower connection, start picking up flowers from him, and never stop.",
+  "That was twenty-five years ago. Since then it's been Brooklyn and Manhattan, on the road and on the street: a store in Brooklyn, stands on the corner, learning the trade from the pavement up. He loved it. Every day was a new day, and a new inventory.",
   "These days the shop is on the corner of Washington and Sycamore in Newtown, and the job hasn't really changed. The flowers come in, and Vince figures out what to do with them.",
 ];
 
-/** Where the flowers actually come from — the part most shops don't tell you. */
+/** Where the flowers actually come from, the part most shops don't tell you. */
 export const SOURCING_PARAGRAPHS = [
   "The flowers in the cooler have been on a longer trip than most people expect. New Zealand. Japan. South America. Kenya.",
-  "They're grown and field-cut where the growing is best, cut fresh, and shipped straight through to get here — so what you're looking at on Sycamore Street was standing in a field on the other side of the world a few days ago.",
+  "They're grown and field-cut where the growing is best, cut fresh, and shipped straight through to get here, so what you're looking at on Sycamore Street was standing in a field on the other side of the world a few days ago.",
 ];
 
 /**
- * The board — Vince asked for a numbered board like a restaurant's.
+ * The board. Vince asked for a numbered board like a restaurant's.
  * These are defaults; he can change them from /admin whenever the
  * inventory turns over, which is most days.
  */

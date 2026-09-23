@@ -102,7 +102,7 @@ export default function GalleryPage() {
           </h2>
           <div className="lg:col-span-5 lg:col-start-8">
             <p className="leading-relaxed text-ink-soft">
-              Vince posts what&rsquo;s in as it comes in — the fastest way to see
+              Vince posts what&rsquo;s in as it comes in, the fastest way to see
               today&rsquo;s cooler without walking through the door.
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3">

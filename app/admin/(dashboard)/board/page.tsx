@@ -11,7 +11,7 @@ export default function AdminBoardPage() {
     <>
       <h1 className="font-display text-3xl leading-tight">The Board</h1>
       <p className="mt-3 max-w-2xl leading-relaxed text-ink-soft">
-        These are the numbered options on the site. Keep them loose — the
+        These are the numbered options on the site. Keep them loose. The
         description can say what it usually is, not what it always is.
       </p>
 

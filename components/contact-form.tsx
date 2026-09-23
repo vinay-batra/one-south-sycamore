@@ -44,8 +44,8 @@ export function ContactForm() {
       <div className="border-t-[3px] border-forest bg-paper p-8">
         <h3 className="font-display text-[2rem] leading-tight">Got it.</h3>
         <p className="mt-3 leading-relaxed text-ink-soft">
-          Vince will get back to you. If it&rsquo;s time-sensitive — a funeral, a
-          same-day delivery — please call the shop directly so it doesn&rsquo;t wait.
+          Vince will get back to you. If it&rsquo;s time-sensitive, a funeral or a
+          same-day delivery, please call the shop directly so it doesn&rsquo;t wait.
         </p>
       </div>
     );
@@ -123,7 +123,7 @@ export function ContactForm() {
           {state === "sending" ? "Sending…" : "Send to the shop"}
         </button>
         <p className="text-xs text-muted">
-          Need an answer today? Call or text — that&rsquo;s always faster.
+          Need an answer today? Call or text. That&rsquo;s always faster.
         </p>
       </div>
     </form>

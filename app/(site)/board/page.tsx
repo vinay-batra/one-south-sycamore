@@ -1,21 +1,24 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { FieldFade } from "@/components/field-fade";
 import { DEFAULT_BOARD } from "@/lib/content";
 import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "The Board",
   description:
-    "The numbered board at V Flowers in Newtown, PA. Order by number or just describe the person — prices depend on the day.",
+    "The numbered board at V Flowers in Newtown, PA. Order by number or just describe the person. Prices depend on the day.",
 };
 
 export default function BoardPage() {
   return (
-    <div className="bg-board text-chalk">
+    <>
+      <FieldFade to="dark" />
+      <div className="bg-board text-chalk">
       <div className="mx-auto max-w-[1180px] px-6 pt-16 pb-24 sm:pt-20">
         <header className="grid gap-8 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <p className="text-[0.7rem] uppercase tracking-[0.2em] text-chalk/50">
+            <p className="text-[0.7rem] uppercase tracking-[0.2em] text-chalk/60">
               The board
             </p>
             <h1 className="mt-5 font-display text-[3rem] leading-[0.95] tracking-[-0.02em] sm:text-[4.5rem]">
@@ -24,7 +27,7 @@ export default function BoardPage() {
           </div>
           <p className="text-[1.0625rem] leading-relaxed text-chalk/65 lg:col-span-4 lg:col-start-9 lg:pt-4">
             A starting point, not a menu. What goes into each one depends on what
-            came in that morning — which is the whole point. Call with a number,
+            came in that morning, which is the whole point. Call with a number,
             or call with an occasion and Vince takes it from there.
           </p>
         </header>
@@ -35,7 +38,7 @@ export default function BoardPage() {
               key={item.number}
               className="group grid grid-cols-[3.5rem_1fr] items-baseline gap-x-5 border-t border-chalk/15 py-8 transition-colors hover:bg-chalk/[0.03] sm:grid-cols-[7rem_minmax(0,20rem)_1fr] sm:gap-x-8"
             >
-              <span className="numeral text-[3rem] text-chalk/40 transition-colors group-hover:text-chalk/60 sm:text-[4.5rem]">
+              <span className="numeral text-[3rem] text-chalk/45 transition-colors group-hover:text-chalk/60 sm:text-[4.5rem]">
                 {item.number}
               </span>
               <h2 className="font-display text-[1.75rem] leading-tight sm:text-[2.25rem]">
@@ -55,7 +58,7 @@ export default function BoardPage() {
             </h2>
             <p className="mt-4 leading-relaxed text-chalk/60">
               Because the flowers change. What a bunch costs depends on the day,
-              the stems, and how big you want it — so Vince prices it once he
+              the stems, and how big you want it, so Vince prices it once he
               knows what he&rsquo;s building. Tell him a number you want to stay
               under and he&rsquo;ll work to it.
             </p>
@@ -67,7 +70,7 @@ export default function BoardPage() {
             </h2>
             <p className="mt-4 leading-relaxed text-chalk/60">
               Call or text the shop. For weddings, funerals, or anything with a
-              deadline, the earlier the better — some stems have to be brought in.
+              deadline, the earlier the better. Some stems have to be brought in.
             </p>
             <a
               href={`tel:${PHONE_TEL}`}
@@ -86,6 +89,8 @@ export default function BoardPage() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+      <FieldFade to="paper" />
+    </>
   );
 }

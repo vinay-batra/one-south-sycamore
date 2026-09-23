@@ -14,14 +14,16 @@ const RIM = "#9db9a3";
 /**
  * A great-circle arc lifted just off the surface.
  *
- * The lift is kept very low on purpose. These routes are long — New
- * Zealand is 129° of arc — so most of each one is on the far side of the
- * globe at any given moment. An arc sitting well above the surface clears
- * the silhouette and peeks around the limb instead of being hidden, which
- * reads as loose lines floating in space. Hugging the surface lets the
- * sphere occlude the half that faces away, the way a route on a globe
- * should behave. Japan's great circle also peaks at 69°N — a real polar
- * route — and altitude there turns it into a ring over the Arctic.
+ * The lift is tiny on purpose, barely off the surface.
+ *
+ * These routes are long (New Zealand is 129 degrees of arc) so most of any
+ * one of them is on the far side of the globe at any moment. An arc with
+ * real altitude clears the silhouette instead of being hidden behind it,
+ * and the far half comes swinging back around the limb as loose rings in
+ * space. Japan's great circle compounds it by peaking at 69N, a genuine
+ * polar route, so its altitude lands right on top of the Arctic. Pinned to
+ * the surface the sphere occludes the far half cleanly, which is how a
+ * route drawn on a globe should behave.
  */
 function arcPoints(
   from: [number, number, number],
@@ -31,7 +33,7 @@ function arcPoints(
   const start = new THREE.Vector3(...from);
   const end = new THREE.Vector3(...to);
   const angle = start.angleTo(end);
-  const lift = 0.012 + angle * 0.016;
+  const lift = 0.004 + angle * 0.004;
   const points: THREE.Vector3[] = [];
 
   for (let i = 0; i <= segments; i++) {
@@ -44,7 +46,7 @@ function arcPoints(
   return points;
 }
 
-/** The land map — true coastlines, drawn from Natural Earth 50m data. */
+/** The land map: true coastlines, drawn from Natural Earth 50m data. */
 function Earth() {
   const base = useLoader(THREE.TextureLoader, "/globe/land.png");
 
@@ -53,12 +55,16 @@ function Earth() {
   const texture = useMemo(() => {
     const map = base.clone();
     map.colorSpace = THREE.SRGBColorSpace;
-    map.anisotropy = 8;
-    // SphereGeometry's UVs run the opposite way from a standard
-    // equirectangular map, so the texture is mirrored back into place.
+    map.anisotropy = 16;
+    /**
+     * SphereGeometry puts UV 0 at phi 0, which with toVector's mapping is
+     * longitude -90. A standard equirectangular map starts at -180, so the
+     * texture is shifted a quarter turn. No mirroring: doing that here is
+     * what hid the flipped world before.
+     */
     map.wrapS = THREE.RepeatWrapping;
-    map.repeat.x = -1;
-    map.offset.x = 1;
+    map.repeat.x = 1;
+    map.offset.x = 0.25;
     map.needsUpdate = true;
     return map;
   }, [base]);
@@ -210,31 +216,86 @@ export function GlobeScene({
 }) {
   const group = useRef<THREE.Group>(null);
 
-  /**
-   * Picking a region turns the globe until that region faces the camera,
-   * then holds it there. With nothing selected it drifts on its own.
-   */
-  const target = useMemo(() => {
-    const origin = ORIGINS.find((o) => o.id === activeId);
-    if (!origin) return null;
-    return Math.PI / 2 - (origin.lng * Math.PI) / 180;
-  }, [activeId]);
+  const activeOrigin = useMemo(
+    () => ORIGINS.find((o) => o.id === activeId) ?? null,
+    [activeId],
+  );
 
-  useFrame((_, delta) => {
+  /**
+   * Picking a region turns the globe until that region sits dead centre,
+   * facing the camera. With nothing selected it drifts on its own.
+   *
+   * Done as a quaternion that maps the region's direction onto the
+   * direction of the camera, rather than as a longitude-only spin. A spin
+   * about Y can only ever solve longitude, so anything far from the equator
+   * ended up centred sideways but low; it also assumed the camera had never
+   * moved, which stops being true the moment anyone drags the globe.
+   */
+  const scratch = useMemo(
+    () => ({
+      target: new THREE.Quaternion(),
+      yawIn: new THREE.Quaternion(),
+      pitch: new THREE.Quaternion(),
+      yawOut: new THREE.Quaternion(),
+      parentQuat: new THREE.Quaternion(),
+      camDir: new THREE.Vector3(),
+      up: new THREE.Vector3(0, 1, 0),
+      right: new THREE.Vector3(1, 0, 0),
+    }),
+    [],
+  );
+
+  useFrame(({ camera }, delta) => {
     const node = group.current;
     if (!node) return;
 
-    if (target === null) {
-      if (!reduced) node.rotation.y += delta * 0.04;
+    if (!activeOrigin) {
+      // World axis, so the drift works from whatever orientation a previous
+      // selection left behind.
+      if (!reduced) node.rotateOnWorldAxis(scratch.up, delta * 0.04);
       return;
     }
 
-    // Take the short way around rather than unwinding a full turn.
-    const diff =
-      ((((target - node.rotation.y + Math.PI) % (Math.PI * 2)) + Math.PI * 2) %
-        (Math.PI * 2)) -
-      Math.PI;
-    node.rotation.y += diff * Math.min(1, delta * (reduced ? 12 : 2.6));
+    const parent = node.parent;
+    if (!parent) return;
+
+    // Where the camera sits, expressed in this group's parent space.
+    parent.getWorldQuaternion(scratch.parentQuat);
+    scratch.camDir
+      .copy(camera.position)
+      .normalize()
+      .applyQuaternion(scratch.parentQuat.invert());
+
+    const lat = (activeOrigin.lat * Math.PI) / 180;
+    const lng = (activeOrigin.lng * Math.PI) / 180;
+    const camLat = Math.asin(THREE.MathUtils.clamp(scratch.camDir.y, -1, 1));
+    const camLng = Math.atan2(scratch.camDir.x, scratch.camDir.z);
+
+    /**
+     * Yaw the region onto the prime meridian, pitch it to the camera's
+     * latitude, then yaw it out to the camera's longitude.
+     *
+     * The obvious version of this is a single setFromUnitVectors, which
+     * takes the shortest path between the two directions and rolls the
+     * globe on its way there: picking New Zealand swung Antarctica to the
+     * top of the frame. Splitting the turn into yaw, pitch, yaw keeps north
+     * pointing up.
+     */
+    scratch.yawIn.setFromAxisAngle(scratch.up, -lng);
+    scratch.pitch.setFromAxisAngle(scratch.right, lat - camLat);
+    scratch.yawOut.setFromAxisAngle(scratch.up, camLng);
+    scratch.target
+      .copy(scratch.yawOut)
+      .multiply(scratch.pitch)
+      .multiply(scratch.yawIn);
+
+    const step = reduced ? 1 : 1 - Math.pow(0.0015, delta);
+    node.quaternion.slerp(scratch.target, step);
+
+    // Snap the last sliver, so it arrives instead of easing forever.
+    if (node.quaternion.angleTo(scratch.target) < 0.002) {
+      node.quaternion.copy(scratch.target);
+    }
   });
 
   const destination = useMemo(
@@ -248,7 +309,7 @@ export function GlobeScene({
           so the less of the Arctic that faces the camera, the better. */}
       <group rotation={[0.16, 0, 0.08]}>
         <Atmosphere />
-        <group ref={group} rotation={[0, 2.88, 0]}>
+        <group ref={group} rotation={[0, -(DESTINATION.lng * Math.PI) / 180, 0]}>
           <Earth />
 
           {ORIGINS.map((origin, index) => {

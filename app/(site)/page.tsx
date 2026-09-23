@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { JourneySection } from "@/components/journey-section";
+import { Reveal } from "@/components/reveal";
 import { PhotoSlot } from "@/components/photo-slot";
 import { DEFAULT_BOARD, SERVICES } from "@/lib/content";
 import {
@@ -13,7 +14,7 @@ import {
   PHONE_TEL,
 } from "@/lib/site";
 
-/** How Vince actually sells — observed at the shop, not invented. */
+/** How Vince actually sells, observed at the shop and not invented. */
 const HOW_IT_GOES = [
   {
     step: "First",
@@ -21,7 +22,7 @@ const HOW_IT_GOES = [
   },
   {
     step: "Then",
-    text: "He walks you back to the cooler and shows you what came in — what's open, what's tight, what's going to last.",
+    text: "He walks you back to the cooler and shows you what came in: what's open, what's tight, what's going to last.",
   },
   {
     step: "After that",
@@ -36,18 +37,22 @@ export default function HomePage() {
       <section className="mx-auto max-w-[1180px] px-6">
         <div className="grid gap-10 pt-14 pb-12 lg:grid-cols-12 lg:gap-8 lg:pt-20">
           <h1 className="font-display text-[3.5rem] leading-[0.92] tracking-[-0.03em] sm:text-[5.5rem] lg:col-span-7 lg:text-[6.25rem]">
-            No set menu.
-            <br />
-            Just what&rsquo;s
-            <br />
-            <span className="text-forest">beautiful today.</span>
+            <span className="block animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_both] motion-reduce:animate-none">
+              No set menu.
+            </span>
+            <span className="block animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_120ms_both] motion-reduce:animate-none">
+              Just what&rsquo;s
+            </span>
+            <span className="block animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_240ms_both] text-forest motion-reduce:animate-none">
+              beautiful today.
+            </span>
           </h1>
 
-          <div className="lg:col-span-4 lg:col-start-9 lg:pt-3">
+          <div className="animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_380ms_both] motion-reduce:animate-none lg:col-span-4 lg:col-start-9 lg:pt-3">
             <p className="text-[1.0625rem] leading-relaxed text-ink-soft">
               V Flowers is one man, one cooler, and whatever was cut this week on
-              the other side of the world. There&rsquo;s no catalog to scroll —
-              you tell Vince the occasion and he builds it in front of you.
+              the other side of the world. There&rsquo;s no catalog to scroll.
+              You tell Vince the occasion and he builds it in front of you.
             </p>
             <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
               <a
@@ -69,33 +74,44 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Three portraits: the photographs are all 3:4, so the page is
-            built around that rather than cropping them into wide bands. */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
-          <PhotoSlot
-            slug="storefront-wide"
-            label="The shop from across Sycamore Street"
-            className="aspect-[3/4] w-full"
-            sizes="(min-width: 1024px) 33vw, 50vw"
-            priority
-          />
-          <PhotoSlot
-            slug="roses-green-trick"
-            label="Roses and green trick in the cooler"
-            className="aspect-[3/4] w-full"
-            sizes="(min-width: 1024px) 33vw, 50vw"
-            priority
-          />
-          <PhotoSlot
-            slug="succulent-patio"
-            label="The succulent tables out back"
-            className="col-span-2 aspect-[3/4] w-full lg:col-span-1"
-            sizes="(min-width: 1024px) 33vw, 100vw"
-          />
-        </div>
       </section>
 
       <JourneySection />
+
+
+      {/* Three portraits below the globe. The photographs are all 3:4,
+          so the page is built around that rather than cropping them
+          into wide bands. */}
+      <section className="mx-auto max-w-[1180px] px-6 pt-4 pb-8">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+          <Reveal motion="scale" delay={0} duration={1100}>
+            <PhotoSlot
+              slug="storefront-wide"
+              label="The shop from across Sycamore Street"
+              className="aspect-[3/4] w-full"
+              sizes="(min-width: 1024px) 33vw, 50vw"
+              priority
+            />
+          </Reveal>
+          <Reveal motion="scale" delay={120} duration={1100}>
+            <PhotoSlot
+              slug="roses-green-trick"
+              label="Roses and green trick in the cooler"
+              className="aspect-[3/4] w-full"
+              sizes="(min-width: 1024px) 33vw, 50vw"
+              priority
+            />
+          </Reveal>
+          <Reveal motion="scale" delay={240} duration={1100} className="col-span-2 lg:col-span-1">
+            <PhotoSlot
+              slug="succulent-patio"
+              label="The succulent tables out back"
+              className="aspect-[3/4] w-full"
+              sizes="(min-width: 1024px) 33vw, 100vw"
+            />
+          </Reveal>
+        </div>
+      </section>
 
       {/* ── The board ────────────────────────────────────────── */}
       {/* Light on purpose: the globe section above it is already a dark
@@ -122,10 +138,11 @@ export default function HomePage() {
         {/* Numeral hangs in the margin; the description sits directly under
             its own name instead of in a far-off third column. */}
         <ol className="grid sm:grid-cols-2 sm:gap-x-12">
-          {DEFAULT_BOARD.slice(0, 6).map((item) => (
+          {DEFAULT_BOARD.slice(0, 6).map((item, index) => (
             <li
               key={item.number}
               className="grid grid-cols-[2.75rem_1fr] items-baseline gap-x-4 border-b border-ink/10 py-7 sm:grid-cols-[3.5rem_1fr] sm:gap-x-5"
+              style={{ transitionDelay: `${index * 70}ms` }}
             >
               <span className="numeral text-[2rem] text-moss sm:text-[2.5rem]">
                 {item.number}
@@ -184,17 +201,18 @@ export default function HomePage() {
           What he does
         </p>
         <ul className="mt-10">
-          {SERVICES.map((service) => (
-            <li
-              key={service.slug}
-              className="grid gap-2 border-t hairline py-6 sm:grid-cols-[minmax(0,16rem)_1fr] sm:gap-10"
-            >
-              <h3 className="font-display text-[1.6rem] leading-tight">
-                {service.name}
-              </h3>
-              <p className="max-w-2xl leading-relaxed text-ink-soft">
-                {service.blurb}
-              </p>
+          {SERVICES.map((service, index) => (
+            <li key={service.slug}>
+              <Reveal delay={index * 70} duration={800}>
+                <div className="grid gap-2 border-t hairline py-6 sm:grid-cols-[minmax(0,16rem)_1fr] sm:gap-10">
+                  <h3 className="font-display text-[1.6rem] leading-tight">
+                    {service.name}
+                  </h3>
+                  <p className="max-w-2xl leading-relaxed text-ink-soft">
+                    {service.blurb}
+                  </p>
+                </div>
+              </Reveal>
             </li>
           ))}
         </ul>
@@ -217,7 +235,7 @@ export default function HomePage() {
             </a>
           </div>
 
-          {/* Uneven plates — a contact sheet, not a grid of equal squares. */}
+          {/* Uneven plates: a contact sheet, not a grid of equal squares. */}
           <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
             <PhotoSlot
               slug="roses-hellebore"

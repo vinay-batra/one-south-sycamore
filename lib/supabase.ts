@@ -10,7 +10,7 @@ export const supabaseConfigured = Boolean(url && serviceKey);
 /**
  * Service-role client for trusted server paths only (contact inserts, the
  * admin panel's reads and writes). Never import this into a client
- * component — the key must not reach the browser.
+ * component, because the key must not reach the browser.
  */
 export function createServiceClient() {
   if (!url || !serviceKey) {

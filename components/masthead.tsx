@@ -19,7 +19,7 @@ const LINKS = [
 ];
 
 /**
- * A printed masthead, not a sticky app bar — deliberately different from the
+ * A printed masthead, not a sticky app bar, and deliberately different from the
  * translucent top bar pattern. It sits at the top of the page and scrolls
  * away; the phone stays reachable through the fixed strip on small screens.
  *
@@ -32,7 +32,7 @@ export function Masthead() {
   const isHome = pathname === "/";
 
   return (
-    <header className="border-t-[3px] border-ink bg-paper">
+    <header className="masthead-in border-t-[3px] border-ink bg-paper">
       <div className="mx-auto max-w-[1180px] px-6">
         <div
           className={`flex items-start justify-between gap-6 ${
@@ -98,9 +98,10 @@ export function Masthead() {
         </div>
       </div>
 
-      {/* Double rule — the masthead's signature. */}
-      <div className="border-t border-ink/25" />
-      <div className="border-t border-ink/25 pt-[3px]">
+      {/* Double rule, the masthead's signature. It draws itself across on
+          first paint, the way a press sheet is ruled. */}
+      <div className="rule-in border-t border-ink/25" />
+      <div className="rule-in border-t border-ink/25 pt-[3px]">
         <div className="mx-auto max-w-[1180px] px-6">
           <nav className="hidden items-center justify-between py-2.5 sm:flex">
             <ul className="flex items-center gap-9">
@@ -110,14 +111,14 @@ export function Masthead() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className={`text-[0.7rem] uppercase tracking-[0.16em] transition-colors hover:text-ink ${
+                      className={`group/nav block text-[0.7rem] uppercase tracking-[0.16em] transition-colors hover:text-ink ${
                         active ? "text-ink" : "text-ink-soft"
                       }`}
                     >
                       {link.label}
                       <span
-                        className={`mt-1 block h-px origin-left transition-transform ${
-                          active ? "scale-x-100 bg-forest" : "scale-x-0 bg-forest"
+                        className={`mt-1 block h-px origin-left bg-forest transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/nav:scale-x-100 ${
+                          active ? "scale-x-100" : "scale-x-0"
                         }`}
                       />
                     </Link>
@@ -126,7 +127,7 @@ export function Masthead() {
               })}
             </ul>
             <p className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
-              Call ahead — the inventory changes daily
+              The inventory changes daily. Call ahead.
             </p>
           </nav>
         </div>

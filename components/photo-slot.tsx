@@ -36,7 +36,7 @@ export function PhotoSlot({
 
   if (photo) {
     return (
-      <div className={`relative overflow-hidden bg-sage ${className}`}>
+      <div className={`group relative overflow-hidden bg-sage ${className}`}>
         <Image
           src={`/photos/${photo.slug}.webp`}
           alt={alt ?? photo.alt}
@@ -45,7 +45,7 @@ export function PhotoSlot({
           priority={priority}
           placeholder="blur"
           blurDataURL={photo.blurDataURL}
-          className="object-cover"
+          className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.045] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
         />
       </div>
     );

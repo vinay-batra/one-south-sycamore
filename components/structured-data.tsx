@@ -10,7 +10,7 @@ import { DESTINATION } from "@/lib/globe/origins";
 
 /**
  * Local search is the thing most likely to actually bring someone through
- * the door — Vince has no Google Business Profile yet, so this is what a
+ * the door. Vince has no Google Business Profile yet, so this is what a
  * search engine has to go on.
  *
  * Deliberately omits openingHours: the hours on the site are placeholders

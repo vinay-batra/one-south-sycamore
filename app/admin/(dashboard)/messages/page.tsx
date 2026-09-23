@@ -33,7 +33,7 @@ export default async function AdminMessagesPage() {
       <h1 className="font-display text-3xl leading-tight">Messages</h1>
       <p className="mt-3 max-w-2xl leading-relaxed text-ink-soft">
         Notes sent through the website&rsquo;s form. Anything urgent still comes to
-        your phone at {PHONE_DISPLAY} — this is for the longer ones.
+        your phone at {PHONE_DISPLAY}. This is for the longer ones.
       </p>
 
       {!supabaseConfigured ? (
