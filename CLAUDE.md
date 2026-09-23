@@ -121,19 +121,38 @@ so plainly rather than pretending to save.
 
 ## Launch blockers
 
-1. **Supabase project** — create it, run `0001_init.sql`, create a public `gallery` storage
-   bucket, set env vars. Until then the contact form stores nothing (dev logs it; **production
-   returns 503 and tells people to call**, by design — a real customer must never be silently dropped).
-2. **Wire the admin writes** — board CRUD and photo upload. This is the feature Vince actually
-   asked for; the site is not done without it.
-3. ~~Real photos~~ **Ten are in.** A portrait slot for Vince at the bench is held open at
-   the top of /about and renders the placeholder until the photograph exists. Still
-   nothing of wedding, sympathy or gift-basket work.
-4. **Buy vjsflowers.com** and deploy.
-5. **Draft review with Vince, in person** — he explicitly asked for this before launch. Confirm
-   the slogan ("No set menu. Just what's beautiful today." is invented, not his), the logo, the
-   placeholder hours, and the board copy.
-6. Consider: Vercel Hobby forbids commercial use — same question that's open on Moreco.
+Ordered by what actually blocks going live.
+
+1. **Decide where the contact form goes, then wire it.** This is the last real
+   engineering. The form currently writes to `contact_messages` and shows in the admin,
+   which assumes Vince logs into an admin panel; he will not. He has no email and lives
+   on his phone. Wire it to **text him** (Twilio from `app/api/contact/route.ts`), or to
+   email Vinay who relays. Until something is wired, production returns 503 and tells
+   people to call, which is deliberate: a real customer must never be silently dropped.
+
+   Related decision, see the hosting notes: **this site does not need Supabase at all.**
+   One table and an HMAC cookie login. If the form texts instead of storing, the database
+   disappears and photo uploads can go to Vercel Blob.
+
+2. **Photo uploads for Vince.** The one feature he asked for that is not built. The
+   admin panel lays it out and says plainly that it is off. Target Vercel Blob rather
+   than Supabase Storage, per the above.
+
+3. **More photographs.** Ten are in. Still missing: **Vince himself** (a slot is held
+   open at the top of /about and renders a visible placeholder until it exists), and
+   anything of wedding, sympathy or gift-basket work, which are three services currently
+   sold with no picture.
+
+4. **Buy vjsflowers.com and deploy.** Set `NEXT_PUBLIC_SITE_URL` to the real https
+   origin in production; the build throws otherwise, on purpose.
+
+5. **Vercel Hobby forbids commercial use.** This is a client site, so either Vercel Pro
+   at $20/mo or Cloudflare Workers, whose free tier permits it. Same open question as
+   Moreco.
+
+6. **The in-person review Vince asked for.** Bring the open questions below, plus: the
+   slogan, the logo and the placeholder hours are all invented or drafted, and the
+   numbered board he asked for has been removed.
 
 ## Layout decisions worth not undoing
 
