@@ -15,21 +15,22 @@ export const metadata: Metadata = {
 };
 
 /**
- * A contact sheet, not a product grid — plates are numbered and unevenly
- * sized so it reads as a record of work rather than a catalog. Every
- * photograph is 3:4, so the columns vary instead of the crops.
+ * Every photograph is the same 3:4 portrait, so they are shown at one
+ * size. An earlier version varied the column spans to feel like a contact
+ * sheet; with real photographs it just read as ragged rows and a
+ * half-empty last row.
  */
 const PLATES = [
-  { slug: "storefront-wide", category: "The Shop", span: "sm:col-span-5" },
-  { slug: "roses-green-trick", category: "Arrangements", span: "sm:col-span-4" },
-  { slug: "cooler-doors", category: "The Cooler", span: "sm:col-span-3" },
-  { slug: "succulent-patio", category: "Succulents", span: "sm:col-span-4" },
-  { slug: "roses-hellebore", category: "Arrangements", span: "sm:col-span-4" },
-  { slug: "storefront-front", category: "The Shop", span: "sm:col-span-4" },
-  { slug: "studio-interior", category: "The Shop", span: "sm:col-span-5" },
-  { slug: "art-panels", category: "The Shop", span: "sm:col-span-3" },
-  { slug: "art-canvases", category: "The Shop", span: "sm:col-span-4" },
-  { slug: "cooler-wide", category: "The Cooler", span: "sm:col-span-6" },
+  { slug: "storefront-wide", category: "The Shop" },
+  { slug: "roses-green-trick", category: "Arrangements" },
+  { slug: "cooler-doors", category: "The Cooler" },
+  { slug: "succulent-patio", category: "Succulents" },
+  { slug: "roses-hellebore", category: "Arrangements" },
+  { slug: "storefront-front", category: "The Shop" },
+  { slug: "studio-interior", category: "The Shop" },
+  { slug: "art-panels", category: "The Shop" },
+  { slug: "art-canvases", category: "The Shop" },
+  { slug: "cooler-wide", category: "The Cooler" },
 ] as const;
 
 export default function GalleryPage() {
@@ -69,15 +70,15 @@ export default function GalleryPage() {
       </section>
 
       <section className="mx-auto max-w-[1180px] px-6 pb-20">
-        <div className="grid gap-4 sm:grid-cols-12 sm:gap-6">
+        <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
           {PLATES.map((plate, index) => (
-            <Reveal key={plate.slug} className={plate.span}>
+            <Reveal key={plate.slug} delay={(index % 3) * 60}>
               <figure>
                 <PhotoSlot
                   slug={plate.slug}
                   label={plate.category}
                   className="aspect-[3/4] w-full"
-                  sizes="(min-width: 640px) 33vw, 100vw"
+                  sizes="(min-width: 1024px) 33vw, 50vw"
                   priority={index < 2}
                 />
                 <figcaption className="mt-2.5 flex items-baseline justify-between gap-4 border-t hairline pt-2">

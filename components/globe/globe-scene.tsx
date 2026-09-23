@@ -12,9 +12,16 @@ const BLUSH = "#f0cfc0";
 const RIM = "#9db9a3";
 
 /**
- * A great-circle arc lifted just off the surface. The lift stays small and
- * only grows a little with distance: enough to read as a flight path over
- * the globe, not enough to look like it leaves orbit.
+ * A great-circle arc lifted just off the surface.
+ *
+ * The lift is kept very low on purpose. These routes are long — New
+ * Zealand is 129° of arc — so most of each one is on the far side of the
+ * globe at any given moment. An arc sitting well above the surface clears
+ * the silhouette and peeks around the limb instead of being hidden, which
+ * reads as loose lines floating in space. Hugging the surface lets the
+ * sphere occlude the half that faces away, the way a route on a globe
+ * should behave. Japan's great circle also peaks at 69°N — a real polar
+ * route — and altitude there turns it into a ring over the Arctic.
  */
 function arcPoints(
   from: [number, number, number],
@@ -24,7 +31,7 @@ function arcPoints(
   const start = new THREE.Vector3(...from);
   const end = new THREE.Vector3(...to);
   const angle = start.angleTo(end);
-  const lift = 0.025 + angle * 0.055;
+  const lift = 0.012 + angle * 0.016;
   const points: THREE.Vector3[] = [];
 
   for (let i = 0; i <= segments; i++) {
@@ -58,7 +65,7 @@ function Earth() {
 
   return (
     <mesh>
-      <sphereGeometry args={[1, 96, 96]} />
+      <sphereGeometry args={[1, 128, 128]} />
       <meshBasicMaterial map={texture} />
     </mesh>
   );
@@ -178,9 +185,9 @@ function Route({
       <Line
         points={points}
         color={active ? CHALK : ROUTE}
-        lineWidth={active ? 2.2 : 1.3}
+        lineWidth={active ? 2.4 : 1.6}
         transparent
-        opacity={active ? 1 : 0.5}
+        opacity={active ? 1 : 0.68}
       />
       {!reduced && (
         <mesh ref={pulse}>
@@ -237,10 +244,11 @@ export function GlobeScene({
 
   return (
     <>
-      {/* Tilted so the northern hemisphere, and Newtown, sit front of centre. */}
-      <group rotation={[0.34, 0, 0.1]}>
+      {/* A shallow tilt: equirectangular textures smear badly at the poles,
+          so the less of the Arctic that faces the camera, the better. */}
+      <group rotation={[0.16, 0, 0.08]}>
         <Atmosphere />
-        <group ref={group} rotation={[0, 1.4, 0]}>
+        <group ref={group} rotation={[0, 2.88, 0]}>
           <Earth />
 
           {ORIGINS.map((origin, index) => {

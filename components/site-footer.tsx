@@ -125,9 +125,22 @@ export function SiteFooter() {
             © {new Date().getFullYear()} {SITE_NAME} · {ADDRESS_STREET},{" "}
             {ADDRESS_CITY}
           </p>
-          <Link href="/admin" className="transition-colors hover:text-ink-soft">
-            Shop login
-          </Link>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <p>
+              Designed by{" "}
+              <a
+                href="https://vinaybatra.org"
+                target="_blank"
+                rel="noreferrer"
+                className="text-ink-soft underline underline-offset-2 transition-colors hover:text-ink"
+              >
+                Vinay Batra
+              </a>
+            </p>
+            <Link href="/admin" className="transition-colors hover:text-ink-soft">
+              Shop login
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
