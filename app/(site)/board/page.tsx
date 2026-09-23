@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FieldFade } from "@/components/field-fade";
+import { PhotoSlot } from "@/components/photo-slot";
 import { DEFAULT_BOARD } from "@/lib/content";
 import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/site";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/board" },
   title: "The Board",
   description:
-    "The numbered board at V Flowers in Newtown, PA. Order by number or just describe the person. Prices depend on the day.",
+    "The numbered board at One South Sycamore in Newtown, PA. Order by number or just describe the person. Prices depend on the day.",
 };
 
 export default function BoardPage() {
@@ -51,7 +53,34 @@ export default function BoardPage() {
           ))}
         </ol>
 
-        <div className="mt-16 grid gap-10 border-t border-chalk/15 pt-10 lg:grid-cols-12">
+        <div className="mt-16 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+          <PhotoSlot
+            slug="roses-green-trick"
+            label="Roses and green trick in the cooler"
+            className="aspect-[3/4] w-full"
+            sizes="(min-width: 1024px) 25vw, 50vw"
+          />
+          <PhotoSlot
+            slug="cooler-doors"
+            label="The cooler"
+            className="mt-8 aspect-[3/4] w-full"
+            sizes="(min-width: 1024px) 25vw, 50vw"
+          />
+          <PhotoSlot
+            slug="roses-hellebore"
+            label="Coral roses and hellebore"
+            className="aspect-[3/4] w-full"
+            sizes="(min-width: 1024px) 25vw, 50vw"
+          />
+          <PhotoSlot
+            slug="cooler-wide"
+            label="The cooler, roses and banksia"
+            className="mt-8 aspect-[3/4] w-full"
+            sizes="(min-width: 1024px) 25vw, 50vw"
+          />
+        </div>
+
+        <div className="mt-20 grid gap-10 border-t border-chalk/15 pt-10 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <h2 className="font-display text-[1.75rem] leading-tight">
               Why there are no prices here

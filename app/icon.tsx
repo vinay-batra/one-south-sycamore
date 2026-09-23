@@ -18,17 +18,11 @@ export default function Icon() {
         }}
       >
         <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
-          <path
-            d="M7 6.5L16 25.5L25 6.5"
-            stroke="#2e4636"
-            strokeWidth="2.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M21.2 14.5c2.6.5 4.6-.6 5.6-3.2-2.7-.7-4.7.3-5.6 3.2z"
-            fill="#2e4636"
-          />
+          <rect x="2.5" y="8.5" width="27" height="15" rx="2.5" stroke="#2e4636" strokeWidth="1.8" />
+          <path d="M13.4 13.2h2.1v5.6" stroke="#2e4636" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M12.6 18.8h4.4" stroke="#2e4636" strokeWidth="1.9" strokeLinecap="round" />
+          <path d="M21.6 21.6V12.6" stroke="#2e4636" strokeWidth="1.6" strokeLinecap="round" />
+          <path d="M21.6 15.6c2-.1 3.2-1.1 3.4-2.9-2 .1-3.2 1.1-3.4 2.9z" fill="#2e4636" />
         </svg>
       </div>
     ),

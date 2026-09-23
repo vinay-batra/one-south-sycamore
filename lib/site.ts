@@ -1,6 +1,16 @@
-/** Site-wide constants: the single source of truth for V Flowers' details. */
+/** Site-wide constants: the single source of truth for the shop's details. */
 
-export const SITE_NAME = "V Flowers";
+/**
+ * The name on the building and on Instagram. An earlier draft of this site
+ * used "V Flowers", which appeared nowhere a customer could actually see:
+ * the street blade over the door reads ONE SOUTH SYCAMORE and the handle
+ * is @1southsycamore. The domain stays vjsflowers.com, which is fine and
+ * better for search, since people look for flowers rather than an address.
+ */
+export const SITE_NAME = "One South Sycamore";
+
+/** For places too tight for the full name, like a mobile masthead. */
+export const SITE_NAME_SHORT = "One South Sycamore";
 
 /** Primary slogan. Draft. Confirm with Vince at the in-person review. */
 export const SITE_TAGLINE = "No set menu. Just what's beautiful today.";

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { JourneySection } from "@/components/journey-section";
 import { Reveal } from "@/components/reveal";
@@ -30,6 +31,10 @@ const HOW_IT_GOES = [
   },
 ];
 
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
 export default function HomePage() {
   return (
     <>
@@ -50,7 +55,7 @@ export default function HomePage() {
 
           <div className="animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_380ms_both] motion-reduce:animate-none lg:col-span-4 lg:col-start-9 lg:pt-3">
             <p className="text-[1.0625rem] leading-relaxed text-ink-soft">
-              V Flowers is one man, one cooler, and whatever was cut this week on
+              One South Sycamore is one man, one cooler, and whatever was cut this week on
               the other side of the world. There&rsquo;s no catalog to scroll.
               You tell Vince the occasion and he builds it in front of you.
             </p>

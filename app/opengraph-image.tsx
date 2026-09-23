@@ -5,7 +5,7 @@ import { ADDRESS_STREET, PHONE_DISPLAY, SITE_TAGLINE } from "@/lib/site";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "V Flowers, florist in Newtown, Pennsylvania";
+export const alt = "One South Sycamore, florist in Newtown, Pennsylvania";
 
 /** Shared-link card: the masthead, essentially, at poster size. */
 export default async function OpengraphImage() {
@@ -29,28 +29,23 @@ export default async function OpengraphImage() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          <svg width="56" height="56" viewBox="0 0 32 32" fill="none">
-            <path
-              d="M7 6.5L16 25.5L25 6.5"
-              stroke="#2e4636"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M21.2 14.5c2.6.5 4.6-.6 5.6-3.2-2.7-.7-4.7.3-5.6 3.2z"
-              fill="#2e4636"
-            />
+          <svg width="64" height="64" viewBox="0 0 32 32" fill="none">
+            <rect x="2.5" y="8.5" width="27" height="15" rx="2.5" stroke="#2e4636" strokeWidth="1.6" />
+            <rect x="5" y="11" width="22" height="10" rx="1.2" stroke="#2e4636" strokeWidth="0.9" opacity="0.45" />
+            <path d="M13.4 13.2h2.1v5.6" stroke="#2e4636" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M12.6 18.8h4.4" stroke="#2e4636" strokeWidth="1.7" strokeLinecap="round" />
+            <path d="M21.6 21.6V12.6" stroke="#2e4636" strokeWidth="1.5" strokeLinecap="round" />
+            <path d="M21.6 15.6c2-.1 3.2-1.1 3.4-2.9-2 .1-3.2 1.1-3.4 2.9z" fill="#2e4636" />
           </svg>
-          <div style={{ fontSize: 58, color: "#1b211c", letterSpacing: "-0.02em" }}>
-            V Flowers
+          <div style={{ fontSize: 50, color: "#1b211c", letterSpacing: "-0.02em" }}>
+            One South Sycamore
           </div>
         </div>
 
         <div
           style={{
             display: "flex",
-            fontSize: 86,
+            fontSize: 80,
             lineHeight: 1.02,
             color: "#1b211c",
             letterSpacing: "-0.03em",

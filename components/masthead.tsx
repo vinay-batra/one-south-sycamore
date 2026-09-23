@@ -39,21 +39,21 @@ export function Masthead() {
             isHome ? "pt-7 pb-6 sm:pt-9" : "pt-5 pb-4"
           }`}
         >
-          <Link href="/" aria-label="V Flowers home" className="group block">
+          <Link href="/" aria-label="One South Sycamore, home" className="group block">
             <span className="flex items-center gap-3">
               <LogoMark
-                className={`shrink-0 text-forest transition-transform group-hover:-rotate-6 ${
-                  isHome ? "h-9 w-9 sm:h-11 sm:w-11" : "h-7 w-7"
+                className={`shrink-0 text-forest transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-rotate-6 ${
+                  isHome ? "h-8 w-8 sm:h-10 sm:w-10" : "h-6 w-6 sm:h-7 sm:w-7"
                 }`}
               />
               <span
-                className={`font-display leading-[0.9] tracking-[-0.02em] ${
+                className={`font-display leading-[0.92] tracking-[-0.02em] ${
                   isHome
-                    ? "text-[2.6rem] sm:text-[3.6rem]"
-                    : "text-[1.75rem] sm:text-[2rem]"
+                    ? "text-[2rem] sm:text-[2.9rem] lg:text-[3.4rem]"
+                    : "text-[1.4rem] sm:text-[1.8rem]"
                 }`}
               >
-                V Flowers
+                One South Sycamore
               </span>
             </span>
             {isHome && (

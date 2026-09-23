@@ -13,7 +13,7 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-sm">
         <Link href="/" className="inline-flex items-center gap-2">
           <LogoMark className="h-6 w-6 text-forest" />
-          <span className="font-display text-xl">V Flowers</span>
+          <span className="font-display text-xl">One South Sycamore</span>
         </Link>
 
         <h1 className="mt-8 font-display text-3xl leading-tight">Shop login</h1>

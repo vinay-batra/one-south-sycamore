@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: `%s · ${SITE_NAME}`,
   },
   description:
-    "V Flowers is a hand-arranged flower shop on South Sycamore Street in Newtown, PA. Fresh cut flowers sourced worldwide, custom arrangements, weddings, sympathy, plants and succulents.",
+    "One South Sycamore is a hand-arranged flower shop on the corner of Washington and Sycamore in Newtown, PA. Fresh cut flowers sourced worldwide, custom arrangements, weddings, sympathy work, plants, succulents and gift baskets.",
   openGraph: {
     title: `${SITE_NAME} · Florist in Newtown, PA`,
     description: SITE_TAGLINE,
@@ -36,7 +36,6 @@ export const metadata: Metadata = {
     title: `${SITE_NAME} · Florist in Newtown, PA`,
     description: SITE_TAGLINE,
   },
-  alternates: { canonical: "/" },
 };
 
 export default function RootLayout({

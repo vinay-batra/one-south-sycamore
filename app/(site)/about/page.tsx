@@ -12,9 +12,10 @@ import {
 } from "@/lib/site";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/about" },
   title: "About",
   description:
-    "Twenty-five years in flowers, from Brooklyn street stands to a corner shop in Newtown, PA. The story behind V Flowers.",
+    "Twenty-five years in flowers, from Brooklyn street stands to a corner shop in Newtown, PA. The story behind One South Sycamore.",
 };
 
 export default function AboutPage() {
@@ -79,9 +80,14 @@ export default function AboutPage() {
                 index === 0 ? "border-t-0 pt-0" : ""
               }`}
             >
-              <p className="text-[0.7rem] uppercase tracking-[0.16em] text-moss lg:col-span-3">
-                {chapter.label}
-              </p>
+              <div className="flex items-baseline gap-4 lg:col-span-3">
+                <span className="numeral text-[1.6rem] text-moss/70">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <p className="text-[0.7rem] uppercase tracking-[0.16em] text-moss">
+                  {chapter.label}
+                </p>
+              </div>
               <div className="lg:col-span-8 lg:col-start-5">
                 <h2 className="font-display text-[2rem] leading-[1.08] tracking-tight sm:text-[2.6rem]">
                   {chapter.heading}

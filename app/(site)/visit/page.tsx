@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact-form";
+import { CornerDiagram } from "@/components/corner-diagram";
 import { PhotoSlot } from "@/components/photo-slot";
 import {
   ADDRESS_CITY,
@@ -16,8 +17,9 @@ import {
 } from "@/lib/site";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/visit" },
   title: "Visit & Delivery",
-  description: `V Flowers is at ${ADDRESS_FULL}. Hours, local delivery, payment, and directions.`,
+  description: `One South Sycamore is at ${ADDRESS_FULL}. Hours, local delivery, payment, and directions.`,
 };
 
 export default function VisitPage() {
@@ -104,10 +106,12 @@ export default function VisitPage() {
             </div>
           </dl>
 
+          <CornerDiagram className="mt-12" />
+
           <PhotoSlot
             slug="storefront-wide"
             label="Storefront, corner of Washington & Sycamore"
-            className="mt-12 aspect-[3/4] w-full"
+            className="mt-10 aspect-[3/4] w-full"
             sizes="(min-width: 1024px) 45vw, 100vw"
           />
         </div>

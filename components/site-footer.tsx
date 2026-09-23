@@ -137,6 +137,9 @@ export function SiteFooter() {
                 Vinay Batra
               </a>
             </p>
+            <Link href="/privacy" className="transition-colors hover:text-ink-soft">
+              Privacy
+            </Link>
             <Link href="/admin" className="transition-colors hover:text-ink-soft">
               Shop login
             </Link>

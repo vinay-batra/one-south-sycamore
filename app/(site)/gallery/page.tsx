@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { PhotoSlot } from "@/components/photo-slot";
-import { Reveal } from "@/components/reveal";
+import { GalleryGrid, type Plate } from "@/components/gallery-grid";
 import {
   INSTAGRAM_HANDLE,
   INSTAGRAM_URL,
@@ -9,9 +8,10 @@ import {
 } from "@/lib/site";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/gallery" },
   title: "Gallery",
   description:
-    "Arrangements, wedding work, sympathy pieces, plants and succulents from V Flowers in Newtown, PA.",
+    "Arrangements, wedding work, sympathy pieces, plants, succulents and art from One South Sycamore in Newtown, PA.",
 };
 
 /**
@@ -31,7 +31,7 @@ const PLATES = [
   { slug: "art-panels", category: "Art" },
   { slug: "art-canvases", category: "Art" },
   { slug: "cooler-wide", category: "The Cooler" },
-] as const;
+] as const satisfies readonly Plate[];
 
 export default function GalleryPage() {
   return (
@@ -70,29 +70,7 @@ export default function GalleryPage() {
       </section>
 
       <section className="mx-auto max-w-[1180px] px-6 pb-20">
-        <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
-          {PLATES.map((plate, index) => (
-            <Reveal key={plate.slug} delay={(index % 3) * 60}>
-              <figure>
-                <PhotoSlot
-                  slug={plate.slug}
-                  label={plate.category}
-                  className="aspect-[3/4] w-full"
-                  sizes="(min-width: 1024px) 33vw, 50vw"
-                  priority={index < 2}
-                />
-                <figcaption className="mt-2.5 flex items-baseline justify-between gap-4 border-t hairline pt-2">
-                  <span className="text-[0.7rem] uppercase tracking-[0.16em] text-ink-soft">
-                    {plate.category}
-                  </span>
-                  <span className="numeral text-xs text-muted">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                </figcaption>
-              </figure>
-            </Reveal>
-          ))}
-        </div>
+        <GalleryGrid plates={PLATES} />
       </section>
 
       <section className="border-t hairline bg-paper-warm">

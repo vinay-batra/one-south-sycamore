@@ -1,4 +1,4 @@
--- V Flowers — initial schema.
+-- One South Sycamore: initial schema.
 --
 -- Three tables, all written only through the server (service role) or the
 -- admin panel. RLS is on everywhere with no public policies, so the anon
