@@ -48,11 +48,12 @@ export function FlowerGlobe() {
               />
             </Suspense>
           </Canvas>
-
-          <p className="pointer-events-none absolute inset-x-0 bottom-0 text-center text-[0.65rem] uppercase tracking-[0.18em] text-chalk/50">
-            Drag to turn · Tap an origin
-          </p>
         </div>
+
+        {/* Outside the square, so it clears the globe rather than sitting on it. */}
+        <p className="mt-6 text-center text-[0.65rem] uppercase tracking-[0.18em] text-chalk/50">
+          Drag to turn · Tap an origin
+        </p>
       </div>
 
       <div className="lg:col-span-4 lg:col-start-9">

@@ -98,49 +98,54 @@ export default function HomePage() {
       <JourneySection />
 
       {/* ── The board ────────────────────────────────────────── */}
-      <section className="bg-board text-chalk">
-        <div className="mx-auto max-w-[1180px] px-6 py-20 sm:py-24">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <p className="text-[0.7rem] uppercase tracking-[0.2em] text-chalk/50">
-                The board
-              </p>
-              <h2 className="mt-4 max-w-2xl font-display text-[2.5rem] leading-[1.02] tracking-tight sm:text-[3.25rem]">
-                Order by number, or just describe the person.
-              </h2>
-            </div>
-            <Link
-              href="/board"
-              className="border-b border-chalk/30 pb-1 text-[0.7rem] uppercase tracking-[0.16em] text-chalk/70 transition-colors hover:border-chalk hover:text-chalk"
-            >
-              The whole board
-            </Link>
+      {/* Light on purpose: the globe section above it is already a dark
+          field, and two in a row read as one undifferentiated slab. The
+          dedicated /board page is where the dark menu board lives. */}
+      <section className="mx-auto max-w-[1180px] px-6 py-20 sm:py-24">
+        <div className="flex flex-wrap items-end justify-between gap-6 border-b border-ink/15 pb-8">
+          <div>
+            <p className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
+              The board
+            </p>
+            <h2 className="mt-4 font-display text-[2.5rem] leading-[1.0] tracking-[-0.02em] sm:text-[3.25rem]">
+              Six places to start.
+            </h2>
           </div>
+          <Link
+            href="/board"
+            className="border-b border-forest/40 pb-0.5 text-[0.7rem] uppercase tracking-[0.16em] text-forest transition-colors hover:border-forest"
+          >
+            The whole board
+          </Link>
+        </div>
 
-          <ol className="mt-14">
-            {DEFAULT_BOARD.slice(0, 6).map((item) => (
-              <li
-                key={item.number}
-                className="grid grid-cols-[3.25rem_1fr] items-baseline gap-x-5 border-t border-chalk/15 py-6 sm:grid-cols-[5.5rem_minmax(0,18rem)_1fr] sm:gap-x-8"
-              >
-                <span className="numeral text-[2.5rem] text-chalk/40 sm:text-[3.5rem]">
-                  {item.number}
-                </span>
-                <h3 className="font-display text-[1.6rem] leading-tight sm:text-[2rem]">
+        {/* Numeral hangs in the margin; the description sits directly under
+            its own name instead of in a far-off third column. */}
+        <ol className="grid sm:grid-cols-2 sm:gap-x-12">
+          {DEFAULT_BOARD.slice(0, 6).map((item) => (
+            <li
+              key={item.number}
+              className="grid grid-cols-[2.75rem_1fr] items-baseline gap-x-4 border-b border-ink/10 py-7 sm:grid-cols-[3.5rem_1fr] sm:gap-x-5"
+            >
+              <span className="numeral text-[2rem] text-moss sm:text-[2.5rem]">
+                {item.number}
+              </span>
+              <div>
+                <h3 className="font-display text-[1.5rem] leading-tight sm:text-[1.75rem]">
                   {item.name}
                 </h3>
-                <p className="col-start-2 mt-2 max-w-xl text-[0.95rem] leading-relaxed text-chalk/60 sm:col-start-3 sm:mt-0">
+                <p className="mt-1.5 max-w-md text-[0.95rem] leading-relaxed text-ink-soft">
                   {item.description}
                 </p>
-              </li>
-            ))}
-          </ol>
+              </div>
+            </li>
+          ))}
+        </ol>
 
-          <p className="mt-10 max-w-xl text-[0.85rem] leading-relaxed text-chalk/50">
-            Prices depend on the day, the stems, and the size. Call and Vince will
-            tell you exactly what it runs.
-          </p>
-        </div>
+        <p className="mt-8 max-w-xl text-[0.9rem] leading-relaxed text-muted">
+          Prices depend on the day, the stems, and the size. Call and Vince will
+          tell you exactly what it runs.
+        </p>
       </section>
 
       {/* ── How it goes ──────────────────────────────────────── */}
