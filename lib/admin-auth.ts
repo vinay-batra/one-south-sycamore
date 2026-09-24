@@ -11,10 +11,12 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 const COOKIE_NAME = "vf_admin";
 const SESSION_DAYS = 30;
 
+/**
+ * Blank counts as unset, the same as missing. A host that imports variable
+ * names from .env.example supplies empty strings for all of them.
+ */
 function secret() {
-  const value = process.env.ADMIN_SESSION_SECRET;
-  if (!value) throw new Error("ADMIN_SESSION_SECRET is not set.");
-  return value;
+  return process.env.ADMIN_SESSION_SECRET?.trim() ?? "";
 }
 
 function sign(payload: string) {
@@ -29,19 +31,22 @@ function safeEqual(a: string, b: string) {
 }
 
 export function passwordMatches(attempt: string) {
-  const expected = process.env.ADMIN_PASSWORD;
-  if (!expected) return false;
+  const expected = process.env.ADMIN_PASSWORD?.trim();
+  // No password or no signing secret configured means no way in, rather
+  // than a 500 on a page the footer links to from every page of the site.
+  if (!expected || !secret()) return false;
   return safeEqual(attempt, expected);
 }
 
 export function createSessionToken() {
+  if (!secret()) throw new Error("ADMIN_SESSION_SECRET is not set.");
   const expires = Date.now() + SESSION_DAYS * 24 * 60 * 60 * 1000;
   const payload = String(expires);
   return `${payload}.${sign(payload)}`;
 }
 
 export function sessionTokenValid(token: string | undefined) {
-  if (!token) return false;
+  if (!token || !secret()) return false;
   const [payload, signature] = token.split(".");
   if (!payload || !signature) return false;
   if (!safeEqual(signature, sign(payload))) return false;

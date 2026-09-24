@@ -59,7 +59,14 @@ export const DELIVERY = {
 
 export const PAYMENT_METHODS = ["Cash", "Card", "Apple Pay", "Venmo"];
 
-const RAW_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://onesouthsycamore.com";
+/*
+ * `||`, not `??`. A host that imports variable names from .env.example
+ * hands you an empty string, and `??` passes that straight through: the
+ * first production build failed on `got ""` rather than falling back.
+ * Blank means unset.
+ */
+const RAW_SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://onesouthsycamore.com";
 
 /**
  * Every canonical, og:url, sitemap entry and JSON-LD url is built from this.
