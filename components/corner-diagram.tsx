@@ -48,7 +48,11 @@ export function CornerDiagram({ className = "" }: { className?: string }) {
           {/* The shop: south east corner, fronting Sycamore. */}
           <g>
             <rect x="244" y="180" width="62" height="106" fill="var(--color-forest)" rx="2" />
-            <g transform="rotate(90 275 233)">
+            {/* Turned the opposite way to the Lukoil's label: this building is east
+                of Sycamore and that one is west, so setting both the same way
+                pointed one of them away from the street. They face each other
+                across the road now, which is how Vince describes the corner. */}
+            <g transform="rotate(-90 275 233)">
               <text
                 x="275"
                 y="229"

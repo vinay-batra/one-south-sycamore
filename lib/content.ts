@@ -14,7 +14,7 @@ export const SERVICES: Service[] = [
     slug: "everyday",
     name: "Everyday Arrangements",
     blurb:
-      "Something for the kitchen table, a birthday, an apology, a Tuesday. Built from whatever came in that morning.",
+      "For the kitchen table, for a birthday, for an apology. Built out of whatever came in that morning.",
   },
   {
     slug: "custom",
@@ -42,7 +42,7 @@ export const SERVICES: Service[] = [
   {
     slug: "succulents",
     name: "Succulents",
-    blurb: "A deep bench of succulents, from single pots to arranged dish gardens.",
+    blurb: "Single pots through to arranged dish gardens. He keeps a lot of them, and they are the easiest thing in the shop to keep alive.",
   },
   {
     slug: "gift-baskets",
@@ -81,14 +81,14 @@ export const STORY_CHAPTERS: Chapter[] = [
     heading: "The trade, learned from the pavement up.",
     body: [
       "A store in Brooklyn. Stands on the corner. Brooklyn and Manhattan, on the road and on the street, for years, selling flowers to people walking past, which is the fastest way there is to learn what people actually want.",
-      "He loved it, and he did it for years.",
+      "He loved it. Every day was a new day and a new inventory, and that part has not changed.",
     ],
   },
   {
     label: "Newtown",
     heading: "Same job, quieter corner.",
     body: [
-      "After years of stands and corners, what he wanted was somewhere permanent: an actual store, in an actual building, with his name on the door and the same address every morning.",
+      "After years of stands and corners he wanted somewhere permanent. A real store, in a building, at the same address every morning.",
       "He found it on the corner of Washington and Sycamore, across from the Lukoil, in the center of town.",
       "The job hasn't really changed. The flowers come in, and Vince figures out what to do with them.",
     ],
@@ -137,7 +137,7 @@ export const ORDER_STEPS: OrderStep[] = [
   {
     label: "First",
     heading: "Work out the occasion, not the product.",
-    body: "Who it is for, when you need it, and roughly what you want to spend. That is the entire brief, and it is all Vince needs.",
+    body: "Who it is for, when you need it, and roughly what you want to spend. Vince can work from that.",
   },
   {
     label: "Then",

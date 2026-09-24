@@ -20,53 +20,60 @@ export const metadata: Metadata = {
 };
 
 /* Matched buttons: the outline carries a transparent border on the solid
-   one too, so the two sit at exactly the same height. */
+   one too, so the two sit at exactly the same height. They lift by half a
+   pixel on hover, which is not enough to notice and enough to feel. */
 const BUTTON =
-  "inline-flex items-center justify-center border px-7 py-3.5 text-[0.7rem] uppercase tracking-[0.16em] transition-colors";
+  "inline-flex items-center justify-center border px-7 py-3.5 text-[0.7rem] uppercase tracking-[0.16em] transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:hover:translate-y-0";
 
 export default function HomePage() {
   return (
     <>
-      {/* ── Lede, with the flowers themselves beside it ────────── */}
-      <section className="mx-auto max-w-[1180px] px-6 pt-12 sm:pt-16">
-        <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-14">
-          <div className="lg:col-span-7">
-            <h1 className="font-display text-[2.75rem] leading-[0.94] tracking-[-0.03em] sm:text-[4rem] lg:text-[4.5rem]">
-              <span className="block animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_both] motion-reduce:animate-none">
-                No set menu.
-              </span>
-              <span className="block animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_120ms_both] text-forest motion-reduce:animate-none">
-                Just what&rsquo;s beautiful today.
-              </span>
-            </h1>
+      {/* ── Lede, with the flowers themselves beside it ──────────
+           overflow-x-clip, not hidden: the particle figure overhangs its
+           column by half its width and would otherwise push out a
+           horizontal scrollbar. Clip leaves the vertical axis visible, so
+           the throw can still carry above and below the section. */}
+      <section className="overflow-x-clip">
+        <div className="mx-auto max-w-[1180px] px-6 pt-12 sm:pt-16">
+          <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-14">
+            <div className="lg:col-span-7">
+              <h1 className="font-display text-[2.75rem] leading-[0.94] tracking-[-0.03em] sm:text-[4rem] lg:text-[4.5rem]">
+                <span className="block animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_both] motion-reduce:animate-none">
+                  No set menu.
+                </span>
+                <span className="block animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_120ms_both] text-forest motion-reduce:animate-none">
+                  Just what&rsquo;s beautiful today.
+                </span>
+              </h1>
 
-            <div className="animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_300ms_both] motion-reduce:animate-none">
-              <p className="mt-8 max-w-xl text-[1.0625rem] leading-relaxed text-ink-soft">
-                A flower shop on the corner of Washington and Sycamore, in the
-                middle of Newtown. Nothing here is made in advance. Tell Vince
-                the occasion and he builds it from whatever came in that
-                morning.
-              </p>
+              <div className="animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_300ms_both] motion-reduce:animate-none">
+                <p className="mt-8 max-w-xl text-[1.0625rem] leading-relaxed text-ink-soft">
+                  A flower shop on the corner of Washington and Sycamore, in the
+                  middle of Newtown. Nothing here is made in advance. Tell Vince
+                  the occasion and he builds it from whatever came in that
+                  morning.
+                </p>
 
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link
-                  href="/contact"
-                  className={`${BUTTON} border-transparent bg-forest text-paper hover:bg-ink`}
-                >
-                  Fill out a request
-                </Link>
-                <a
-                  href={`tel:${PHONE_TEL}`}
-                  className={`${BUTTON} border-forest/35 text-forest hover:border-forest hover:bg-sage/60`}
-                >
-                  Call or text the shop
-                </a>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <Link
+                    href="/contact"
+                    className={`${BUTTON} border-transparent bg-forest text-paper hover:bg-ink`}
+                  >
+                    Fill out a request
+                  </Link>
+                  <a
+                    href={`tel:${PHONE_TEL}`}
+                    className={`${BUTTON} border-forest/35 text-forest hover:border-forest hover:bg-sage/60`}
+                  >
+                    Call or text the shop
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="lg:col-span-5">
-            <HeroBloom />
+            <div className="lg:col-span-5">
+              <HeroBloom />
+            </div>
           </div>
         </div>
       </section>
@@ -87,8 +94,8 @@ export default function HomePage() {
             </h2>
           </div>
           <p className="text-[1.0625rem] leading-relaxed text-ink-soft lg:col-span-5 lg:col-start-8 lg:pt-4">
-            No list of arrangements, no set prices, no checkout. Just a
-            conversation and a cooler. Here is how it goes.
+            No list of arrangements, no set prices, nothing to add to a cart.
+            Here is how an order actually goes.
           </p>
         </div>
 

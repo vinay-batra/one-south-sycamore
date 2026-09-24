@@ -74,8 +74,8 @@ Vince asked for a logo to be made; he hasn't seen this one yet.
 ### The hero figure
 
 `components/bloom/` rebuilds one of Vince's photographs as a cloud of points beside
-the headline. Click it and the cloud is thrown outward, changes colour mid-flight and
-reassembles as the next photograph.
+the headline. Click it and the cloud is thrown clear across the page, changes colour
+mid-flight and gathers back as the next photograph.
 
 - Every point takes its colour from a pixel of a real photo, so the front page is
   always his actual stock. Nothing organic is modelled by hand here, and nothing
@@ -107,6 +107,30 @@ reassembles as the next photograph.
   zeta≈0.67, and the throw velocities put the peak of the scatter at about the edge
   of the frame with a settle just under two seconds. Change one and re-check the
   other, headless, because a throttled browser will not show you the difference.
+- **The throw is three parts, not a spring.** A spring has one constant for both how
+  far the points go and how long they take, so far always means fast, and the whole
+  thing was over in 1.7 seconds. They are now thrown into pure drag (0.85s), which
+  carries them out past the edge of the frame and lets them slow to a hang, and only
+  then walked home on an eased tween (2.7s) whose length is set independently. Points
+  set off home from the middle outward, so the picture grows back rather than
+  appearing all at once.
+- Outward speed **scales with how far out the point already sits**. A flat push moves
+  every point the same distance and blows a hole through the middle, which reads as a
+  smoke ring; measured centre density went from 0.00 to 0.10 of the peak when this
+  changed, and the throw reads as a bloom instead.
+- **The canvas is deliberately bigger than the picture** (2.1x wide, 1.6x tall, the
+  insets in hero-bloom paired with FRAME_SCALE_X/Y and the camera distance here) and
+  nothing clips it, so a throw crosses the page instead of piling up against an edge.
+  The hero section carries `overflow-x-clip` so that overhang does not push out a
+  horizontal scrollbar; clip rather than hidden, so the vertical axis stays visible.
+- Points **dissolve with distance from home**, which is what lets the throw thin out
+  into the page with no visible canvas boundary. It also means the entrance scatter
+  has to stay small, or the page opens on a pale haze instead of a picture.
+- **Scrolling past blows the picture apart.** Gated on the bottom edge of the
+  photograph, not the canvas, which is much taller: nothing happens until the picture
+  is halfway out of the viewport. Get this wrong and the figure is simply invisible on
+  a page that has been scrolled at all, which looks exactly like a dead canvas and
+  cost an hour of chasing a bug that was not there.
 - A real photograph paints first and holds the layout. three.js is held back 300ms,
   the cloud crossfades over the still, and reduced motion never loads it at all.
 
@@ -203,6 +227,9 @@ Ordered by what actually blocks going live.
 
 ## Layout decisions worth not undoing
 
+- **The paper grain is the only thing over everything.** A fixed, 3% noise overlay on
+  `body::after`. Large flat fields of near-white read as screen rather than as paper
+  without it. It is hidden in print.
 - **No full-bleed dark sections on public pages.** There used to be several, and every
   one meant two hard colour changes on the way past, however gently they were ramped.
   The globe is dark enough on its own to anchor the page. The only dark surface left is

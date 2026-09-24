@@ -13,7 +13,8 @@ import { BLOOM_FRAMES } from "@/lib/bloom";
 
 /**
  * The hero figure: one of Vince's photographs rebuilt as a cloud of points,
- * which scatters and reassembles as the next photograph when you click it.
+ * which is thrown across the page and gathers back as the next photograph
+ * when you click it.
  *
  * Every point takes its colour from a pixel of a real photo, so the thing on
  * the front page is always his actual stock rather than a modelled flower.
@@ -21,10 +22,8 @@ import { BLOOM_FRAMES } from "@/lib/bloom";
  * Density is the whole game. An earlier pass ran 9,408 points and read as a
  * coarse halftone: you could not tell what it was, which defeats the point
  * of using a photograph at all. At rest this should look like the
- * photograph, with only a fine grain to say it is alive; the particles are
- * meant to be discovered on the click, not endured before it. Points are
- * drawn a little wider than the grid spacing so no page background shows
- * through between them.
+ * photograph, with only a fine drift to say it is alive; the particles are
+ * meant to be discovered on the click, not endured before it.
  */
 
 const PLANE_W = 1.5;
@@ -34,13 +33,40 @@ const DEPTH = 0.3;
 /** Gentle barrel so the surface is obviously a surface when it turns. */
 const CURVE = 0.1;
 const FOV = 40;
+
 /**
- * Close enough that the plane overfills the frame by a few percent. The
- * figure is a photograph, so it should run to the edges of its box the way
- * every other photograph on the site does, and the overfill keeps the
- * corners covered while the cloud tilts with the pointer.
+ * The canvas is deliberately larger than the photograph it draws, so a throw
+ * can leave the frame and cross the page instead of piling up against an
+ * edge. These two must match the negative insets on the canvas wrapper in
+ * hero-bloom.tsx, and the camera pulls back by the height factor so the
+ * photograph still lands at the same size on screen.
  */
-const CAM_Z = 2.6;
+export const FRAME_SCALE_X = 2.1;
+export const FRAME_SCALE_Y = 1.6;
+/**
+ * Exactly far enough that the plane's height fills 1/FRAME_SCALE_Y of the
+ * canvas, which is the photograph's own box. Nothing clips the canvas any
+ * more, so an approximate distance shows as the picture bleeding over its
+ * own caption.
+ */
+const CAM_Z = (PLANE_H / 2 / Math.tan((FOV * Math.PI) / 360)) * FRAME_SCALE_Y;
+
+/**
+ * The throw, in three parts.
+ *
+ * A spring alone cannot do this: one constant sets both how far the points
+ * go and how long they take, so far always means fast. Instead they are
+ * thrown into pure drag, which carries them a long way and lets them slow
+ * to a hang, and only then are they walked home on an eased tween whose
+ * length is set independently.
+ */
+const FLIGHT = 0.85;
+const HOMEWARD = 2.7;
+const ENTRANCE = 1.8;
+/** Per second. With the speeds below this lands the hang around 1.4 units. */
+const DRAG = 5;
+/** Points near the middle set off home first, so the picture grows outward. */
+const MAX_DELAY = 0.55;
 
 type Frame = { position: Float32Array; color: Float32Array };
 
@@ -110,25 +136,45 @@ const VERTEX = /* glsl */ `
   uniform float uSize;
   uniform float uScale;
   uniform float uTime;
+  uniform float uDisperse;
   attribute vec3 aColor;
+  attribute vec3 aHome;
   varying vec3 vColor;
+  varying float vAlpha;
 
   void main() {
     vColor = aColor;
+    vec3 p = position;
 
     // Idle drift lives here rather than in the simulation: it is per point
     // and every frame, which is exactly what the GPU is for. The phase comes
     // from the point's own position, so neighbours move together and the
-    // surface undulates like cloth instead of boiling like noise. Amplitude
-    // is a fraction of the grid spacing, or the photograph would smear.
-    vec3 drifted = position;
-    float phase = position.x * 6.0 + position.y * 4.0;
-    float wave = sin(uTime * 0.7 + phase);
-    drifted.x += cos(uTime * 0.5 + phase) * 0.0015;
-    drifted.y += wave * 0.0015;
-    drifted.z += wave * 0.01;
+    // surface undulates like cloth instead of boiling like noise. Two rates,
+    // so it never settles into a visible beat. Amplitude stays a fraction of
+    // the grid spacing, or the photograph smears.
+    float phase = p.x * 6.0 + p.y * 4.0;
+    float slow = sin(uTime * 0.7 + phase);
+    float fast = sin(uTime * 1.13 + phase * 1.7);
+    p.x += cos(uTime * 0.5 + phase) * 0.0016 + fast * 0.0009;
+    p.y += slow * 0.0016 + cos(uTime * 0.91 + phase * 1.7) * 0.0009;
+    p.z += slow * 0.012 + fast * 0.006;
 
-    vec4 mv = modelViewMatrix * vec4(drifted, 1.0);
+    // Scrolling past blows the picture apart rather than sliding it away.
+    if (uDisperse > 0.0) {
+      vec3 drift = normalize(vec3(
+        sin(aHome.x * 91.7 + aHome.y * 47.3),
+        cos(aHome.x * 53.1 - aHome.y * 88.2),
+        sin(aHome.x * 31.9 + aHome.y * 61.4) * 0.7
+      ) + vec3(0.001, 0.002, 0.003));
+      p += drift * uDisperse * 1.2;
+    }
+
+    // Points dissolve the further they are from where they belong, so the
+    // throw thins out into the page instead of stopping at a canvas edge.
+    float strayed = length(p - aHome);
+    vAlpha = (1.0 - smoothstep(0.7, 1.55, strayed)) * (1.0 - uDisperse);
+
+    vec4 mv = modelViewMatrix * vec4(p, 1.0);
     gl_PointSize = max(1.0, uSize * uScale / -mv.z);
     gl_Position = projectionMatrix * mv;
   }
@@ -136,21 +182,21 @@ const VERTEX = /* glsl */ `
 
 const FRAGMENT = /* glsl */ `
   varying vec3 vColor;
+  varying float vAlpha;
 
   void main() {
     vec2 offset = gl_PointCoord - vec2(0.5);
-    if (dot(offset, offset) > 0.25) discard;
-    gl_FragColor = vec4(vColor, 1.0);
+    if (dot(offset, offset) > 0.25 || vAlpha < 0.01) discard;
+    gl_FragColor = vec4(vColor, vAlpha);
     #include <colorspace_fragment>
   }
 `;
 
-/**
- * Mean per-component energy below which the cloud is close enough to its
- * target to stop simulating it. Roughly a sixth of the grid spacing, well
- * under one pixel on screen.
- */
-const SLEEP_ENERGY = 1e-6;
+function easeInOut(t: number) {
+  return t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
+}
+
+type Mode = "flight" | "homeward" | "rest";
 
 class PointCloud {
   readonly geometry: BufferGeometry;
@@ -160,14 +206,22 @@ class PointCloud {
   private readonly live: Float32Array;
   private readonly colors: Float32Array;
   private readonly velocity: Float32Array;
+  /** Where each point set off from on the way home. */
+  private readonly from: Float32Array;
+  /** Stagger, so the picture gathers from the middle outward. */
+  private readonly delay: Float32Array;
+  /** Half the plane's diagonal: the yardstick for "how far out is this". */
+  private readonly reach: number;
 
   private target: Float32Array;
   private colorFrom: Float32Array;
   private colorTo: Float32Array;
   private colorMix = 1;
-  private sinceScatter = -1;
-  /** Settled: the per-frame loop and the buffer upload are both skipped. */
-  private asleep = false;
+
+  private mode: Mode = "homeward";
+  private clock = 0;
+  private age = -1;
+  private span = ENTRANCE - MAX_DELAY;
 
   constructor(first: Frame, columns: number) {
     this.count = first.position.length / 3;
@@ -178,8 +232,28 @@ class PointCloud {
     this.colorFrom = new Float32Array(first.color);
     this.colorTo = first.color;
 
-    // Start scattered, so the cloud is seen settling into the photograph.
-    for (let i = 0; i < this.count * 3; i += 1) this.live[i] += (Math.random() - 0.5) * 0.9;
+    const home = new Float32Array(this.count * 3);
+    this.delay = new Float32Array(this.count);
+    const reach = Math.hypot(PLANE_W, PLANE_H) / 2;
+    this.reach = reach;
+
+    for (let i = 0; i < this.count; i += 1) {
+      const i3 = i * 3;
+      const x = first.position[i3];
+      const y = first.position[i3 + 1];
+      // Flat grid, no relief: this is what "where it belongs" means to the
+      // shader, and keeping it static means it never needs re-uploading.
+      home[i3] = x;
+      home[i3 + 1] = y;
+      this.delay[i] = (Math.hypot(x, y) / reach) * 0.4 + Math.random() * 0.15;
+    }
+
+    // Start slightly loose, so the photograph is seen pulling itself
+    // together out of the points. Deliberately small: the shader dissolves
+    // a point the further it is from home, and a wide entrance would open
+    // on a pale haze rather than on a picture.
+    for (let i = 0; i < this.count * 3; i += 1) this.live[i] += (Math.random() - 0.5) * 0.5;
+    this.from = new Float32Array(this.live);
 
     const position = new BufferAttribute(this.live, 3);
     position.setUsage(DynamicDrawUsage);
@@ -189,10 +263,10 @@ class PointCloud {
     this.geometry = new BufferGeometry();
     this.geometry.setAttribute("position", position);
     this.geometry.setAttribute("aColor", color);
+    this.geometry.setAttribute("aHome", new BufferAttribute(home, 3));
 
     this.material = new ShaderMaterial({
-      vertexShader: VERTEX,
-      fragmentShader: FRAGMENT,
+      transparent: true,
       uniforms: {
         // 1.45x the grid pitch. Circles on a square grid need about 1.41x
         // before the diamond-shaped gaps at the four-way junctions close;
@@ -200,7 +274,10 @@ class PointCloud {
         uSize: { value: (PLANE_W / (columns - 1)) * 1.45 },
         uScale: { value: 600 },
         uTime: { value: 0 },
+        uDisperse: { value: 0 },
       },
+      vertexShader: VERTEX,
+      fragmentShader: FRAGMENT,
     });
   }
 
@@ -210,70 +287,112 @@ class PointCloud {
     this.colorMix = 0;
     this.target = frame.position;
     this.colorTo = frame.color;
-    this.asleep = false;
+    if (this.mode === "rest") this.beginHomeward(HOMEWARD);
   }
 
   scatter() {
+    const { reach } = this;
     for (let i = 0; i < this.count; i += 1) {
       const i3 = i * 3;
       const x = this.live[i3];
       const y = this.live[i3 + 1];
       const radius = Math.hypot(x, y) || 1;
-      const speed = 3 + Math.random() * 4.5;
-      // Outward, plus a shared swirl so it reads as a throw rather than a
-      // uniform expansion, plus noise so no two points travel together.
-      // Sized against the spring below: these put the peak of the throw at
-      // roughly the edge of the frame, so it clips a little and comes back.
-      this.velocity[i3] += (x / radius) * speed - y * 3.6 + (Math.random() - 0.5) * 4.2;
-      this.velocity[i3 + 1] += (y / radius) * speed + x * 3.6 + (Math.random() - 0.5) * 4.2;
-      this.velocity[i3 + 2] += (Math.random() - 0.25) * 6.5;
+      // Outward, but scaled by how far out the point already sits. A flat
+      // outward push moves every point the same distance and blows a hole
+      // through the middle, which reads as a smoke ring; letting the edges
+      // travel furthest keeps the picture filled while it comes apart.
+      // Plus a shared swirl so it reads as a throw rather than an
+      // expansion, and noise so no two points travel together. Under the
+      // drag above this carries the cloud out past the edge of the frame,
+      // with the strays reaching far enough to dissolve entirely.
+      const speed = 1 + (radius / reach) * 3.4 + Math.random() * 2.4;
+      this.velocity[i3] = (x / radius) * speed - y * 2.2 + (Math.random() - 0.5) * 3.6;
+      this.velocity[i3 + 1] = (y / radius) * speed + x * 2.2 + (Math.random() - 0.5) * 3.6;
+      this.velocity[i3 + 2] = (Math.random() - 0.3) * 4.4;
     }
-    this.sinceScatter = 0;
-    this.asleep = false;
+    this.mode = "flight";
+    this.clock = 0;
+    this.age = 0;
   }
 
-  step(dt: number, time: number, heightPx: number) {
-    this.material.uniforms.uTime.value = time;
-    this.material.uniforms.uScale.value = heightPx / (2 * Math.tan((FOV * Math.PI) / 360));
-    if (this.asleep) return;
+  private beginHomeward(duration: number) {
+    this.from.set(this.live);
+    this.mode = "homeward";
+    this.clock = 0;
+    this.span = duration - MAX_DELAY;
+  }
 
-    // Underdamped on purpose (zeta is about 0.67): the cloud overshoots
-    // slightly on the way back, which is what makes it feel thrown rather
-    // than faded. Settles in a shade under two seconds.
-    const stiffness = 14;
-    const damping = Math.exp(-5 * dt);
+  step(dt: number, time: number, heightPx: number, disperse: number) {
+    const { uniforms } = this.material;
+    uniforms.uTime.value = time;
+    uniforms.uDisperse.value = disperse;
+    uniforms.uScale.value = heightPx / (2 * Math.tan((FOV * Math.PI) / 360));
+
+    if (this.age >= 0) this.age += dt;
+    this.stepColor(dt);
+    if (this.mode === "rest") return;
+
+    this.clock += dt;
     const total = this.count * 3;
-    let energy = 0;
 
-    for (let i = 0; i < total; i += 1) {
-      const offset = this.target[i] - this.live[i];
-      const v = (this.velocity[i] + offset * stiffness * dt) * damping;
-      this.velocity[i] = v;
-      this.live[i] += v * dt;
-      energy += v * v + offset * offset;
-    }
-    this.geometry.attributes.position.needsUpdate = true;
-
-    if (this.colorMix < 1) {
-      if (this.sinceScatter >= 0) this.sinceScatter += dt;
-      // Hold the old colours through the first beat of the throw, so the
-      // photograph changes while the cloud is loose rather than on the click.
-      const holding = this.sinceScatter >= 0 && this.sinceScatter < 0.22;
-      this.colorMix = Math.min(1, this.colorMix + (holding ? 0 : dt / 0.9));
-
-      const t = this.colorMix;
-      const eased = t * t * (3 - 2 * t);
+    if (this.mode === "flight") {
+      // Pure drag, no spring. They carry a long way and slow to a hang.
+      const damping = Math.exp(-DRAG * dt);
       for (let i = 0; i < total; i += 1) {
-        this.colors[i] = this.colorFrom[i] + (this.colorTo[i] - this.colorFrom[i]) * eased;
+        this.velocity[i] *= damping;
+        this.live[i] += this.velocity[i] * dt;
       }
-      this.geometry.attributes.aColor.needsUpdate = true;
-    } else if (energy / total < SLEEP_ENERGY) {
-      // Land exactly on the photograph and stop: at rest this figure should
-      // cost nothing, which is what pays for the point count.
-      this.live.set(this.target);
-      this.velocity.fill(0);
-      this.asleep = true;
+      if (this.clock >= FLIGHT) this.beginHomeward(HOMEWARD);
+    } else {
+      const { live, from, target, delay, span, clock } = this;
+      let done = true;
+      for (let i = 0; i < this.count; i += 1) {
+        const t = (clock - delay[i]) / span;
+        if (t <= 0) {
+          done = false;
+          continue;
+        }
+        if (t >= 1) {
+          const i3 = i * 3;
+          live[i3] = target[i3];
+          live[i3 + 1] = target[i3 + 1];
+          live[i3 + 2] = target[i3 + 2];
+          continue;
+        }
+        done = false;
+        const e = easeInOut(t);
+        const i3 = i * 3;
+        live[i3] = from[i3] + (target[i3] - from[i3]) * e;
+        live[i3 + 1] = from[i3 + 1] + (target[i3 + 1] - from[i3 + 1]) * e;
+        live[i3 + 2] = from[i3 + 2] + (target[i3 + 2] - from[i3 + 2]) * e;
+      }
+      if (done) {
+        // Land exactly on the photograph and stop: at rest this figure
+        // should cost nothing, which is what pays for the point count.
+        this.live.set(this.target);
+        this.velocity.fill(0);
+        this.mode = "rest";
+        this.age = -1;
+      }
     }
+
+    this.geometry.attributes.position.needsUpdate = true;
+  }
+
+  private stepColor(dt: number) {
+    if (this.colorMix >= 1) return;
+    // Hold the old colours through the first beat of the throw, so the
+    // photograph changes while the cloud is loose rather than on the click.
+    const holding = this.age >= 0 && this.age < 0.3;
+    this.colorMix = Math.min(1, this.colorMix + (holding ? 0 : dt / 1.1));
+
+    const t = this.colorMix;
+    const eased = t * t * (3 - 2 * t);
+    const { colors, colorFrom, colorTo } = this;
+    for (let i = 0; i < this.count * 3; i += 1) {
+      colors[i] = colorFrom[i] + (colorTo[i] - colorFrom[i]) * eased;
+    }
+    this.geometry.attributes.aColor.needsUpdate = true;
   }
 
   dispose() {
@@ -302,7 +421,24 @@ function Cloud({
   }, [cloud, scatterCount]);
 
   useFrame((state, delta) => {
-    cloud.step(Math.min(delta, 0.05), state.clock.elapsedTime, state.gl.domElement.height);
+    const canvas = state.gl.domElement;
+    // Scroll dispersal, measured off the canvas itself so it needs no ref
+    // into the DOM above it. One rect read a frame on a leaf element.
+    //
+    // Gated on the bottom edge of the photograph rather than the canvas,
+    // which is a good deal taller than it: nothing happens until the
+    // picture is halfway out of the viewport, and it is fully scattered
+    // exactly as the last of it leaves the top. An earlier version started
+    // dispersing 80px into the page and had the figure gone while a third
+    // of it was still on screen.
+    const rect = canvas.getBoundingClientRect();
+    const pictureHeight = rect.height / FRAME_SCALE_Y;
+    const bottom = rect.top + rect.height / 2 + pictureHeight / 2;
+    const gate = window.innerHeight * 0.5;
+    const disperse = Math.min(1, Math.max(0, (gate - bottom) / gate));
+
+    cloud.step(Math.min(delta, 0.05), state.clock.elapsedTime, canvas.height, disperse);
+
     const mesh = points.current;
     if (!mesh) return;
     mesh.rotation.y += (state.pointer.x * 0.24 - mesh.rotation.y) * 0.05;

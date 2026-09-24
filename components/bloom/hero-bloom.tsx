@@ -60,7 +60,7 @@ export function HeroBloom() {
   );
 
   return (
-    <figure className="animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_200ms_both] motion-reduce:animate-none">
+    <figure className="group animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_200ms_both] motion-reduce:animate-none">
       {reduced ? (
         <div className="relative aspect-[3/4] w-full overflow-hidden bg-sage/50">
           {still("opacity-100")}
@@ -70,12 +70,19 @@ export function HeroBloom() {
           type="button"
           onClick={scatter}
           aria-label="Scatter the flowers and show another photograph from the shop"
-          className="relative block aspect-[3/4] w-full cursor-pointer overflow-hidden bg-sage/50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-forest"
+          className="relative block aspect-[3/4] w-full cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-forest"
         >
-          {still(ready ? "opacity-0" : "opacity-100")}
+          <span className="absolute inset-0 block overflow-hidden bg-sage/50">
+            {still(ready ? "opacity-0" : "opacity-100")}
+          </span>
+          {/* Deliberately larger than the photograph and unclipped, so a
+              throw crosses the page instead of piling up against an edge.
+              The insets are paired with FRAME_SCALE_X and FRAME_SCALE_Y in
+              bloom-canvas, which pull the camera back to match. Clicks fall
+              through to the button underneath. */}
           {mounted && (
             <span
-              className={`absolute inset-0 block transition-opacity duration-700 ${
+              className={`pointer-events-none absolute -inset-x-[55%] -inset-y-[30%] block transition-opacity duration-700 ${
                 ready ? "opacity-100" : "opacity-0"
               }`}
             >
@@ -95,7 +102,10 @@ export function HeroBloom() {
           {frame.caption}
         </span>
         {!reduced && (
-          <span aria-hidden="true" className="text-[0.65rem] uppercase tracking-[0.18em] text-muted">
+          <span
+            aria-hidden="true"
+            className="text-[0.65rem] uppercase tracking-[0.18em] text-muted transition-colors duration-300 group-hover:text-forest"
+          >
             Click to scatter
           </span>
         )}

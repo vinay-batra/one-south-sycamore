@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { LogoMark } from "@/components/logo";
+import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Page not found",
 };
-import { LogoMark } from "@/components/logo";
-import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/site";
 
 export default function NotFound() {
   return (

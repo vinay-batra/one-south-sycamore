@@ -59,7 +59,7 @@ export function Masthead() {
             </span>
             {isHome && (
               <span className="mt-2.5 block text-[0.7rem] uppercase tracking-[0.2em] text-muted">
-                Cut fresh · Arranged by hand · Twenty-five years
+                Arranged while you wait · Twenty-five years in flowers
               </span>
             )}
           </Link>

@@ -2,8 +2,8 @@
 
 /*
   One South Sycamore design language: warm white paper, deep green ink, pale sage
-  fields, one blush pastel accent. Modern and quiet — the photographs are
-  meant to carry the color, not the interface.
+  fields, one blush pastel accent. Modern and quiet, because the photographs
+  are meant to carry the color rather than the interface.
 */
 @theme {
   --color-paper: #fcfbf9;
@@ -55,6 +55,23 @@ blockquote {
 
 p {
   text-wrap: pretty;
+}
+
+/*
+  A whisper of grain over everything. The design language is paper, and
+  large flat fields of near-white read as screen instead unless something
+  breaks them up. Fixed rather than scrolling, so it never crawls against
+  the photographs, and far too faint to see as texture: you notice it only
+  when it is removed.
+*/
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
 }
 
 /* One visible focus treatment everywhere, including on the dark board. */
@@ -160,6 +177,10 @@ p {
   canvas,
   [role="dialog"] {
     display: none !important;
+  }
+
+  body::after {
+    display: none;
   }
 
   body {
