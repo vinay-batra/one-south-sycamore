@@ -4,6 +4,8 @@ Marketing site for **One South Sycamore**, a one-man flower shop in Newtown, PA.
 Client is **Vince** (sole owner, sole point of contact). Built free; changes are free.
 Vinay owns and manages the domain and does all deploys.
 
+**Live at [onesouthsycamore.com](https://onesouthsycamore.com)** since Sep 24 2026.
+
 Stack: Next.js 16 (App Router, Turbopack) · React 19 · Tailwind v4. **No database.**
 
 ```bash
@@ -165,31 +167,52 @@ the `(dashboard)` layout, not a proxy, so HMAC verification runs on the Node run
 Currently **read-only**: photo editing is laid out but not wired, and the panel says
 so plainly rather than pretending to save. It is the only reason `/admin` exists.
 
-## Launch blockers
+## Deployment
 
-Ordered by what actually blocks going live.
+- **Repo:** `github.com/vinay-batra/one-south-sycamore` (private). Every push to `main`
+  deploys. There is no staging.
+- **Host:** Vercel, project `one-south-sycamore`, Hobby plan. Hobby's terms prohibit
+  commercial use and this is a client's business; Vinay was told twice and chose Hobby
+  anyway, so treat it as decided rather than raising it again.
+- **Domain:** bought through Vercel, already on `ns1/ns2.vercel-dns.com`, so there is no
+  external DNS to touch. **The bare domain is production and `www` 308s to it.**
+  `lib/site.ts` has to name whichever host actually answers: a canonical pointing at a
+  URL that redirects away is a signal Google resolves by ignoring the canonical. If the
+  two are ever swapped in Vercel's Domains settings, that line moves with them.
+  **Auto-renew is off.** It expires Sep 24 2027 and would lapse silently.
+- **Env vars:** `NEXT_PUBLIC_SITE_URL`, `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET`. All
+  three are optional in the sense that nothing crashes without them, which is
+  deliberate: Vercel offers to import the names it finds in `.env.example` and imports
+  them **empty**, and the first production build died on `got ""` because the code used
+  `??`, which only falls back on `undefined`. Everything now trims and uses `||`, so
+  blank means unset. A genuinely wrong origin still fails the build, which is the point.
+  With the admin vars blank, `/admin` renders a login that can never succeed rather than
+  throwing a 500 on a page the footer links to from every page of the site.
 
-1. **Photo uploads for Vince.** The one feature he asked for that is not built, and now
-   the only engineering left. The admin panel lays it out and says plainly that it is
-   off. Target Vercel Blob: no table, no database, nothing to pay for monthly.
+## What is left
+
+The site is live and finished. Nothing below is blocking anything.
+
+1. **Photo uploads for Vince.** The one feature he asked for that is not built, and the
+   only engineering left. The admin panel lays it out and says plainly that it is off.
+   Target Vercel Blob: no table, no database, nothing to pay for monthly. Worth waiting
+   until the review, in case he never actually wants it.
 
 2. **More photographs.** Ten are in. Still missing: **Vince himself** (a slot is held
    open at the top of /about and renders a visible placeholder until it exists), and
    anything of wedding, sympathy or gift-basket work, which are three services currently
    sold with no picture.
 
-3. **Buy the domain and deploy.** Set `NEXT_PUBLIC_SITE_URL` to the real https origin in
-   production; the build throws otherwise, on purpose. The domain should match whatever
-   the Google listing ends up saying, see the name question below.
+3. **The Google Business Profile.** Not in this repo and the highest-value item on the
+   list. It does not exist yet, and the listing Google does have reads **"V flowers"**.
+   The map pack sits above every organic result, so that listing will bring Vince more
+   custom than this whole website will. It needs to say One South Sycamore and carry the
+   URL, or local search splits his shop in two.
 
-4. **Vercel Hobby forbids commercial use.** This is a client site, so either Vercel Pro
-   at $20/mo or Cloudflare Workers, whose free tier permits it. Same question as Moreco.
-   The site is now entirely static with no server runtime, which makes a plain static
-   host a real option as well.
-
-5. **The in-person review Vince asked for.** Bring the open questions below, plus: the
-   slogan, the logo and the placeholder hours are all invented or drafted, the numbered
-   board he asked for has been removed, and so has the contact form.
+4. **The in-person review Vince asked for.** He has not seen any of this. Bring the open
+   questions below, plus the things that were invented or removed on his behalf: the
+   slogan, the logo and the placeholder hours are all drafts, the numbered board he
+   specifically asked for has been removed, and so has the contact form.
 
 ## Layout decisions worth not undoing
 
