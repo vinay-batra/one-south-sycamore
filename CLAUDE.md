@@ -73,66 +73,36 @@ Vince asked for a logo to be made; he hasn't seen this one yet.
 
 ### The hero figure
 
-`components/bloom/` rebuilds one of Vince's photographs as a cloud of points beside
-the headline. Click it and the cloud is thrown clear across the page, changes colour
-mid-flight and gathers back as the next photograph.
+`components/hero/` shows one of Vince's photographs at full quality beside the
+headline and melts it into the next one every few seconds, the way ink spreads in
+water. Click advances it early.
 
-- Every point takes its colour from a pixel of a real photo, so the front page is
-  always his actual stock. Nothing organic is modelled by hand here, and nothing
-  should be.
-- **Density is the whole thing.** 76,800 points on desktop (240x320), 19,200 on a
-  phone, drawn at 1.45x the grid pitch so no page background shows between them.
-  Circles on a square grid need about 1.41x before the diamond gaps at the four-way
-  junctions close. The first pass ran 9,408 points at 0.82x pitch and read as a coarse
-  halftone you could not identify, which defeats the point of using a photograph.
-  At rest this should look like the photograph; the particles are the reveal on the
-  click, not something to sit through beforehand. The per-frame cost is not the
-  constraint: 120,000 points measured at 4% of a 60fps budget.
-- The cloud **sleeps** once it settles, skipping both the integration and the ~900KB
-  position upload, so at rest the figure costs nothing. That is what pays for the
-  point count. Idle motion continues on the GPU regardless.
-- Depth is perceptual luminance plus a gentle barrel curve, so the bright petals stand
-  proud, the surface reads as a surface, and both parallax when the cloud turns with
-  the pointer. The camera sits close enough that the plane overfills its box, because
-  this is a photograph and should run to the edges like every other one on the site.
-- Sampling frames and posters come from the same hand-picked crop
-  (`scripts/generate-bloom-frames.mjs` → `public/bloom/`, manifest in
-  `lib/bloom-sources.ts`), which is what keeps the crossfade from jumping. Crop tight:
-  the figure sits on a pale page, so every bit of shop wall, ceiling or strip light in
-  frame reads as a hole in it. All three masters need pulling down onto the flowers.
-- The simulation is a class, not refs and memos. Tens of thousands of points are
-  rewritten in place every frame and React must not be able to see any of it; the
-  compiler's immutability rules will reject the memo version, correctly.
-- Spring constants are tuned together, not guessed: k=14 with c=5 is underdamped at
-  zeta≈0.67, and the throw velocities put the peak of the scatter at about the edge
-  of the frame with a settle just under two seconds. Change one and re-check the
-  other, headless, because a throttled browser will not show you the difference.
-- **The throw is three parts, not a spring.** A spring has one constant for both how
-  far the points go and how long they take, so far always means fast, and the whole
-  thing was over in 1.7 seconds. They are now thrown into pure drag (0.85s), which
-  carries them out past the edge of the frame and lets them slow to a hang, and only
-  then walked home on an eased tween (2.7s) whose length is set independently. Points
-  set off home from the middle outward, so the picture grows back rather than
-  appearing all at once.
-- Outward speed **scales with how far out the point already sits**. A flat push moves
-  every point the same distance and blows a hole through the middle, which reads as a
-  smoke ring; measured centre density went from 0.00 to 0.10 of the peak when this
-  changed, and the throw reads as a bloom instead.
-- **The canvas is deliberately bigger than the picture** (2.1x wide, 1.6x tall, the
-  insets in hero-bloom paired with FRAME_SCALE_X/Y and the camera distance here) and
-  nothing clips it, so a throw crosses the page instead of piling up against an edge.
-  The hero section carries `overflow-x-clip` so that overhang does not push out a
-  horizontal scrollbar; clip rather than hidden, so the vertical axis stays visible.
-- Points **dissolve with distance from home**, which is what lets the throw thin out
-  into the page with no visible canvas boundary. It also means the entrance scatter
-  has to stay small, or the page opens on a pale haze instead of a picture.
-- **Scrolling past blows the picture apart.** Gated on the bottom edge of the
-  photograph, not the canvas, which is much taller: nothing happens until the picture
-  is halfway out of the viewport. Get this wrong and the figure is simply invisible on
-  a page that has been scrolled at all, which looks exactly like a dead canvas and
-  cost an hour of chasing a bug that was not there.
-- A real photograph paints first and holds the layout. three.js is held back 300ms,
-  the cloud crossfades over the still, and reduced motion never loads it at all.
+**The rule it is built around, learned the hard way:** never make the photograph look
+worse than it already does. His pictures are the best thing on this site. A particle
+version came before this one, went through three rounds of tuning (9,408 points, then
+76,800, then a throw that crossed the page) and was cut, because no density of dots
+beats the actual photograph standing still. At rest this figure is the photograph,
+pixel for pixel, with a drift of a pixel or two so it is not dead. Everything
+interesting happens in the transition.
+
+- The melt is a **diagonal front bent by a flow field**: it sweeps the new picture
+  across the old one and pushes the two apart along the seam. Progress is stretched
+  past both ends (`uProgress * 1.34 - 0.17`) so the front is fully out of frame at 0
+  and at 1, which is what keeps the resting photograph clean.
+- The flow field is crossed sine pairs, not real noise. For something this smooth and
+  this slow the difference is invisible and it costs a fraction as much.
+- A soft lens follows the pointer, and the plane tilts with it. The plane overfills the
+  frame by 7% so the tilt never opens a gap at the edge.
+- The `<img>` underneath and the WebGL texture **use the same file**, so the texture is
+  a cache hit rather than a second download. That is why it is a plain `<img>` and not
+  next/image: routing one through the optimizer would fetch the picture twice.
+- The caption and the dots change at the **halfway point of the melt**, not when the
+  next photograph is asked for, or the label runs ahead of the picture.
+- Material and transition state live in a class. It is written every frame and React
+  must not be able to see it; the compiler's immutability rules reject the
+  memo-and-refs version, correctly.
+- Nothing advances while the figure is off screen. A real photograph paints first and
+  holds the layout, three.js is held back 300ms, and reduced motion never loads it.
 
 ### The globe
 
@@ -162,7 +132,7 @@ crop them into wide bands: it cuts the sign off the storefront shot.
 - Masters: `public/photos/*.webp`, 2400px, ~7.7 MB total (from 37 MB of JPEGs).
 - `lib/photos.ts` is generated: dimensions plus a 16px inline `blurDataURL` per photo.
 - Originals are in `photo-originals/`, gitignored, so they are not deployed.
-- Regenerate with `scripts/process-photos.mjs`, then `scripts/generate-bloom-frames.mjs`
+- Regenerate with `scripts/process-photos.mjs`, then `scripts/generate-hero-frames.mjs`
   if any of the three hero frames changed.
 
 ## Structure

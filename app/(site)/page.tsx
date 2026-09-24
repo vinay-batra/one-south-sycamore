@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { HeroBloom } from "@/components/bloom/hero-bloom";
+import { HeroFigure } from "@/components/hero/hero-figure";
 import { PhotoSlot } from "@/components/photo-slot";
 import { Reveal } from "@/components/reveal";
 import { SourcingGlobe } from "@/components/sourcing-globe";
@@ -9,7 +9,6 @@ import {
   ADDRESS_CITY,
   ADDRESS_STREET,
   DIRECTIONS_NOTE,
-  INSTAGRAM_HANDLE,
   INSTAGRAM_URL,
   PHONE_TEL,
 } from "@/lib/site";
@@ -28,12 +27,8 @@ const BUTTON =
 export default function HomePage() {
   return (
     <>
-      {/* ── Lede, with the flowers themselves beside it ──────────
-           overflow-x-clip, not hidden: the particle figure overhangs its
-           column by half its width and would otherwise push out a
-           horizontal scrollbar. Clip leaves the vertical axis visible, so
-           the throw can still carry above and below the section. */}
-      <section className="overflow-x-clip">
+      {/* ── Lede, with the flowers themselves beside it ────────── */}
+      <section>
         <div className="mx-auto max-w-[1180px] px-6 pt-12 sm:pt-16">
           <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-14">
             <div className="lg:col-span-7">
@@ -72,7 +67,7 @@ export default function HomePage() {
             </div>
 
             <div className="lg:col-span-5">
-              <HeroBloom />
+              <HeroFigure />
             </div>
           </div>
         </div>
@@ -280,7 +275,6 @@ export default function HomePage() {
                 Instagram
               </a>
             </div>
-            <p className="mt-3 text-[0.8rem] text-muted">{INSTAGRAM_HANDLE}</p>
           </div>
         </div>
       </section>
