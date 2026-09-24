@@ -1,6 +1,10 @@
-# V Flowers
+# One South Sycamore
 
-Website for One South Sycamore, the flower shop at 1 South Sycamore Street, Newtown, PA.
+Website for the flower shop at 1 South Sycamore Street, Newtown, PA.
+Live at [onesouthsycamore.com](https://onesouthsycamore.com).
+
+No database, no API routes, no contact form: every public page is static and
+the only way to reach the shop is to call or text Vince.
 
 ```bash
 npm install
