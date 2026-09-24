@@ -10,6 +10,7 @@ import {
   ADDRESS_STREET,
   DIRECTIONS_NOTE,
   INSTAGRAM_URL,
+  PHONE_DISPLAY,
   PHONE_TEL,
 } from "@/lib/site";
 
@@ -50,17 +51,17 @@ export default function HomePage() {
                 </p>
 
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <Link
-                    href="/contact"
-                    className={`${BUTTON} border-transparent bg-forest text-paper hover:bg-ink`}
-                  >
-                    Fill out a request
-                  </Link>
                   <a
                     href={`tel:${PHONE_TEL}`}
+                    className={`${BUTTON} border-transparent bg-forest text-paper hover:bg-ink`}
+                  >
+                    Call {PHONE_DISPLAY}
+                  </a>
+                  <a
+                    href={`sms:${PHONE_TEL}`}
                     className={`${BUTTON} border-forest/35 text-forest hover:border-forest hover:bg-sage/60`}
                   >
-                    Call or text the shop
+                    Text the shop
                   </a>
                 </div>
               </div>

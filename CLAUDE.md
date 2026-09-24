@@ -4,7 +4,7 @@ Marketing site for **One South Sycamore**, a one-man flower shop in Newtown, PA.
 Client is **Vince** (sole owner, sole point of contact). Built free; changes are free.
 Vinay owns and manages the domain and does all deploys.
 
-Stack: Next.js 16 (App Router, Turbopack) · React 19 · Tailwind v4 · Supabase (not yet provisioned).
+Stack: Next.js 16 (App Router, Turbopack) · React 19 · Tailwind v4. **No database.**
 
 ```bash
 npm run dev    # localhost:3006
@@ -23,6 +23,7 @@ Everything below came from Vince directly. Don't invent shop details. Ask.
 | Landmark | Across from the Lukoil, corner of Washington & Sycamore, center of town |
 | Phone | (609) 649-1992. Call **and** text |
 | Email | **None.** Vince doesn't use email. Never put an email address on the site. |
+| Getting in touch | **Call or text only.** There is no contact form. One was built and removed: it had no destination Vince would ever check, so the site was inventing a channel the shop does not have. |
 | Hours | Constantly changing. Site shows placeholder hours + "call for availability", which Vince approved |
 | Delivery | Local only. $100 order minimum, delivery from $20, customer covers it |
 | Payment | Cash, card, Apple Pay, Venmo. No online checkout, and he does not want one |
@@ -137,12 +138,16 @@ crop them into wide bands: it cuts the sign off the storefront shot.
 
 ## Structure
 
-- `app/(site)/`: public pages, home, `/gallery`, `/about`, `/visit`, `/contact`, `/privacy`
-- `app/admin/`: password-gated panel, overview, photos, messages
+- `app/(site)/`: public pages, home, `/gallery`, `/about`, `/visit`, `/privacy`
+- `app/admin/`: password-gated panel, overview and photos
 - `lib/site.ts`: every shop fact (address, phone, hours, delivery, payment). Single source of truth
 - `lib/content.ts`: editorial copy, services, order steps, gallery categories
 - `components/photo-slot.tsx`: placeholder that becomes a real `<Image>` once given a `src`
-- `supabase/migrations/0001_init.sql`: schema, **not yet applied**
+
+**There is no database and no API route.** Every public page is static. The contact
+form was the only thing that ever wrote anything, and with it gone the Supabase client,
+the schema, the messages tab, zod and resend all went too. Keep it that way: when the
+photo uploader is built it goes to Vercel Blob, which needs no table of its own.
 
 ### The board
 
@@ -153,47 +158,38 @@ decision is reversible. Nothing renders it. He has not been told yet.
 
 ### Admin
 
-One shop, one owner, one shared password, not Supabase Auth. `lib/admin-auth.ts` signs an
+One shop, one owner, one shared password, not a real auth provider. `lib/admin-auth.ts` signs an
 expiry into an HMAC cookie (30 days); the password is never stored in the cookie. The gate is
 the `(dashboard)` layout, not a proxy, so HMAC verification runs on the Node runtime.
 
 Currently **read-only**: photo editing is laid out but not wired, and the panel says
-so plainly rather than pretending to save.
+so plainly rather than pretending to save. It is the only reason `/admin` exists.
 
 ## Launch blockers
 
 Ordered by what actually blocks going live.
 
-1. **Decide where the contact form goes, then wire it.** This is the last real
-   engineering. The form currently writes to `contact_messages` and shows in the admin,
-   which assumes Vince logs into an admin panel; he will not. He has no email and lives
-   on his phone. Wire it to **text him** (Twilio from `app/api/contact/route.ts`), or to
-   email Vinay who relays. Until something is wired, production returns 503 and tells
-   people to call, which is deliberate: a real customer must never be silently dropped.
+1. **Photo uploads for Vince.** The one feature he asked for that is not built, and now
+   the only engineering left. The admin panel lays it out and says plainly that it is
+   off. Target Vercel Blob: no table, no database, nothing to pay for monthly.
 
-   Related decision, see the hosting notes: **this site does not need Supabase at all.**
-   One table and an HMAC cookie login. If the form texts instead of storing, the database
-   disappears and photo uploads can go to Vercel Blob.
-
-2. **Photo uploads for Vince.** The one feature he asked for that is not built. The
-   admin panel lays it out and says plainly that it is off. Target Vercel Blob rather
-   than Supabase Storage, per the above.
-
-3. **More photographs.** Ten are in. Still missing: **Vince himself** (a slot is held
+2. **More photographs.** Ten are in. Still missing: **Vince himself** (a slot is held
    open at the top of /about and renders a visible placeholder until it exists), and
    anything of wedding, sympathy or gift-basket work, which are three services currently
    sold with no picture.
 
-4. **Buy vjsflowers.com and deploy.** Set `NEXT_PUBLIC_SITE_URL` to the real https
-   origin in production; the build throws otherwise, on purpose.
+3. **Buy the domain and deploy.** Set `NEXT_PUBLIC_SITE_URL` to the real https origin in
+   production; the build throws otherwise, on purpose. The domain should match whatever
+   the Google listing ends up saying, see the name question below.
 
-5. **Vercel Hobby forbids commercial use.** This is a client site, so either Vercel Pro
-   at $20/mo or Cloudflare Workers, whose free tier permits it. Same open question as
-   Moreco.
+4. **Vercel Hobby forbids commercial use.** This is a client site, so either Vercel Pro
+   at $20/mo or Cloudflare Workers, whose free tier permits it. Same question as Moreco.
+   The site is now entirely static with no server runtime, which makes a plain static
+   host a real option as well.
 
-6. **The in-person review Vince asked for.** Bring the open questions below, plus: the
-   slogan, the logo and the placeholder hours are all invented or drafted, and the
-   numbered board he asked for has been removed.
+5. **The in-person review Vince asked for.** Bring the open questions below, plus: the
+   slogan, the logo and the placeholder hours are all invented or drafted, the numbered
+   board he asked for has been removed, and so has the contact form.
 
 ## Layout decisions worth not undoing
 
@@ -244,17 +240,6 @@ Both of these came out of his own photographs, not the intake. Ask before acting
    separate business. Nothing is priced ahead, same as the flowers, so the price is a
    conversation. The home page now says so in its own section. Still worth confirming
    the wording with him, since it is his work being described.
-
-### The contact form, and where it goes
-
-The form lives at `/contact`. Submissions land in `contact_messages` and surface in the
-admin Messages tab.
-
-**That is probably not good enough.** Vince does not use email and does not sit at a
-computer; expecting him to log into an admin panel to find a customer enquiry is
-optimistic. Either wire the form to text him (a Twilio send on successful insert is a
-few lines in `app/api/contact/route.ts`) or reconsider having a form at all. Until one
-of those happens, the page copy deliberately points anyone in a hurry at the phone.
 
 ## SEO, and the traps in it
 

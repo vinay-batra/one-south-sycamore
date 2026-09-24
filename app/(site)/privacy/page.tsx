@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "Privacy",
   alternates: { canonical: "/privacy" },
   openGraph: { url: "/privacy" },
-  description: `What ${SITE_NAME} does with the details you send through this website. Short version: nothing beyond getting back to you.`,
+  description: `What ${SITE_NAME} does with your details. Short version: this website collects nothing, because there is nothing on it to fill in.`,
 };
 
 /**
@@ -17,10 +17,10 @@ export const metadata: Metadata = {
  */
 const SECTIONS = [
   {
-    heading: "What the form collects",
+    heading: "This site collects nothing",
     body: [
-      "The contact form asks for your name, your phone number, the occasion, and whatever you want to tell Vince. That is all of it. There is no email field, because Vince does not use email.",
-      "Those details go to the shop so he can call you back about your order. They are not sold, shared, or sent anywhere else.",
+      "There is no form here, no sign-up, no account, and no email address to give. The only way to reach the shop is to call or text Vince, and that is an ordinary phone call on his own phone. Nothing about it passes through this website.",
+      "So there is no database of customers, nothing stored, and nothing to sell or share even if anyone wanted to.",
     ],
   },
   {
@@ -39,7 +39,7 @@ const SECTIONS = [
   {
     heading: "Changing your mind",
     body: [
-      "If you sent a note through the form and would rather it were deleted, call or text the shop and it will be. There is no account to close and nothing else on file.",
+      "There is nothing to undo. No account to close, no list to come off, nothing on file. If you called or texted, that conversation lives on Vince's phone and nowhere else.",
     ],
   },
 ];

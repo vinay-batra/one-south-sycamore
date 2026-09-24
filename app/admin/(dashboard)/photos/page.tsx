@@ -1,8 +1,7 @@
 import { GALLERY_CATEGORIES } from "@/lib/content";
-import { supabaseConfigured } from "@/lib/supabase";
 
 /**
- * Draft state: the uploader's layout, without the Supabase Storage wiring.
+ * Draft state: the uploader's layout, without the storage wiring.
  * Vince's flow is "take a photo, pick a section, done": no cropping, no
  * file management, no naming.
  */
@@ -18,11 +17,9 @@ export default function AdminPhotosPage() {
         Take a picture on your phone, pick where it goes, and it&rsquo;s on the site.
       </p>
 
-      {!supabaseConfigured && (
-        <div id="photos-locked" className="mt-8 border border-blush bg-blush/40 p-5 text-sm leading-relaxed text-ink-soft">
-          Uploading turns on once the photo storage is connected.
-        </div>
-      )}
+      <div id="photos-locked" className="mt-8 border border-blush bg-blush/40 p-5 text-sm leading-relaxed text-ink-soft">
+        Uploading turns on once the photo storage is connected.
+      </div>
 
       <div className="mt-10 border border-dashed border-moss/40 bg-paper p-10 text-center">
         <p className="font-display text-2xl">Add photos</p>

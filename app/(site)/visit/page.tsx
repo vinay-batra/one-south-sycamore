@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { CornerDiagram } from "@/components/corner-diagram";
 import {
   ADDRESS_CITY,
@@ -112,15 +111,16 @@ export default function VisitPage() {
 
           <div className="mt-10 border-t hairline pt-8">
             <p className="leading-relaxed text-ink-soft">
-              For a wedding, a corporate account, or anything with a lot of
-              detail, it is easier to write it down.
+              Anything with a date on it, a wedding or a funeral, is worth
+              calling about early. Some stems have to be brought in.
             </p>
-            <Link
-              href="/contact"
-              className="mt-4 inline-block border-b border-forest/40 pb-0.5 text-[0.7rem] uppercase tracking-[0.16em] text-forest transition-colors hover:border-forest"
+            <a
+              href={`tel:${PHONE_TEL}`}
+              aria-label={`Call the shop, ${PHONE_DISPLAY}`}
+              className="mt-4 inline-block font-display text-[1.9rem] leading-none tracking-tight transition-colors hover:text-forest"
             >
-              Write to the shop
-            </Link>
+              {PHONE_DISPLAY}
+            </a>
           </div>
         </div>
 

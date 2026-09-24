@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { supabaseConfigured } from "@/lib/supabase";
 
 import type { Metadata } from "next";
 
@@ -14,26 +13,19 @@ export default function AdminOverviewPage() {
         and the site updates right away.
       </p>
 
-      {!supabaseConfigured && (
-        <div className="mt-8 border border-blush bg-blush/40 p-5">
-          <p className="text-sm font-medium">Not connected yet</p>
-          <p className="mt-1 text-sm leading-relaxed text-ink-soft">
-            The database isn&rsquo;t hooked up, so edits here won&rsquo;t save. This is the
-            draft version. Vinay finishes this part before launch.
-          </p>
-        </div>
-      )}
+      <div className="mt-8 border border-blush bg-blush/40 p-5">
+        <p className="text-sm font-medium">Not switched on yet</p>
+        <p className="mt-1 text-sm leading-relaxed text-ink-soft">
+          Uploading isn&rsquo;t hooked up, so nothing here saves yet. This is the
+          draft version. Vinay finishes this part before launch.
+        </p>
+      </div>
 
       <div className="mt-10 grid gap-4 sm:grid-cols-2">
         <Card
           href="/admin/photos"
           title="Photos"
           body="Add pictures from your phone and pick which part of the site they show up in."
-        />
-        <Card
-          href="/admin/messages"
-          title="Messages"
-          body="Notes people send from the website's form. Calls and texts still go straight to your phone."
         />
         <Card
           href="/"

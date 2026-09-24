@@ -16,7 +16,6 @@ const PAGES = [
   { href: "/gallery", label: "Gallery" },
   { href: "/about", label: "About" },
   { href: "/visit", label: "Visit & Delivery" },
-  { href: "/contact", label: "Write to the shop" },
 ];
 
 /**
