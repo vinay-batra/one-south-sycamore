@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { LogoMark } from "@/components/logo";
 import {
   ADDRESS_CITY,
   ADDRESS_STREET,
@@ -10,40 +9,29 @@ import {
   INSTAGRAM_URL,
   MAP_URL,
   PAYMENT_METHODS,
-  PHONE_DISPLAY,
-  PHONE_TEL,
   SITE_NAME,
 } from "@/lib/site";
 
-const COLUMNS = [
+const PAGES = [
   { href: "/gallery", label: "Gallery" },
   { href: "/about", label: "About" },
   { href: "/visit", label: "Visit & Delivery" },
   { href: "/contact", label: "Write to the shop" },
 ];
 
+/**
+ * Four columns of the same weight, and nothing the masthead already says.
+ *
+ * There used to be a sign-off row above these carrying the shop name, the
+ * logo and the phone at display size. All three are at the top of every
+ * page, so it read as a repeat rather than a close.
+ */
 export function SiteFooter() {
   return (
     /* pb on mobile clears the fixed call strip. */
     <footer className="border-t-[3px] border-ink bg-paper-warm pb-14 sm:pb-0">
       <div className="mx-auto max-w-[1180px] px-6">
-        {/* Sign-off line: the shop's name at size, the way it sits on the window. */}
-        <div className="flex flex-wrap items-end justify-between gap-6 py-12">
-          <div className="flex items-center gap-4">
-            <LogoMark className="h-10 w-10 shrink-0 text-forest" />
-            <span className="font-display text-[2.75rem] leading-none tracking-[-0.02em] sm:text-[3.5rem]">
-              {SITE_NAME}
-            </span>
-          </div>
-          <a
-            href={`tel:${PHONE_TEL}`}
-            className="font-display text-[2rem] leading-none tracking-tight transition-colors hover:text-forest sm:text-[2.5rem]"
-          >
-            {PHONE_DISPLAY}
-          </a>
-        </div>
-
-        <div className="grid gap-10 border-t border-ink/15 py-12 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-x-8 gap-y-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <p className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
               The shop
@@ -73,30 +61,32 @@ export function SiteFooter() {
             <p className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
               Hours
             </p>
+            {/* A fixed column for the days rather than justify-between, which
+                stretched this block to the full grid track and made the four
+                columns look unevenly filled. */}
             <ul className="mt-4 space-y-2">
               {HOURS.map((row) => (
-                <li
-                  key={row.days}
-                  className="flex justify-between gap-4 text-sm text-ink-soft"
-                >
-                  <span>{row.days}</span>
+                <li key={row.days} className="flex gap-3 text-sm text-ink-soft">
+                  <span className="w-[7.25rem] shrink-0 whitespace-nowrap">{row.days}</span>
                   <span className="text-muted">{row.time}</span>
                 </li>
               ))}
             </ul>
-            <p className="mt-4 text-xs leading-relaxed text-muted">{HOURS_NOTE}</p>
+            <p className="mt-4 max-w-[15rem] text-xs leading-relaxed text-muted">
+              {HOURS_NOTE}
+            </p>
           </div>
 
           <div>
             <p className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
               Delivery &amp; payment
             </p>
-            <p className="mt-4 text-sm leading-relaxed text-ink-soft">
+            <p className="mt-4 max-w-[15rem] text-sm leading-relaxed text-ink-soft">
               Local delivery to {DELIVERY.area}.
               <br />${DELIVERY.orderMinimum} minimum, delivery from $
               {DELIVERY.deliveryFrom}.
             </p>
-            <p className="mt-3 text-sm leading-relaxed text-ink-soft">
+            <p className="mt-3 max-w-[15rem] text-sm leading-relaxed text-ink-soft">
               {PAYMENT_METHODS.join(" · ")}
             </p>
           </div>
@@ -106,13 +96,13 @@ export function SiteFooter() {
               Pages
             </p>
             <nav aria-label="Footer" className="mt-4 flex flex-col gap-2">
-              {COLUMNS.map((column) => (
+              {PAGES.map((page) => (
                 <Link
-                  key={column.href}
-                  href={column.href}
+                  key={page.href}
+                  href={page.href}
                   className="text-sm text-ink-soft transition-colors hover:text-ink"
                 >
-                  {column.label}
+                  {page.label}
                 </Link>
               ))}
             </nav>

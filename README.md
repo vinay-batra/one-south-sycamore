@@ -1,6 +1,6 @@
 # V Flowers
 
-Website for V Flowers — 1 South Sycamore Street, Newtown, PA.
+Website for One South Sycamore, the flower shop at 1 South Sycamore Street, Newtown, PA.
 
 ```bash
 npm install

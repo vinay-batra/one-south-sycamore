@@ -81,14 +81,15 @@ export const STORY_CHAPTERS: Chapter[] = [
     heading: "The trade, learned from the pavement up.",
     body: [
       "A store in Brooklyn. Stands on the corner. Brooklyn and Manhattan, on the road and on the street, for years, selling flowers to people walking past, which is the fastest way there is to learn what people actually want.",
-      "He loved it. That part comes up more than once when he talks about it.",
+      "He loved it, and he did it for years.",
     ],
   },
   {
     label: "Newtown",
     heading: "Same job, quieter corner.",
     body: [
-      "These days the shop sits on the corner of Washington and Sycamore, across from the Lukoil, in the center of town.",
+      "After years of stands and corners, what he wanted was somewhere permanent: an actual store, in an actual building, with his name on the door and the same address every morning.",
+      "He found it on the corner of Washington and Sycamore, across from the Lukoil, in the center of town.",
       "The job hasn't really changed. The flowers come in, and Vince figures out what to do with them.",
     ],
   },
@@ -102,17 +103,14 @@ export const STORY_PARAGRAPHS = [
 ];
 
 /**
- * The art.
- *
- * Written only from what the photographs actually show: painted canvases
- * and tall panels through the shop, a rack of spray cans behind the
- * counter, and an ART sign standing out front. It deliberately does not
- * say who painted them or that they are for sale, because nobody has told
- * us either of those things yet. Sharpen this once Vince answers.
+ * The art. Confirmed at the second visit: Vince paints all of it himself,
+ * spray paint on canvas, at a setup behind the shop, and sells it off the
+ * walls inside. It is not a separate business. Nothing is priced ahead,
+ * same as the flowers.
  */
 export const ART_PARAGRAPHS = [
-  "There is more than flowers in the building. Canvases lean along the walls and hang from the rafters, spray-painted in heavy reds and pinks, figures and blooms worked over wood and board.",
-  "It is not a separate business with its own door. The work sits in among the buckets and the cooler, which is the whole character of the place: a corner shop that fills up with whatever Vince has going on.",
+  "The canvases around the shop are Vince's. He spray paints them himself at a setup behind the building, then hangs them out front in among the buckets and the cooler.",
+  "It is not a second business with its own door, just one of the things he does. The work is for sale, and like the flowers nothing is priced ahead of time, so ask him about a piece while you are in.",
 ];
 
 /** Where the flowers actually come from, the part most shops don't tell you. */

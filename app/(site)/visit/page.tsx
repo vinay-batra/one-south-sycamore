@@ -6,7 +6,6 @@ import {
   ADDRESS_FULL,
   ADDRESS_STREET,
   DELIVERY,
-  DIRECTIONS_NOTE,
   HOURS,
   HOURS_NOTE,
   MAP_URL,
@@ -25,29 +24,15 @@ export const metadata: Metadata = {
 export default function VisitPage() {
   return (
     <div className="mx-auto max-w-[1180px] px-6 pt-14 pb-20 sm:pt-20">
-      <header className="grid gap-8 lg:grid-cols-12">
-        <div className="lg:col-span-7">
-          <p className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
-            Visit
-          </p>
-          <h1 className="mt-5 font-display text-[3rem] leading-[0.94] tracking-[-0.03em] sm:text-[4.5rem]">
-            Corner of Washington
-            <br />
-            and Sycamore, Newtown.
-          </h1>
-        </div>
-        <div className="lg:col-span-4 lg:col-start-9 lg:pt-4">
-          <p className="text-[1.0625rem] leading-relaxed text-ink-soft">
-            {DIRECTIONS_NOTE}
-          </p>
-          <a
-            href={`tel:${PHONE_TEL}`}
-            aria-label={`Call the shop, ${PHONE_DISPLAY}`}
-            className="mt-5 inline-block font-display text-[1.9rem] leading-none tracking-tight transition-colors hover:text-forest"
-          >
-            {PHONE_DISPLAY}
-          </a>
-        </div>
+      <header>
+        <p className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
+          Visit
+        </p>
+        <h1 className="mt-5 font-display text-[3rem] leading-[0.94] tracking-[-0.03em] sm:text-[4.5rem]">
+          Corner of Washington
+          <br />
+          and Sycamore, Newtown.
+        </h1>
       </header>
 
       <div className="mt-16 grid gap-12 lg:grid-cols-12 lg:items-start">

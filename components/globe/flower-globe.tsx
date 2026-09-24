@@ -1,27 +1,11 @@
 "use client";
 
-import { Suspense, useState, useSyncExternalStore } from "react";
+import { Suspense, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { GlobeScene } from "@/components/globe/globe-scene";
 import { CountUp, Reveal } from "@/components/reveal";
 import { ORIGINS, milesFrom } from "@/lib/globe/origins";
-
-const REDUCED_QUERY = "(prefers-reduced-motion: reduce)";
-
-function subscribe(callback: () => void) {
-  const query = window.matchMedia(REDUCED_QUERY);
-  query.addEventListener("change", callback);
-  return () => query.removeEventListener("change", callback);
-}
-
-/** External store rather than an effect, so the first paint is already correct. */
-function usePrefersReducedMotion() {
-  return useSyncExternalStore(
-    subscribe,
-    () => window.matchMedia(REDUCED_QUERY).matches,
-    () => false,
-  );
-}
+import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
 
 /**
  * The sourcing story, as the thing you land on.

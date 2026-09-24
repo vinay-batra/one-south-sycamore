@@ -5,7 +5,7 @@
  *
  *   node scripts/generate-globe-texture.mjs
  */
-import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
+import { mkdirSync, readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import * as topojson from "topojson-client";
 import { geoArea, geoEquirectangular, geoPath } from "d3-geo";

@@ -8,6 +8,10 @@ import { MAP_URL } from "@/lib/site";
  * and the Lukoil is directly opposite across Sycamore, which is exactly how
  * Vince describes it. Still a sketch and still not to scale, with the real
  * map a tap underneath.
+ *
+ * Both building labels are set along Sycamore rather than across it, the
+ * way a street name runs on a map: they read in the direction of the road
+ * they front.
  */
 export function CornerDiagram({ className = "" }: { className?: string }) {
   return (
@@ -41,36 +45,38 @@ export function CornerDiagram({ className = "" }: { className?: string }) {
             <path d="M0 104H158M234 104H400M0 166H158M234 166H400" />
           </g>
 
-          {/* The shop: south east corner, east of Sycamore. */}
+          {/* The shop: south east corner, fronting Sycamore. */}
           <g>
-            <rect x="248" y="182" width="104" height="62" fill="var(--color-forest)" rx="2" />
-            <text
-              x="300"
-              y="208"
-              textAnchor="middle"
-              className="fill-[var(--color-paper)] font-sans"
-              style={{ fontSize: 10.5, letterSpacing: "0.1em" }}
-            >
-              ONE SOUTH
-            </text>
-            <text
-              x="300"
-              y="224"
-              textAnchor="middle"
-              className="fill-[var(--color-paper)] font-sans"
-              style={{ fontSize: 10.5, letterSpacing: "0.1em" }}
-            >
-              SYCAMORE
-            </text>
+            <rect x="244" y="180" width="62" height="106" fill="var(--color-forest)" rx="2" />
+            <g transform="rotate(90 275 233)">
+              <text
+                x="275"
+                y="229"
+                textAnchor="middle"
+                className="fill-[var(--color-paper)] font-sans"
+                style={{ fontSize: 10.5, letterSpacing: "0.1em" }}
+              >
+                ONE SOUTH
+              </text>
+              <text
+                x="275"
+                y="244"
+                textAnchor="middle"
+                className="fill-[var(--color-paper)] font-sans"
+                style={{ fontSize: 10.5, letterSpacing: "0.1em" }}
+              >
+                SYCAMORE
+              </text>
+            </g>
           </g>
 
           {/* Lukoil: directly opposite, west of Sycamore. */}
           <g>
             <rect
-              x="58"
-              y="186"
-              width="78"
-              height="54"
+              x="74"
+              y="182"
+              width="76"
+              height="80"
               fill="none"
               stroke="var(--color-moss)"
               strokeWidth="1.4"
@@ -78,8 +84,9 @@ export function CornerDiagram({ className = "" }: { className?: string }) {
               rx="2"
             />
             <text
-              x="97"
-              y="218"
+              x="112"
+              y="226"
+              transform="rotate(90 112 222)"
               textAnchor="middle"
               className="fill-[var(--color-ink-soft)] font-sans"
               style={{ fontSize: 10, letterSpacing: "0.1em" }}
@@ -90,7 +97,7 @@ export function CornerDiagram({ className = "" }: { className?: string }) {
 
           {/* Street names */}
           <text
-            x="286"
+            x="250"
             y="129"
             className="fill-[var(--color-ink-soft)] font-sans"
             style={{ fontSize: 9.5, letterSpacing: "0.16em" }}
@@ -124,25 +131,33 @@ export function CornerDiagram({ className = "" }: { className?: string }) {
             S SYCAMORE ST
           </text>
 
-          {/* North */}
-          <g transform="translate(366 30)">
-            <path
-              d="M0 14V-6M0 -6l-4.5 5M0 -6l4.5 5"
-              stroke="var(--color-ink-soft)"
-              strokeWidth="1.3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
+          {/* Compass. North is up, so east is right and west is left. */}
+          <g transform="translate(356 50)" aria-hidden="true">
+            <circle
+              r="14"
+              fill="var(--color-paper-warm)"
+              stroke="var(--color-moss)"
+              strokeWidth="1"
+              opacity="0.9"
             />
-            <text
-              x="0"
-              y="26"
-              textAnchor="middle"
+            <path
+              d="M0 0V-9M0 0V9M0 0H-9M0 0H9"
+              stroke="var(--color-moss)"
+              strokeWidth="1"
+              strokeLinecap="round"
+              opacity="0.7"
+            />
+            <path d="M0 -12.5 3.1 -5 -3.1 -5Z" fill="var(--color-forest)" />
+            <g
               className="fill-[var(--color-ink-soft)] font-sans"
-              style={{ fontSize: 9, letterSpacing: "0.12em" }}
+              style={{ fontSize: 8.5, letterSpacing: "0.1em" }}
+              textAnchor="middle"
             >
-              N
-            </text>
+              <text x="0" y="-18">N</text>
+              <text x="0" y="25">S</text>
+              <text x="21" y="3">E</text>
+              <text x="-21" y="3">W</text>
+            </g>
           </g>
         </svg>
       </div>

@@ -36,13 +36,14 @@ const FlowerGlobe = dynamic(
 );
 
 /**
- * The globe sits on the paper background rather than in a dark band.
+ * The sourcing story, as its own spread: the claim is made in type first
+ * and the globe below is the evidence for it.
  *
- * It used to live in a full-bleed dark section, which meant two hard
- * colour changes on the way past it however gently they were ramped. The
- * globe is dark enough on its own to anchor the page.
+ * It sits on the paper background rather than in a dark band. It used to be
+ * full-bleed dark, which meant two hard colour changes on the way past it
+ * however gently they were ramped.
  */
-export function HeroGlobe() {
+export function SourcingGlobe() {
   const ref = useRef<HTMLDivElement>(null);
   const [near, setNear] = useState(false);
 
@@ -67,10 +68,8 @@ export function HeroGlobe() {
   }, []);
 
   return (
-    <section className="mx-auto max-w-[1180px] px-6 pt-12 sm:pt-16">
-      <div ref={ref}>{near ? <FlowerGlobe /> : <GlobeSkeleton />}</div>
-
-      <div className="mt-14 grid gap-8 border-t hairline pt-10 lg:grid-cols-12">
+    <section className="mx-auto max-w-[1180px] px-6 py-20 sm:py-28">
+      <div className="grid gap-8 border-t hairline pt-10 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <p className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
             Where they come from
@@ -91,6 +90,10 @@ export function HeroGlobe() {
             </p>
           ))}
         </div>
+      </div>
+
+      <div ref={ref} className="mt-16 sm:mt-20">
+        {near ? <FlowerGlobe /> : <GlobeSkeleton />}
       </div>
     </section>
   );

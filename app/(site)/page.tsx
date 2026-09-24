@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { HeroGlobe } from "@/components/hero-globe";
+import { HeroBloom } from "@/components/bloom/hero-bloom";
 import { PhotoSlot } from "@/components/photo-slot";
 import { Reveal } from "@/components/reveal";
+import { SourcingGlobe } from "@/components/sourcing-globe";
 import { ART_PARAGRAPHS, ORDER_STEPS, SERVICES } from "@/lib/content";
 import {
   ADDRESS_CITY,
@@ -18,47 +19,62 @@ export const metadata: Metadata = {
   openGraph: { url: "/" },
 };
 
+/* Matched buttons: the outline carries a transparent border on the solid
+   one too, so the two sit at exactly the same height. */
+const BUTTON =
+  "inline-flex items-center justify-center border px-7 py-3.5 text-[0.7rem] uppercase tracking-[0.16em] transition-colors";
+
 export default function HomePage() {
   return (
     <>
-      {/* ── Lede, with the globe as the thing you land on ─────── */}
+      {/* ── Lede, with the flowers themselves beside it ────────── */}
       <section className="mx-auto max-w-[1180px] px-6 pt-12 sm:pt-16">
-        <h1 className="max-w-[16ch] font-display text-[3.25rem] leading-[0.92] tracking-[-0.03em] sm:text-[5rem] lg:text-[6rem]">
-          <span className="block animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_both] motion-reduce:animate-none">
-            No set menu.
-          </span>
-          <span className="block animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_120ms_both] text-forest motion-reduce:animate-none">
-            Just what&rsquo;s beautiful today.
-          </span>
-        </h1>
+        <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-14">
+          <div className="lg:col-span-7">
+            <h1 className="font-display text-[2.75rem] leading-[0.94] tracking-[-0.03em] sm:text-[4rem] lg:text-[4.5rem]">
+              <span className="block animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_both] motion-reduce:animate-none">
+                No set menu.
+              </span>
+              <span className="block animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_120ms_both] text-forest motion-reduce:animate-none">
+                Just what&rsquo;s beautiful today.
+              </span>
+            </h1>
 
-        <div className="mt-10 grid gap-8 animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_300ms_both] motion-reduce:animate-none lg:grid-cols-12">
-          <p className="text-[1.0625rem] leading-relaxed text-ink-soft lg:col-span-6">
-            A flower shop on the corner of Washington and Sycamore, in the middle
-            of Newtown. Nothing here is made in advance. Tell Vince the occasion
-            and he builds it from whatever came in that morning.
-          </p>
-          <div className="flex items-start gap-8 lg:col-span-4 lg:col-start-9 lg:justify-end">
-            <a
-              href={`tel:${PHONE_TEL}`}
-              className="bg-forest px-7 py-3.5 text-[0.7rem] uppercase tracking-[0.16em] text-paper transition-opacity hover:opacity-90"
-            >
-              Call the shop
-            </a>
-            <a
-              href={`sms:${PHONE_TEL}`}
-              className="self-center border-b border-forest/40 pb-0.5 text-[0.7rem] uppercase tracking-[0.16em] text-forest transition-colors hover:border-forest"
-            >
-              or text
-            </a>
+            <div className="animate-[fade-up_900ms_cubic-bezier(0.16,1,0.3,1)_300ms_both] motion-reduce:animate-none">
+              <p className="mt-8 max-w-xl text-[1.0625rem] leading-relaxed text-ink-soft">
+                A flower shop on the corner of Washington and Sycamore, in the
+                middle of Newtown. Nothing here is made in advance. Tell Vince
+                the occasion and he builds it from whatever came in that
+                morning.
+              </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  href="/contact"
+                  className={`${BUTTON} border-transparent bg-forest text-paper hover:bg-ink`}
+                >
+                  Fill out a request
+                </Link>
+                <a
+                  href={`tel:${PHONE_TEL}`}
+                  className={`${BUTTON} border-forest/35 text-forest hover:border-forest hover:bg-sage/60`}
+                >
+                  Call or text the shop
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-5">
+            <HeroBloom />
           </div>
         </div>
       </section>
 
-      <HeroGlobe />
+      <SourcingGlobe />
 
       {/* ── How to order ─────────────────────────────────────── */}
-      <section className="mx-auto max-w-[1180px] px-6 py-20 sm:py-24">
+      <section className="mx-auto max-w-[1180px] px-6 pb-20 sm:pb-24">
         <div className="grid gap-10 border-b border-ink/15 pb-10 lg:grid-cols-12">
           <div className="lg:col-span-6">
             <p className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
@@ -137,12 +153,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── What he does ─────────────────────────────────────── */}
+      {/* ── Services ─────────────────────────────────────────── */}
       <section className="mx-auto max-w-[1180px] px-6 py-20 sm:py-24">
-        <p className="text-[0.7rem] uppercase tracking-[0.16em] text-muted">
-          What he does
-        </p>
-        <h2 className="mt-4 max-w-3xl font-display text-[2.25rem] leading-[1.05] tracking-tight sm:text-[2.75rem]">
+        <h2 className="max-w-3xl font-display text-[2.25rem] leading-[1.05] tracking-tight sm:text-[2.75rem]">
           Weddings, sympathy work and everyday flowers in Newtown.
         </h2>
         <ul className="mt-10">
@@ -172,9 +185,9 @@ export default function HomePage() {
                 Also in the shop
               </p>
               <h2 className="mt-5 font-display text-[2.5rem] leading-[1.0] tracking-[-0.02em] sm:text-[3.25rem]">
-                There is paint on
+                The canvases
                 <br />
-                the walls too.
+                are his too.
               </h2>
             </div>
             <div className="lg:col-span-6 lg:col-start-7 lg:pt-4">
