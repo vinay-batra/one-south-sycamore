@@ -66,10 +66,15 @@ export const PAYMENT_METHODS = ["Cash", "Card", "Apple Pay", "Venmo"];
  * Blank means unset.
  */
 const RAW_SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://onesouthsycamore.com";
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://www.onesouthsycamore.com";
 
 /**
- * Every canonical, og:url, sitemap entry and JSON-LD url is built from this.
+ * Every canonical, og:url, sitemap entry and JSON-LD url is built from this,
+ * so it has to be the host that actually answers. Vercel made www the
+ * production domain and 308s the bare domain to it; a canonical pointing at
+ * a URL that redirects away is a signal Google resolves by ignoring the
+ * canonical. To move the site to the bare domain instead, flip the two in
+ * Vercel's Domains settings and change this line back.
  * A production build that picked up a localhost origin would tell search
  * engines the real address of every page is a host nobody can reach, so it
  * fails the build instead.
