@@ -5,10 +5,9 @@ import { useEffect, useRef, useState } from "react";
 import {
   BufferAttribute,
   BufferGeometry,
-  Color,
+  DynamicDrawUsage,
   Points,
   ShaderMaterial,
-  SRGBColorSpace,
 } from "three";
 import { BLOOM_FRAMES } from "@/lib/bloom";
 
@@ -18,21 +17,44 @@ import { BLOOM_FRAMES } from "@/lib/bloom";
  *
  * Every point takes its colour from a pixel of a real photo, so the thing on
  * the front page is always his actual stock rather than a modelled flower.
- * Depth comes from luminance, which gives the brighter petals real relief to
- * parallax against when the cloud turns.
  *
- * The simulation lives in a class rather than in refs and memos on purpose:
- * nine thousand points are rewritten in place every frame, and React should
- * not be able to see any of it.
+ * Density is the whole game. An earlier pass ran 9,408 points and read as a
+ * coarse halftone: you could not tell what it was, which defeats the point
+ * of using a photograph at all. At rest this should look like the
+ * photograph, with only a fine grain to say it is alive; the particles are
+ * meant to be discovered on the click, not endured before it. Points are
+ * drawn a little wider than the grid spacing so no page background shows
+ * through between them.
  */
 
 const PLANE_W = 1.5;
 const PLANE_H = 2.0;
+/** Luminance relief: bright petals stand proud of the dark leaves. */
 const DEPTH = 0.3;
+/** Gentle barrel so the surface is obviously a surface when it turns. */
+const CURVE = 0.1;
 const FOV = 40;
-const CAM_Z = 3.2;
+/**
+ * Close enough that the plane overfills the frame by a few percent. The
+ * figure is a photograph, so it should run to the edges of its box the way
+ * every other photograph on the site does, and the overfill keeps the
+ * corners covered while the cloud tilts with the pointer.
+ */
+const CAM_Z = 2.6;
 
 type Frame = { position: Float32Array; color: Float32Array };
+
+/**
+ * Byte-indexed sRGB to linear. The attribute is read as working space, so
+ * the samples have to be converted or the output transform brightens the
+ * whole photograph. Three images at this density is a quarter of a million
+ * conversions, which is worth a table rather than a pow() each.
+ */
+const TO_LINEAR = new Float32Array(256);
+for (let i = 0; i < 256; i += 1) {
+  const c = i / 255;
+  TO_LINEAR[i] = c < 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+}
 
 function loadImage(src: string) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
@@ -56,28 +78,28 @@ function sample(image: HTMLImageElement, gw: number, gh: number): Frame {
   const count = gw * gh;
   const position = new Float32Array(count * 3);
   const color = new Float32Array(count * 3);
-  const scratch = new Color();
 
   for (let y = 0; y < gh; y += 1) {
     for (let x = 0; x < gw; x += 1) {
       const i = y * gw + x;
       const p = i * 4;
-      const r = data[p] / 255;
-      const g = data[p + 1] / 255;
-      const b = data[p + 2] / 255;
-      const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      const r = data[p];
+      const g = data[p + 1];
+      const b = data[p + 2];
+      // Perceptual, not linear: what should stand proud of the arrangement
+      // is what looks bright, which is the pale petals.
+      const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
 
       const i3 = i * 3;
-      position[i3] = (x / (gw - 1) - 0.5) * PLANE_W;
+      const px = (x / (gw - 1) - 0.5) * PLANE_W;
+      position[i3] = px;
       position[i3 + 1] = -(y / (gh - 1) - 0.5) * PLANE_H;
-      position[i3 + 2] = (luminance - 0.5) * DEPTH;
+      position[i3 + 2] =
+        (luminance - 0.5) * DEPTH - (px / (PLANE_W / 2)) ** 2 * CURVE;
 
-      // The samples are sRGB and the attribute is read as working space,
-      // so convert rather than letting the output transform brighten them.
-      scratch.setRGB(r, g, b, SRGBColorSpace);
-      color[i3] = scratch.r;
-      color[i3 + 1] = scratch.g;
-      color[i3 + 2] = scratch.b;
+      color[i3] = TO_LINEAR[r];
+      color[i3 + 1] = TO_LINEAR[g];
+      color[i3 + 2] = TO_LINEAR[b];
     }
   }
 
@@ -89,19 +111,22 @@ const VERTEX = /* glsl */ `
   uniform float uScale;
   uniform float uTime;
   attribute vec3 aColor;
-  attribute float aPhase;
   varying vec3 vColor;
 
   void main() {
     vColor = aColor;
 
     // Idle drift lives here rather than in the simulation: it is per point
-    // and every frame, which is exactly what the GPU is for.
+    // and every frame, which is exactly what the GPU is for. The phase comes
+    // from the point's own position, so neighbours move together and the
+    // surface undulates like cloth instead of boiling like noise. Amplitude
+    // is a fraction of the grid spacing, or the photograph would smear.
     vec3 drifted = position;
-    float wave = sin(uTime * 0.8 + aPhase);
-    drifted.x += cos(uTime * 0.55 + aPhase) * 0.005;
-    drifted.y += wave * 0.005;
-    drifted.z += wave * 0.014;
+    float phase = position.x * 6.0 + position.y * 4.0;
+    float wave = sin(uTime * 0.7 + phase);
+    drifted.x += cos(uTime * 0.5 + phase) * 0.0015;
+    drifted.y += wave * 0.0015;
+    drifted.z += wave * 0.01;
 
     vec4 mv = modelViewMatrix * vec4(drifted, 1.0);
     gl_PointSize = max(1.0, uSize * uScale / -mv.z);
@@ -120,6 +145,13 @@ const FRAGMENT = /* glsl */ `
   }
 `;
 
+/**
+ * Mean per-component energy below which the cloud is close enough to its
+ * target to stop simulating it. Roughly a sixth of the grid spacing, well
+ * under one pixel on screen.
+ */
+const SLEEP_ENERGY = 1e-6;
+
 class PointCloud {
   readonly geometry: BufferGeometry;
   readonly material: ShaderMaterial;
@@ -134,6 +166,8 @@ class PointCloud {
   private colorTo: Float32Array;
   private colorMix = 1;
   private sinceScatter = -1;
+  /** Settled: the per-frame loop and the buffer upload are both skipped. */
+  private asleep = false;
 
   constructor(first: Frame, columns: number) {
     this.count = first.position.length / 3;
@@ -144,21 +178,26 @@ class PointCloud {
     this.colorFrom = new Float32Array(first.color);
     this.colorTo = first.color;
 
-    const phase = new Float32Array(this.count);
-    for (let i = 0; i < this.count; i += 1) phase[i] = Math.random() * Math.PI * 2;
     // Start scattered, so the cloud is seen settling into the photograph.
-    for (let i = 0; i < this.count * 3; i += 1) this.live[i] += (Math.random() - 0.5) * 1.2;
+    for (let i = 0; i < this.count * 3; i += 1) this.live[i] += (Math.random() - 0.5) * 0.9;
+
+    const position = new BufferAttribute(this.live, 3);
+    position.setUsage(DynamicDrawUsage);
+    const color = new BufferAttribute(this.colors, 3);
+    color.setUsage(DynamicDrawUsage);
 
     this.geometry = new BufferGeometry();
-    this.geometry.setAttribute("position", new BufferAttribute(this.live, 3));
-    this.geometry.setAttribute("aColor", new BufferAttribute(this.colors, 3));
-    this.geometry.setAttribute("aPhase", new BufferAttribute(phase, 1));
+    this.geometry.setAttribute("position", position);
+    this.geometry.setAttribute("aColor", color);
 
     this.material = new ShaderMaterial({
       vertexShader: VERTEX,
       fragmentShader: FRAGMENT,
       uniforms: {
-        uSize: { value: (PLANE_W / (columns - 1)) * 0.95 },
+        // 1.45x the grid pitch. Circles on a square grid need about 1.41x
+        // before the diamond-shaped gaps at the four-way junctions close;
+        // below that the photograph reads as halftone rather than as itself.
+        uSize: { value: (PLANE_W / (columns - 1)) * 1.45 },
         uScale: { value: 600 },
         uTime: { value: 0 },
       },
@@ -171,6 +210,7 @@ class PointCloud {
     this.colorMix = 0;
     this.target = frame.position;
     this.colorTo = frame.color;
+    this.asleep = false;
   }
 
   scatter() {
@@ -189,20 +229,28 @@ class PointCloud {
       this.velocity[i3 + 2] += (Math.random() - 0.25) * 6.5;
     }
     this.sinceScatter = 0;
+    this.asleep = false;
   }
 
   step(dt: number, time: number, heightPx: number) {
+    this.material.uniforms.uTime.value = time;
+    this.material.uniforms.uScale.value = heightPx / (2 * Math.tan((FOV * Math.PI) / 360));
+    if (this.asleep) return;
+
     // Underdamped on purpose (zeta is about 0.67): the cloud overshoots
     // slightly on the way back, which is what makes it feel thrown rather
     // than faded. Settles in a shade under two seconds.
     const stiffness = 14;
     const damping = Math.exp(-5 * dt);
     const total = this.count * 3;
+    let energy = 0;
 
     for (let i = 0; i < total; i += 1) {
-      this.velocity[i] =
-        (this.velocity[i] + (this.target[i] - this.live[i]) * stiffness * dt) * damping;
-      this.live[i] += this.velocity[i] * dt;
+      const offset = this.target[i] - this.live[i];
+      const v = (this.velocity[i] + offset * stiffness * dt) * damping;
+      this.velocity[i] = v;
+      this.live[i] += v * dt;
+      energy += v * v + offset * offset;
     }
     this.geometry.attributes.position.needsUpdate = true;
 
@@ -219,10 +267,13 @@ class PointCloud {
         this.colors[i] = this.colorFrom[i] + (this.colorTo[i] - this.colorFrom[i]) * eased;
       }
       this.geometry.attributes.aColor.needsUpdate = true;
+    } else if (energy / total < SLEEP_ENERGY) {
+      // Land exactly on the photograph and stop: at rest this figure should
+      // cost nothing, which is what pays for the point count.
+      this.live.set(this.target);
+      this.velocity.fill(0);
+      this.asleep = true;
     }
-
-    this.material.uniforms.uTime.value = time;
-    this.material.uniforms.uScale.value = heightPx / (2 * Math.tan((FOV * Math.PI) / 360));
   }
 
   dispose() {
@@ -276,11 +327,11 @@ export function BloomCanvas({
 
   useEffect(() => {
     let cancelled = false;
-    // Fewer points on a phone: the figure is smaller there and this loop is
-    // the only thing on the page running per point per frame.
+    // Fewer points on a phone, where the figure is a third of the size and
+    // the GPU is doing the same buffer upload over a narrower bus.
     const wide = window.matchMedia("(min-width: 640px)").matches;
-    const columns = wide ? 84 : 58;
-    const rows = wide ? 112 : 78;
+    const columns = wide ? 240 : 120;
+    const rows = wide ? 320 : 160;
 
     Promise.all(BLOOM_FRAMES.map((entry) => loadImage(entry.sample)))
       .then((images) => {

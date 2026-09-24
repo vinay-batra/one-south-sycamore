@@ -5,7 +5,7 @@
  * point takes its colour from a pixel, so it can never look like a
  * hand-modelled flower. Two outputs per photograph:
  *
- *   <slug>.webp         180x240, the grid the browser samples
+ *   <slug>.webp         360x480, the grid the browser samples
  *   <slug>-poster.webp  1200x1600, the still shown until the cloud arrives
  *
  * Both come from the same crop, so the crossfade between them does not
@@ -18,14 +18,16 @@ import { mkdirSync, statSync, writeFileSync } from "node:fs";
 import sharp from "sharp";
 
 /**
- * Crops are hand-picked, not centred. The masters are shot handheld in the
- * shop and all three have ceiling, strip light or fan across the top; at
- * nine thousand points a white ceiling reads as a hole, so each frame is
- * cropped down to the part that is actually flowers. Masters are 1800x2400.
+ * Crops are hand-picked, not centred, and tight. The masters are shot
+ * handheld in the shop: all three have ceiling, fan or strip light across
+ * the top, and pale wall behind. Empty pale area is the enemy here, because
+ * the figure sits on a pale page and every bit of wall reads as a hole in
+ * it. Each crop is pulled down onto the part that is solidly flowers.
+ * Masters are 1800x2400.
  */
 const FRAMES = [
-  { slug: "roses-green-trick", crop: { left: 292, top: 780, width: 1215, height: 1620 } },
-  { slug: "roses-hellebore", crop: { left: 187, top: 500, width: 1425, height: 1900 } },
+  { slug: "roses-green-trick", crop: { left: 431, top: 1150, width: 938, height: 1250 } },
+  { slug: "roses-hellebore", crop: { left: 360, top: 672, width: 1044, height: 1392 } },
   { slug: "cooler-doors", crop: { left: 90, top: 180, width: 1620, height: 2160 } },
 ];
 
@@ -41,7 +43,7 @@ for (const { slug, crop } of FRAMES) {
   const base = sharp(`public/photos/${slug}.webp`).extract(crop);
 
   const sample = `${OUT}/${slug}.webp`;
-  await base.clone().resize(180, 240, { fit: "cover" }).webp({ quality: 84 }).toFile(sample);
+  await base.clone().resize(360, 480, { fit: "cover" }).webp({ quality: 86 }).toFile(sample);
 
   const poster = `${OUT}/${slug}-poster.webp`;
   await base

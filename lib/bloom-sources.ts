@@ -9,7 +9,7 @@ export const BLOOM_SOURCES = [
     poster: "/bloom/roses-green-trick-poster.webp",
     width: 1200,
     height: 1600,
-    blurDataURL: "data:image/webp;base64,UklGRo4AAABXRUJQVlA4IIIAAAAwAgCdASoMABAAA4BaJbACdAYvNnY97DbWAADONsLfUNXibxbC6zsCausOHM/7JHVqqEOhjHvSRrfpmaCn6JA2fz2Z+G4alOSgPstiIeJe0FpZVYfS65lalRL/NHLbKskHLvTjCW9xA2C2tAsWXESFAmL8vD+hgmbjrjS05ia2OWgA",
+    blurDataURL: "data:image/webp;base64,UklGRpgAAABXRUJQVlA4IIwAAABwAgCdASoMABAAA4BaJbACdGuADz5NVXIbE08AAP4HecIebr3Y7UreiGeKW7rDxP73ZR4913AMHtbgV80hYFc2v54f7pOrpGWT8zpjzJitU0EcLVcO2ntz6o/GxkrcHHVcx7SpNpnIwYJ8SXwP88tezWRGBUJ/d0KmN2AXuUWPFUWKUN4unmjZcwAAAA==",
   },
   {
     slug: "roses-hellebore",
@@ -17,7 +17,7 @@ export const BLOOM_SOURCES = [
     poster: "/bloom/roses-hellebore-poster.webp",
     width: 1200,
     height: 1600,
-    blurDataURL: "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAAAQAgCdASoMABAAA4BaJbACdAD0EuEUW6hMAP7V7ERb27U40ebz7VXQTUUSjNjwlAC55bVxE9aIrVopvAJ28y7zAR0oJERtmoSen0nKJY78Nx4UiSJsr92R381W+pjsj81ePQPlU6OcCS9DfgbT4awA",
+    blurDataURL: "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAABwAgCdASoMABAAA4BaJbACdAdwLfNttMuFKS4AAP6VDJcGNw675XmmYYHgRGzjhRcbaJlVN/q+e4J/3zEpScZPz38nY3lVr8qq05WrtLmvpEM/ixk4ndPJ3Hv5QEXrPKYyGCVxKKPF8+QA+D36H+qadYOcpyuwoKHAAA==",
   },
   {
     slug: "cooler-doors",

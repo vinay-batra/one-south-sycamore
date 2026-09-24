@@ -80,16 +80,29 @@ reassembles as the next photograph.
 - Every point takes its colour from a pixel of a real photo, so the front page is
   always his actual stock. Nothing organic is modelled by hand here, and nothing
   should be.
-- Depth is luminance, so the bright petals stand proud and parallax against the rest
-  when the cloud turns with the pointer.
+- **Density is the whole thing.** 76,800 points on desktop (240x320), 19,200 on a
+  phone, drawn at 1.45x the grid pitch so no page background shows between them.
+  Circles on a square grid need about 1.41x before the diamond gaps at the four-way
+  junctions close. The first pass ran 9,408 points at 0.82x pitch and read as a coarse
+  halftone you could not identify, which defeats the point of using a photograph.
+  At rest this should look like the photograph; the particles are the reveal on the
+  click, not something to sit through beforehand. The per-frame cost is not the
+  constraint: 120,000 points measured at 4% of a 60fps budget.
+- The cloud **sleeps** once it settles, skipping both the integration and the ~900KB
+  position upload, so at rest the figure costs nothing. That is what pays for the
+  point count. Idle motion continues on the GPU regardless.
+- Depth is perceptual luminance plus a gentle barrel curve, so the bright petals stand
+  proud, the surface reads as a surface, and both parallax when the cloud turns with
+  the pointer. The camera sits close enough that the plane overfills its box, because
+  this is a photograph and should run to the edges like every other one on the site.
 - Sampling frames and posters come from the same hand-picked crop
   (`scripts/generate-bloom-frames.mjs` → `public/bloom/`, manifest in
-  `lib/bloom-sources.ts`), which is what keeps the crossfade from jumping. The crops
-  exist because all three masters have ceiling, fan or strip light across the top,
-  and at nine thousand points a white ceiling reads as a hole.
-- The simulation is a class, not refs and memos. Nine thousand points are rewritten
-  in place every frame and React must not be able to see any of it; the compiler's
-  immutability rules will reject the memo version, correctly.
+  `lib/bloom-sources.ts`), which is what keeps the crossfade from jumping. Crop tight:
+  the figure sits on a pale page, so every bit of shop wall, ceiling or strip light in
+  frame reads as a hole in it. All three masters need pulling down onto the flowers.
+- The simulation is a class, not refs and memos. Tens of thousands of points are
+  rewritten in place every frame and React must not be able to see any of it; the
+  compiler's immutability rules will reject the memo version, correctly.
 - Spring constants are tuned together, not guessed: k=14 with c=5 is underdamped at
   zeta≈0.67, and the throw velocities put the peak of the scatter at about the edge
   of the frame with a settle just under two seconds. Change one and re-check the
