@@ -1,11 +1,11 @@
 /** Site-wide constants: the single source of truth for the shop's details. */
 
 /**
- * The name on the building and on Instagram. An earlier draft of this site
- * used "V Flowers", which appeared nowhere a customer could actually see:
- * the street blade over the door reads ONE SOUTH SYCAMORE and the handle
- * is @1southsycamore. The domain stays vjsflowers.com, which is fine and
- * better for search, since people look for flowers rather than an address.
+ * The name on the building, on Instagram, and now on the domain. An early
+ * draft of this site used "V Flowers", which appeared nowhere a customer
+ * could actually see: the street blade over the door reads ONE SOUTH
+ * SYCAMORE and the handle is @1southsycamore. Vince's Google listing still
+ * reads "V flowers" and is the last place that disagrees.
  */
 export const SITE_NAME = "One South Sycamore";
 
@@ -59,7 +59,7 @@ export const DELIVERY = {
 
 export const PAYMENT_METHODS = ["Cash", "Card", "Apple Pay", "Venmo"];
 
-const RAW_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://vjsflowers.com";
+const RAW_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://onesouthsycamore.com";
 
 /**
  * Every canonical, og:url, sitemap entry and JSON-LD url is built from this.

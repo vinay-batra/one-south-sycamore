@@ -18,7 +18,7 @@ Everything below came from Vince directly. Don't invent shop details. Ask.
 
 | | |
 |---|---|
-| Business name | **One South Sycamore**, the name on the street blade over the door and the Instagram handle. The domain is vjsflowers.com and deliberately differs: people search for flowers, not an address. An early draft called it "V Flowers", which appeared nowhere a customer could see. |
+| Business name | **One South Sycamore**: the street blade over the door, the Instagram handle, and the domain. Bought Sep 24 2026. An early draft called it "V Flowers", which appeared nowhere a customer could see. Vince said vjsflowers.com at the intake; that was dropped rather than run a fourth name. |
 | Address | 1 South Sycamore Street, Newtown, **PA** 18940 |
 | Landmark | Across from the Lukoil, corner of Washington & Sycamore, center of town |
 | Phone | (609) 649-1992. Call **and** text |
@@ -234,7 +234,7 @@ Both of these came out of his own photographs, not the intake. Ask before acting
    Original note: **The shop's sign says ONE SOUTH SYCAMORE.** It is on the building in the storefront
    shots, and it is his Instagram handle (@1southsycamore). The site currently calls the
    business "V Flowers" because that is what Vinay was told. Which name goes on the site?
-   The domain (vjsflowers.com) matches neither.
+   The domain is onesouthsycamore.com and matches the site.
 2. ~~**He sells art.**~~ **Answered.** The canvases are Vince's own: spray paint on
    canvas, made at a setup behind the shop, sold off the walls inside, and not a
    separate business. Nothing is priced ahead, same as the flowers, so the price is a
